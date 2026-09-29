@@ -7,8 +7,11 @@ import About from './pages/About'
 import Contact from './pages/Contact'
 
 function App() {
+  // Remove trailing slash from BASE_URL for React Router basename
+  const basename = import.meta.env.BASE_URL.replace(/\/$/, '')
+  
   return (
-    <Router basename={import.meta.env.BASE_URL}>
+    <Router basename={basename}>
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Layout />}>
