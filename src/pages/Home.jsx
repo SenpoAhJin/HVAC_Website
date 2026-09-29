@@ -1,0 +1,185 @@
+import { Link } from 'react-router-dom'
+
+export default function Home() {
+  const services = [
+    {
+      title: 'Heating',
+      description: 'Furnace installation, repair, and replacement to keep your home warm and comfortable.',
+      icon: '🔥',
+      color: 'warm'
+    },
+    {
+      title: 'Cooling',
+      description: 'Air conditioning installation, repair, and replacement for efficient cooling.',
+      icon: '❄️',
+      color: 'cool'
+    },
+    {
+      title: 'Heat Pumps',
+      description: 'Energy-efficient heating and cooling solutions for year-round comfort.',
+      icon: '♻️',
+      color: 'warm'
+    },
+    {
+      title: 'Indoor Air Quality',
+      description: 'Air purification, filtration, and ventilation systems for healthier indoor air.',
+      icon: '🌿',
+      color: 'cool'
+    }
+  ]
+
+  const trustSignals = [
+    { label: 'Licensed & Insured', value: '✓' },
+    { label: 'Years in Business', value: '[To be specified]' },
+    { label: '5-Star Reviews', value: '[To be specified]' }
+  ]
+
+  return (
+    <div className="min-h-screen">
+      {/* Hero Section with Diagonal Warm/Cool Seam */}
+      <section className="relative overflow-hidden h-[600px]">
+        {/* Diagonal Split Background */}
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-br from-warm-500 via-warm-600 to-warm-700" 
+               style={{ clipPath: 'polygon(0 0, 100% 0, 55% 100%, 0% 100%)' }}>
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-bl from-cool-500 via-cool-600 to-cool-700"
+               style={{ clipPath: 'polygon(55% 100%, 100% 0, 100% 100%)' }}>
+          </div>
+        </div>
+
+        {/* Hero Content */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
+          <div className="max-w-2xl text-white">
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+              Comfort in Every Season
+            </h1>
+            <p className="text-xl md:text-2xl mb-8 text-white/95">
+              Expert heating and cooling solutions for your home
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <a href="tel:+1234567890" className="inline-block px-8 py-4 bg-white text-warm-600 font-bold rounded-lg hover:bg-gray-100 transition-colors text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-warm-600">
+                Call for Free Estimate
+              </a>
+              <Link to="/services" className="inline-block px-8 py-4 bg-transparent border-2 border-white text-white font-bold rounded-lg hover:bg-white/10 transition-colors text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-cool-600">
+                View Our Services
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Trust Signals */}
+      <section className="bg-gray-50 py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            {trustSignals.map((signal, index) => (
+              <div key={index} className="space-y-2">
+                <div className="text-3xl font-bold text-warm-600">{signal.value}</div>
+                <div className="text-gray-700 font-medium">{signal.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Services Overview */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Our Services</h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Comprehensive HVAC solutions for every need
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {services.map((service, index) => (
+              <div
+                key={index}
+                className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow border border-gray-100"
+              >
+                <div className={`text-5xl mb-4 ${service.color === 'warm' ? 'text-warm-500' : 'text-cool-500'}`}>
+                  {service.icon}
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">
+                  {service.title}
+                </h3>
+                <p className="text-gray-600">
+                  {service.description}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <Link to="/services" className="btn-primary">
+              See All Services
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Choose Us */}
+      <section className="bg-gray-50 py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Why Choose Premier Tech Solution?</h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div className="text-center">
+              <div className="bg-warm-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-3xl">⚡</span>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Fast Response</h3>
+              <p className="text-gray-600">
+                Quick, reliable service when you need it most
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="bg-cool-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-3xl">⭐</span>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Expert Technicians</h3>
+              <p className="text-gray-600">
+                Certified professionals with years of experience
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="bg-warm-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-3xl">💯</span>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Satisfaction Guaranteed</h3>
+              <p className="text-gray-600">
+                We stand behind our work with quality guarantees
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="bg-gradient-to-r from-warm-600 to-cool-600 py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            Ready to Get Started?
+          </h2>
+          <p className="text-xl mb-8 text-white/95">
+            Contact us today for a free estimate on your HVAC needs
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="tel:+1234567890" className="inline-block px-8 py-4 bg-white text-warm-600 font-bold rounded-lg hover:bg-gray-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-warm-600">
+              Call (123) 456-7890
+            </a>
+            <Link to="/contact" className="inline-block px-8 py-4 bg-transparent border-2 border-white text-white font-bold rounded-lg hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-cool-600">
+              Request a Quote
+            </Link>
+          </div>
+        </div>
+      </section>
+    </div>
+  )
+}

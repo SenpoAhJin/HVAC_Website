@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply antialiased;
+  }
+}
+
+@layer components {
+  /* Focus styles for accessibility */
+  .focus-visible-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cool-500 focus-visible:ring-offset-2;
+  }
+  
+  /* Button styles */
+  .btn-primary {
+    @apply px-6 py-3 bg-warm-500 text-white font-semibold rounded-lg hover:bg-warm-600 transition-colors focus-visible-ring;
+  }
+  
+  .btn-secondary {
+    @apply px-6 py-3 bg-cool-500 text-white font-semibold rounded-lg hover:bg-cool-600 transition-colors focus-visible-ring;
+  }
+  
+  .btn-outline {
+    @apply px-6 py-3 border-2 border-gray-800 text-gray-800 font-semibold rounded-lg hover:bg-gray-800 hover:text-white transition-colors focus-visible-ring;
+  }
+}
