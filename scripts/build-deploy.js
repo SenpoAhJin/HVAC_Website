@@ -70,41 +70,8 @@ if (fs.existsSync(htaccessSource)) {
   console.warn('⚠️  Warning: public/.htaccess not found');
 }
 
-// Create deployment instructions
-const instructions = `# Deployment Package Ready
-
-## Contents:
-- Website files (from dist/)
-- API backend (api/ folder)
-- Apache configuration (.htaccess)
-
-## Upload Instructions:
-
-1. **Upload to GreenGeeks:**
-   - Upload ALL files from this deploy/ folder to your public_html/ directory
-   - Preserve folder structure
-
-2. **Create Private Config:**
-   - Create /home/username/private/ folder (ABOVE public_html)
-   - Copy api/config.sample.php to /home/username/private/hvac-config.php
-   - Edit hvac-config.php with your real database and SMTP credentials
-
-3. **Set Permissions:**
-   - Ensure api/contact.php is executable (755)
-   - Ensure private/hvac-config.php is readable only by you (600)
-
-4. **Test:**
-   - Visit your domain - site should load
-   - Refresh /services, /about - should work (no 404)
-   - Submit contact form - should save to database
-
-## See docs/DEPLOY-GREENGEEKS.md for detailed instructions
-`;
-
-fs.writeFileSync(path.join(deployDir, 'DEPLOY-INSTRUCTIONS.txt'), instructions);
-
 console.log('\n✅ Deployment package ready in deploy/');
-console.log('📄 Read deploy/DEPLOY-INSTRUCTIONS.txt for next steps');
+console.log('📄 See docs/DEPLOY-GREENGEEKS.md for complete instructions');
 
 /**
  * Recursively copy directory

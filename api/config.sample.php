@@ -32,3 +32,6 @@ define('MAIL_FROM', 'noreply@yourdomain.com');     // From address (should match
 
 // Site Configuration
 define('SITE_URL', 'https://yourdomain.com');      // Your site URL (for CSRF protection)
+
+// Proxy Configuration
+define('TRUST_PROXY', false);                      // Set to true only if behind CloudFlare/proxy

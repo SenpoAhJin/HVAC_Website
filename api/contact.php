@@ -20,16 +20,28 @@ header('X-Frame-Options: DENY');
 header('X-XSS-Protection: 1; mode=block');
 header('Content-Type: application/json');
 
-// Load configuration - prefer private config outside web root
-$privateConfigPath = dirname(__DIR__, 2) . '/private/hvac-config.php';
-$localConfigPath = __DIR__ . '/config.php';
+// Load configuration - check multiple locations in priority order
+// NEVER use a path inside public web root as the preferred location
+$configPaths = [
+    // 1. Home directory (most secure - outside web root)
+    (getenv('HOME') ?: (function_exists('posix_getpwuid') ? posix_getpwuid(posix_geteuid())['dir'] : '')) . '/private/hvac-config.php',
+    // 2. Two levels up from api/ (outside public_html)
+    dirname(__DIR__, 2) . '/private/hvac-config.php',
+    // 3. Fallback in api/ (protected by .htaccess)
+    __DIR__ . '/config.php'
+];
 
-if (file_exists($privateConfigPath)) {
-    require_once $privateConfigPath;
-} elseif (file_exists($localConfigPath)) {
-    require_once $localConfigPath;
-} else {
-    error_log('Contact API: No configuration file found');
+$configLoaded = false;
+foreach ($configPaths as $path) {
+    if (!empty($path) && file_exists($path)) {
+        require_once $path;
+        $configLoaded = true;
+        break;
+    }
+}
+
+if (!$configLoaded) {
+    error_log('Contact API: No configuration file found. Checked: ' . implode(', ', array_filter($configPaths)));
     http_response_code(500);
     echo json_encode(['error' => 'Service temporarily unavailable']);
     exit;
@@ -73,6 +85,30 @@ function validateOrigin($siteUrl) {
 }
 
 /**
+ * Get client IP address
+ * Only trusts proxy headers if TRUST_PROXY config is true
+ */
+function getClientIp() {
+    // Default: use REMOTE_ADDR (direct connection)
+    $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+    
+    // Only trust proxy headers if explicitly configured
+    if (defined('TRUST_PROXY') && TRUST_PROXY === true) {
+        // Check CloudFlare header
+        if (!empty($_SERVER['HTTP_CF_CONNECTING_IP'])) {
+            $ip = $_SERVER['HTTP_CF_CONNECTING_IP'];
+        }
+        // Check X-Forwarded-For (use first IP in chain)
+        elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $forwardedIps = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+            $ip = trim($forwardedIps[0]);
+        }
+    }
+    
+    return $ip;
+}
+
+/**
  * Hash IP address for privacy-preserving storage
  */
 function hashIp($ip) {
@@ -84,7 +120,16 @@ function hashIp($ip) {
  */
 function checkRateLimit($pdo, $ipHash) {
     try {
-        // Clean up old rate limit entries
+        // Purge old entries (1 in 20 requests to reduce DB load)
+        // Clean entries older than 1 day
+        if (rand(1, 20) === 1) {
+            $purgeStmt = $pdo->prepare(
+                "DELETE FROM rate_limits WHERE created_at < DATE_SUB(NOW(), INTERVAL 1 DAY)"
+            );
+            $purgeStmt->execute();
+        }
+        
+        // Clean up rate limit entries for the current window
         $cleanupStmt = $pdo->prepare(
             "DELETE FROM rate_limits WHERE created_at < DATE_SUB(NOW(), INTERVAL :window SECOND)"
         );
@@ -256,7 +301,7 @@ try {
     ];
     
     // Get IP hash for rate limiting
-    $clientIp = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+    $clientIp = getClientIp();
     $ipHash = hashIp($clientIp);
     
     // Connect to database
