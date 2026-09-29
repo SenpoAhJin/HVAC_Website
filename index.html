@@ -26,6 +26,18 @@
     
     <!-- Theme Color -->
     <meta name="theme-color" content="#F09820" />
+    
+    <!-- GitHub Pages SPA redirect script -->
+    <script>
+      // Restore path from 404.html redirect
+      (function() {
+        var path = sessionStorage.getItem('path');
+        if (path) {
+          sessionStorage.removeItem('path');
+          history.replaceState(null, '', path);
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
