@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { CONTACT_INFO } from '../config/contact'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
@@ -61,17 +62,17 @@ export default function Footer() {
             <h3 className="text-white font-semibold mb-4">Contact Us</h3>
             <ul className="space-y-3 text-sm">
               <li>
-                <a href="tel:+1234567890" className="hover:text-warm-400 transition-colors focus-visible-ring rounded">
-                  Phone: (123) 456-7890
+                <a href={`tel:${CONTACT_INFO.PHONE_TEL}`} className="hover:text-warm-400 transition-colors focus-visible-ring rounded">
+                  Phone: {CONTACT_INFO.PHONE_DISPLAY}
                 </a>
               </li>
               <li>
-                <a href="mailto:info@premiertechsolution.com" className="hover:text-warm-400 transition-colors focus-visible-ring rounded">
-                  info@premiertechsolution.com
+                <a href={`mailto:${CONTACT_INFO.EMAIL}`} className="hover:text-warm-400 transition-colors focus-visible-ring rounded">
+                  {CONTACT_INFO.EMAIL}
                 </a>
               </li>
               <li className="text-gray-400">
-                Service Area: [To be specified]
+                Service Area: {CONTACT_INFO.ADDRESS}
               </li>
             </ul>
           </div>

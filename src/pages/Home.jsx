@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import PhoneCallButton from '../components/PhoneCallButton'
 
 export default function Home() {
   const services = [
@@ -68,9 +69,9 @@ export default function Home() {
               Expert heating and cooling solutions for your home
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <a href="tel:+1234567890" className="inline-block px-8 py-4 bg-white text-warm-600 font-bold rounded-lg hover:bg-gray-100 transition-colors text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-warm-600">
+              <PhoneCallButton className="inline-block px-8 py-4 bg-white text-warm-600 font-bold rounded-lg hover:bg-gray-100 transition-colors text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-warm-600">
                 Call for Free Estimate
-              </a>
+              </PhoneCallButton>
               <Link to="/services" className="inline-block px-8 py-4 bg-transparent border-2 border-white text-white font-bold rounded-lg hover:bg-white/10 transition-colors text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-cool-600">
                 View Our Services
               </Link>

@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 import { useState } from 'react'
+import PhoneCallButton from './PhoneCallButton'
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -46,12 +47,9 @@ export default function Navbar() {
 
           {/* CTA Button */}
           <div className="hidden md:block">
-            <a
-              href="tel:+1234567890"
-              className="btn-primary text-sm"
-            >
+            <PhoneCallButton className="btn-primary text-sm">
               Call Now
-            </a>
+            </PhoneCallButton>
           </div>
 
           {/* Mobile Menu Button */}
@@ -97,12 +95,9 @@ export default function Navbar() {
                   {link.label}
                 </Link>
               ))}
-              <a
-                href="tel:+1234567890"
-                className="btn-primary text-center mx-4 mt-2"
-              >
+              <PhoneCallButton className="btn-primary text-center mx-4 mt-2 block">
                 Call Now
-              </a>
+              </PhoneCallButton>
             </div>
           </div>
         )}
