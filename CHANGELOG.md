@@ -943,3 +943,171 @@ Build time: 1.25s
 The Premier Tech Solution website is fully built, tested, documented, and ready to generate leads and grow the business. All necessary guides have been created to support launch, marketing, and future growth.
 
 **Next:** Business owner follows `LAUNCH-CHECKLIST.md` to replace content and go live. Estimated time to launch: 2-4 hours for quick launch, 8-10 hours for full launch with all optimizations.
+
+
+## 2026-09-29 (Tuesday) — 5:30 PM
+
+### PHASE 1.8: DROP GITHUB PAGES, FIX SCROLL-TO-TOP, REAL BROWSER AUDIT
+
+#### GitHub Pages Removal ✅
+- ✅ Deleted `.github/workflows/deploy-gh-pages.yml` workflow
+- ✅ Removed conditional base path logic from `vite.config.js` - now always uses `/`
+- ✅ Removed basename logic from `src/App.jsx` Router
+- ✅ Deleted `public/404.html` GitHub Pages redirect script
+- ✅ Removed GitHub Pages redirect script from `index.html`
+- **Vercel is now the only deployment target**
+
+#### SEO & Meta Tags Updated for Vercel ✅
+- ✅ Updated `public/sitemap.xml` URLs: `premiertechsolution.com` → `premier-tech-solution.vercel.app`
+- ✅ Updated `public/robots.txt` sitemap reference to Vercel URL
+- ✅ Updated `index.html` Open Graph and Twitter Card URLs to Vercel
+- ✅ Changed all og:image URLs to absolute Vercel paths
+- ✅ Added canonical URL pointing to Vercel
+- **All SEO metadata now points to live Vercel deployment**
+
+#### ScrollToTop Component Enhanced ✅
+- ✅ Changed from `useEffect` to `useLayoutEffect` for immediate scroll before paint
+- ✅ Added explicit `window.scrollTo({ top: 0, left: 0, behavior: 'instant' })`
+- ✅ Reset `document.documentElement.scrollTop = 0`
+- ✅ Reset `document.body.scrollTop = 0`
+- ✅ Added hash navigation support (scrolls to element if URL has #hash)
+- ✅ Listens to both `pathname` and `hash` changes
+- **Scroll-to-top implementation is now more reliable**
+
+#### 404 Not Found Page Added ✅
+- ✅ Created `src/pages/NotFound.jsx` with clean design
+- ✅ Added catch-all route (`path="*"`) to App.jsx
+- ✅ 404 page matches site theme and includes "Back to Home" link
+- **Unknown URLs now show proper 404 page instead of blank screen**
+
+#### Production Deployment ✅
+- ✅ Committed all changes (commit: f8af6d9)
+- ✅ Pushed to GitHub main branch
+- ✅ Deployed to Vercel production: `https://premier-tech-solution.vercel.app`
+- ✅ Build successful (1.09s)
+- ✅ Deployment complete in 20s
+- ✅ Live URL aliased to main domain
+- **Current production commit: f8af6d9**
+
+#### Browser Testing - Status: NOT TESTED ⚠️
+- ⚠️ Automated browser testing attempted with Puppeteer
+- ⚠️ Installation and execution timed out (300s timeout)
+- ⚠️ Cannot verify scroll behavior without real browser
+- ⚠️ Cannot verify button/link functionality without real browser
+- **Created comprehensive manual test checklist instead**
+
+#### Documentation Created ✅
+- ✅ **`docs/MANUAL-TEST-CHECKLIST.md`** - Complete testing guide for owner
+  - Scroll-to-top tests (desktop & mobile)
+  - Navbar functionality tests (desktop & mobile)
+  - All page CTAs and cards
+  - Contact form validation
+  - FAQ widget functionality
+  - Footer links
+  - Phone call button behavior
+  - 404 page verification
+  - External links security check
+  - Keyboard accessibility tests
+  - ~80+ test cases with PASS/FAIL columns
+  
+- ✅ **`docs/BUTTON-AUDIT.md`** - Functional audit report
+  - All clickable elements catalogued by page
+  - Expected functions documented
+  - Code inspection findings noted
+  - All marked NOT TESTED (awaiting manual verification)
+  - ScrollToTop implementation confirmed correct via code review
+  - Router configuration verified
+  
+- ✅ Deleted old `BUTTON-LINK-AUDIT.md` (replaced by new BUTTON-AUDIT.md)
+
+#### Code Inspection Findings ✅
+Based on static code analysis (not runtime testing):
+
+**ScrollToTop Implementation:**
+- Uses `useLayoutEffect` ✓
+- Listens to pathname and hash ✓
+- Handles hash navigation ✓
+- Resets all scroll positions ✓
+- Uses instant behavior ✓
+
+**Router Configuration:**
+- BrowserRouter with base path `/` ✓
+- ScrollToTop inside Router, before Routes ✓
+- 404 catch-all route added ✓
+- All routes properly nested under Layout ✓
+
+**CSS Analysis:**
+- No scroll containers found (h-screen, overflow-y-auto, etc.)
+- No smooth scroll behavior CSS rules
+- Window scrolling should work normally
+
+#### Files Modified (13 total):
+1. Deleted: `.github/workflows/deploy-gh-pages.yml`
+2. Deleted: `public/404.html`
+3. Deleted: `BUTTON-LINK-AUDIT.md`
+4. Modified: `vite.config.js` (removed conditional base path)
+5. Modified: `src/App.jsx` (removed basename, added NotFound route)
+6. Modified: `src/components/ScrollToTop.jsx` (enhanced with useLayoutEffect)
+7. Modified: `index.html` (updated meta tags, removed GH Pages script)
+8. Modified: `public/sitemap.xml` (Vercel URLs)
+9. Modified: `public/robots.txt` (Vercel URL)
+10. Created: `src/pages/NotFound.jsx`
+11. Created: `docs/MANUAL-TEST-CHECKLIST.md`
+12. Created: `docs/BUTTON-AUDIT.md`
+13. Created: `test-scroll.cjs` (Puppeteer test script - not working, kept for reference)
+
+#### Deployment URLs:
+- **Production:** https://premier-tech-solution.vercel.app
+- **Inspect:** https://vercel.com/ahjin5/premier-tech-solution/F5qR8gS3AszVTq8gp474DYfdqb5b
+- **GitHub Pages:** REMOVED (no longer deployed)
+
+#### What Works (Code-Verified):
+- ✅ Vite config uses base path `/`
+- ✅ Router uses no basename
+- ✅ ScrollToTop component properly implemented
+- ✅ 404 page route configured
+- ✅ All meta tags point to Vercel
+- ✅ Build completes successfully
+- ✅ Deployment successful
+
+#### What's Unknown (Requires Manual Testing):
+- ⚠️ Scroll-to-top actual behavior on live site
+- ⚠️ Whether scrollY actually reaches 0 after navigation
+- ⚠️ Browser back/forward scroll behavior
+- ⚠️ All button/link click destinations
+- ⚠️ Phone button behavior (desktop vs mobile)
+- ⚠️ Contact form validation and submission
+- ⚠️ FAQ widget expand/collapse
+- ⚠️ Mobile menu open/close and link behavior
+- ⚠️ External links opening in new tab
+
+#### Next Steps for Owner:
+1. **Test scroll-to-top on live Vercel URL:**
+   - Open https://premier-tech-solution.vercel.app
+   - Follow steps in `docs/MANUAL-TEST-CHECKLIST.md` Section 1
+   - Use browser console to check `window.scrollY` after each navigation
+   - Expected: scrollY = 0 after every page change
+
+2. **Complete button/link audit:**
+   - Follow `docs/MANUAL-TEST-CHECKLIST.md` sections 2-11
+   - Mark each test PASS/FAIL
+   - Take screenshots of any failures → save to `/screenshots`
+   - Update `docs/BUTTON-AUDIT.md` with results
+
+3. **Report findings:**
+   - If scroll-to-top FAILS on any navigation, report which ones
+   - If any buttons/links FAIL, report the issue
+   - Include browser name and version
+   - Include viewport size (desktop/mobile)
+
+#### Status Summary:
+- **Code Quality:** ✅ VERIFIED (static analysis)
+- **Build Status:** ✅ PASSING
+- **Deployment:** ✅ LIVE ON VERCEL
+- **Runtime Testing:** ⚠️ NOT TESTED (requires owner verification)
+- **Documentation:** ✅ COMPREHENSIVE
+- **Manual Checklists:** ✅ PROVIDED
+
+---
+
+**Phase 1.8 Status:** Code complete, awaiting real browser verification by owner
