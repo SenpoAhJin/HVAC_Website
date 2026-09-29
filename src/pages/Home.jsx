@@ -41,9 +41,10 @@ export default function Home() {
         {/* Background Image */}
         <div className="absolute inset-0">
           <img
-            src="/images/Image_Assets/HVAC installation team working/074e249a88610dbbccfdf27b0d00f959.jpg"
-            alt="Premier Tech Solution HVAC team at work"
+            src={`${import.meta.env.BASE_URL}images/hero/team-at-work.jpg`}
+            alt="Premier Tech Solution HVAC installation team working on-site"
             className="w-full h-full object-cover opacity-20"
+            loading="eager"
           />
         </div>
 

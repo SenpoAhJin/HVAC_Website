@@ -129,9 +129,10 @@ export default function About() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="rounded-lg overflow-hidden shadow-lg card-hover">
               <img
-                src="/images/Image_Assets/HVAC technician servicing air handler/056d30e7da63ca784a837f102726a549.jpg"
-                alt="HVAC technician at work"
+                src={`${import.meta.env.BASE_URL}images/about/technician-1.jpg`}
+                alt="HVAC technician performing professional air handler service"
                 className="w-full h-64 object-cover"
+                loading="lazy"
               />
               <div className="p-4 bg-white">
                 <h3 className="font-semibold text-gray-900">Professional Service</h3>
@@ -141,9 +142,10 @@ export default function About() {
 
             <div className="rounded-lg overflow-hidden shadow-lg card-hover">
               <img
-                src="/images/Image_Assets/HVAC service van tools organized/34368c5ce805de383f9110ef861dfa94.jpg"
-                alt="Organized service van with tools"
+                src={`${import.meta.env.BASE_URL}images/about/service-van.jpg`}
+                alt="Fully stocked HVAC service van with organized professional tools"
                 className="w-full h-64 object-cover"
+                loading="lazy"
               />
               <div className="p-4 bg-white">
                 <h3 className="font-semibold text-gray-900">Fully Equipped</h3>
@@ -153,9 +155,10 @@ export default function About() {
 
             <div className="rounded-lg overflow-hidden shadow-lg card-hover">
               <img
-                src="/images/Image_Assets/HVAC technician servicing air handler/2fb31cf5559f0320b7aca0c0f6d6493d.jpg"
-                alt="HVAC technician servicing equipment"
+                src={`${import.meta.env.BASE_URL}images/about/technician-2.jpg`}
+                alt="Expert HVAC technician providing quality equipment maintenance"
                 className="w-full h-64 object-cover"
+                loading="lazy"
               />
               <div className="p-4 bg-white">
                 <h3 className="font-semibold text-gray-900">Quality Workmanship</h3>

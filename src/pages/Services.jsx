@@ -2,7 +2,7 @@ export default function Services() {
   const services = [
     {
       title: 'Heating',
-      image: '/images/Image_Assets/furnace replacement installation/485b4d65d4f0785538e98f6b5ff618bc.jpg',
+      image: `${import.meta.env.BASE_URL}images/services/heating-service.jpg`,
       color: 'warm',
       description: 'Keep your home warm and comfortable all winter long with our comprehensive heating services.',
       offerings: [
@@ -16,7 +16,7 @@ export default function Services() {
     },
     {
       title: 'Cooling',
-      image: '/images/Image_Assets/rooftop HVAC unit repair/1a9b6764d7635fe4b56c9a1a45546eeb.jpg',
+      image: `${import.meta.env.BASE_URL}images/services/cooling-service.jpg`,
       color: 'cool',
       description: 'Stay cool and comfortable during hot weather with our professional air conditioning services.',
       offerings: [
@@ -30,7 +30,7 @@ export default function Services() {
     },
     {
       title: 'Heat Pumps',
-      image: '/images/Image_Assets/ductless mini split installation/1f62ba1219321633a87229dee19698ec.jpg',
+      image: `${import.meta.env.BASE_URL}images/services/heat-pump-service.jpg`,
       color: 'warm',
       description: 'Energy-efficient heating and cooling in one system for year-round comfort and lower utility bills.',
       offerings: [
@@ -44,7 +44,7 @@ export default function Services() {
     },
     {
       title: 'Indoor Air Quality',
-      image: '/images/Image_Assets/HVAC ductwork installation/76da0953faf04f3f60f780c9d7bc98c3.jpg',
+      image: `${import.meta.env.BASE_URL}images/services/air-quality-service.jpg`,
       color: 'cool',
       description: 'Breathe cleaner, healthier air with our advanced indoor air quality solutions.',
       offerings: [
@@ -86,8 +86,9 @@ export default function Services() {
                   <div className="w-80 h-64 rounded-2xl overflow-hidden shadow-lg card-hover">
                     <img
                       src={service.image}
-                      alt={`${service.title} service`}
+                      alt={`${service.title} - Professional HVAC service installation and repair`}
                       className="w-full h-full object-cover"
+                      loading="lazy"
                     />
                   </div>
                 </div>
