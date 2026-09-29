@@ -118,26 +118,48 @@ export default function About() {
         </div>
       </section>
 
-      {/* Team Section Placeholder */}
+      {/* Team Section */}
       <section className="bg-gray-50 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-bold text-gray-900 mb-6 text-center">Our Team</h2>
+          <h2 className="text-4xl font-bold text-gray-900 mb-6 text-center">Our Team in Action</h2>
           <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
             Our certified technicians are the heart of our business. Each team member brings expertise, professionalism, and a commitment to your satisfaction.
           </p>
 
-          <div className="bg-white rounded-lg shadow-md p-8 max-w-2xl mx-auto">
-            <div className="flex items-start space-x-4">
-              <div className="flex-shrink-0">
-                <div className="w-16 h-16 bg-gradient-to-br from-warm-500 to-cool-500 rounded-full flex items-center justify-center text-white text-2xl">
-                  📸
-                </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="rounded-lg overflow-hidden shadow-lg">
+              <img
+                src="/images/Image_Assets/HVAC technician servicing air handler/056d30e7da63ca784a837f102726a549.jpg"
+                alt="HVAC technician at work"
+                className="w-full h-64 object-cover"
+              />
+              <div className="p-4 bg-white">
+                <h3 className="font-semibold text-gray-900">Professional Service</h3>
+                <p className="text-sm text-gray-600">Our technicians bring expertise to every job</p>
               </div>
-              <div className="flex-1">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Team Photos Coming Soon</h3>
-                <p className="text-gray-600">
-                  The business owner will provide photos of the team members for this section. Photos should be placed in the Image_Assets folder under the appropriate category.
-                </p>
+            </div>
+
+            <div className="rounded-lg overflow-hidden shadow-lg">
+              <img
+                src="/images/Image_Assets/HVAC service van tools organized/34368c5ce805de383f9110ef861dfa94.jpg"
+                alt="Organized service van with tools"
+                className="w-full h-64 object-cover"
+              />
+              <div className="p-4 bg-white">
+                <h3 className="font-semibold text-gray-900">Fully Equipped</h3>
+                <p className="text-sm text-gray-600">We arrive prepared for any job</p>
+              </div>
+            </div>
+
+            <div className="rounded-lg overflow-hidden shadow-lg">
+              <img
+                src="/images/Image_Assets/HVAC technician servicing air handler/2fb31cf5559f0320b7aca0c0f6d6493d.jpg"
+                alt="HVAC technician servicing equipment"
+                className="w-full h-64 object-cover"
+              />
+              <div className="p-4 bg-white">
+                <h3 className="font-semibold text-gray-900">Quality Workmanship</h3>
+                <p className="text-sm text-gray-600">Attention to detail in every repair</p>
               </div>
             </div>
           </div>

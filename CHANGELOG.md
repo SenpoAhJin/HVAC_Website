@@ -166,3 +166,65 @@ Estimated time to launch: 6-9 hours of focused work
 3. Grant Vercel app access to GitHub repository
 4. Add API keys to .env.local for local testing
 5. Add API keys to Vercel environment variables for production
+
+
+## 2026-09-29 (Tuesday) — 11:00 AM
+
+### PHASE 1.6: STATIC FAQ CHATBOT + REAL IMAGES + VISUAL VERIFICATION
+
+#### Chatbot Conversion (Conversational AI → Static FAQ)
+- ✅ Removed OpenAI-powered backend (deleted api/chat.js)
+- ✅ Removed OPENAI_API_KEY from .env.example and documentation
+- ✅ Built static FAQ widget with 10 Q&A pairs extracted from knowledge-base.txt
+- ✅ Implemented searchable FAQ interface with expand/collapse functionality
+- ✅ Added fallback message directing users to contact form when no matches found
+- ✅ Maintained same floating widget position and visual style
+- ✅ No AI API calls or network requests - fully client-side
+
+#### Real Image Integration
+- ✅ Located Image_Assets folder (parent directory of project)
+- ✅ Copied all images to public/images/Image_Assets/ preserving folder structure
+- ✅ Total images copied: 22 photos across 7 categories
+
+**Image Mapping Applied:**
+- **Homepage hero:** 074e249a88610dbbccfdf27b0d00f959.jpg (HVAC installation team working)
+- **Heating service:** 485b4d65d4f0785538e98f6b5ff618bc.jpg (furnace replacement installation)
+- **Cooling service:** 1a9b6764d7635fe4b56c9a1a45546eeb.jpg (rooftop HVAC unit repair)
+- **Heat Pumps service:** 1f62ba1219321633a87229dee19698ec.jpg (ductless mini split installation)
+- **Indoor Air Quality service:** 76da0953faf04f3f60f780c9d7bc98c3.jpg (HVAC ductwork installation)
+- **About page gallery:**
+  - 056d30e7da63ca784a837f102726a549.jpg (HVAC technician servicing air handler)
+  - 34368c5ce805de383f9110ef861dfa94.jpg (HVAC service van tools organized)
+  - 2fb31cf5559f0320b7aca0c0f6d6493d.jpg (HVAC technician servicing air handler)
+
+#### Visual Adjustments
+- ✅ Added hero image with gradient overlay to preserve text readability
+- ✅ Replaced emoji icons with real service photos (w-80 h-64 rounded images)
+- ✅ Created 3-column gallery layout for About page
+- ✅ Applied object-cover CSS for proper image cropping
+- ✅ All images display cleanly with no stretching or broken links
+
+#### Visual Verification Completed
+- ✅ Dev server tested on http://localhost:5174/
+- ✅ All pages load without errors
+- ✅ All images display correctly (no broken image icons)
+- ✅ FAQ widget opens/closes smoothly
+- ✅ FAQ search functionality works
+- ✅ Layout remains clean and professional with real images
+- ✅ No visual breaks or overlapping text
+
+#### Files Modified:
+1. `src/components/ChatWidget.jsx` - Complete rebuild as static FAQ
+2. `src/pages/Home.jsx` - Added hero background image
+3. `src/pages/Services.jsx` - Replaced icons with service photos
+4. `src/pages/About.jsx` - Added 3-photo team gallery
+5. `.env.example` - Removed OpenAI references
+6. Deleted: `api/chat.js` (no longer needed)
+7. Added: 22 images in `public/images/Image_Assets/`
+
+#### Benefits of Changes:
+- **No API costs:** Static FAQ eliminates $5-20/month OpenAI expense
+- **Instant responses:** No network latency or API delays
+- **Always available:** No dependency on external services
+- **Real visuals:** Professional photos replace placeholder content
+- **Authentic presentation:** Actual work showcased instead of stock imagery

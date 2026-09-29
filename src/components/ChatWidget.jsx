@@ -1,57 +1,72 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState } from 'react'
+
+// Static FAQ data extracted from knowledge-base.txt
+const faqs = [
+  {
+    id: 1,
+    question: "What services do you offer?",
+    answer: "We offer comprehensive HVAC services including Heating (furnace installation, repair, and replacement), Cooling (AC installation, repair, and replacement), Heat Pumps, and Indoor Air Quality solutions (air purification, filtration, and ventilation systems)."
+  },
+  {
+    id: 2,
+    question: "Do you offer free estimates?",
+    answer: "Yes! We provide free estimates for new installations and replacements. Contact us at (123) 456-7890 or use our contact form to schedule your free estimate."
+  },
+  {
+    id: 3,
+    question: "What is your service area?",
+    answer: "Please call us at (123) 456-7890 to confirm we service your specific location, or use our contact form with your address."
+  },
+  {
+    id: 4,
+    question: "What are your business hours?",
+    answer: "For our current business hours, please call (123) 456-7890 or check our contact page. We also offer emergency service for urgent HVAC needs."
+  },
+  {
+    id: 5,
+    question: "Do you provide emergency service?",
+    answer: "Yes, we offer emergency HVAC service for urgent repairs. Call (123) 456-7890 to speak with our team about your emergency service needs."
+  },
+  {
+    id: 6,
+    question: "Are you licensed and insured?",
+    answer: "Yes, Premier Tech Solution is fully licensed and insured. Contact us for specific license and insurance information."
+  },
+  {
+    id: 7,
+    question: "Do you offer warranties?",
+    answer: "Yes, we stand behind our work with quality warranties. Contact us at (123) 456-7890 for details about our warranty policies."
+  },
+  {
+    id: 8,
+    question: "How can I schedule service?",
+    answer: "You can schedule service by calling (123) 456-7890 or by filling out the contact form on our website. We'll get back to you promptly to confirm your appointment."
+  },
+  {
+    id: 9,
+    question: "What payment methods do you accept?",
+    answer: "Please contact us at (123) 456-7890 for information about payment methods and financing options."
+  },
+  {
+    id: 10,
+    question: "Do you offer maintenance plans?",
+    answer: "For information about our maintenance plans and services, please call (123) 456-7890 or use our contact form."
+  }
+]
 
 export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false)
-  const [messages, setMessages] = useState([
-    {
-      role: 'assistant',
-      content: 'Hello! I\'m here to help answer your questions about Premier Tech Solution\'s HVAC services. How can I assist you today?'
-    }
-  ])
-  const [input, setInput] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const messagesEndRef = useRef(null)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [expandedId, setExpandedId] = useState(null)
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }
+  // Filter FAQs based on search term
+  const filteredFaqs = faqs.filter(faq =>
+    faq.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    faq.answer.toLowerCase().includes(searchTerm.toLowerCase())
+  )
 
-  useEffect(() => {
-    scrollToBottom()
-  }, [messages])
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    if (!input.trim() || isLoading) return
-
-    const userMessage = input.trim()
-    setInput('')
-    setMessages(prev => [...prev, { role: 'user', content: userMessage }])
-    setIsLoading(true)
-
-    try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMessage, history: messages })
-      })
-
-      if (!response.ok) throw new Error('Failed to get response')
-
-      const data = await response.json()
-      setMessages(prev => [...prev, { role: 'assistant', content: data.message }])
-    } catch (error) {
-      console.error('Chat error:', error)
-      setMessages(prev => [
-        ...prev,
-        {
-          role: 'assistant',
-          content: 'I apologize, but I\'m having trouble connecting right now. Please call us at (123) 456-7890 or use the contact form for assistance.'
-        }
-      ])
-    } finally {
-      setIsLoading(false)
-    }
+  const toggleFaq = (id) => {
+    setExpandedId(expandedId === id ? null : id)
   }
 
   return (
@@ -60,7 +75,7 @@ export default function ChatWidget() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="fixed bottom-6 right-6 bg-gradient-to-br from-warm-500 to-cool-500 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all focus-visible-ring z-50"
-        aria-label={isOpen ? 'Close chat' : 'Open chat'}
+        aria-label={isOpen ? 'Close FAQ' : 'Open FAQ'}
       >
         <svg
           className="w-6 h-6"
@@ -74,72 +89,109 @@ export default function ChatWidget() {
           {isOpen ? (
             <path d="M6 18L18 6M6 6l12 12" />
           ) : (
-            <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            <path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           )}
         </svg>
       </button>
 
-      {/* Chat Window */}
+      {/* FAQ Window */}
       {isOpen && (
         <div className="fixed bottom-24 right-6 w-96 max-w-[calc(100vw-3rem)] bg-white rounded-lg shadow-2xl flex flex-col z-50 h-[32rem] max-h-[calc(100vh-8rem)]">
           {/* Header */}
           <div className="bg-gradient-to-r from-warm-500 to-cool-500 text-white p-4 rounded-t-lg">
-            <h3 className="font-semibold">Premier Tech Solution</h3>
-            <p className="text-sm text-white/90">Ask us anything about HVAC services</p>
+            <h3 className="font-semibold text-lg">Frequently Asked Questions</h3>
+            <p className="text-sm text-white/90">Find answers to common questions</p>
           </div>
 
-          {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
-            {messages.map((msg, index) => (
-              <div
-                key={index}
-                className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-              >
-                <div
-                  className={`max-w-[80%] rounded-lg p-3 ${
-                    msg.role === 'user'
-                      ? 'bg-warm-500 text-white'
-                      : 'bg-gray-100 text-gray-800'
-                  }`}
-                >
-                  {msg.content}
-                </div>
+          {/* Search Box */}
+          <div className="p-4 border-b">
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search questions..."
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cool-500"
+            />
+          </div>
+
+          {/* FAQ List */}
+          <div className="flex-1 overflow-y-auto p-4">
+            {filteredFaqs.length > 0 ? (
+              <div className="space-y-3">
+                {filteredFaqs.map((faq) => (
+                  <div
+                    key={faq.id}
+                    className="border border-gray-200 rounded-lg overflow-hidden"
+                  >
+                    <button
+                      onClick={() => toggleFaq(faq.id)}
+                      className="w-full text-left px-4 py-3 bg-gray-50 hover:bg-gray-100 transition-colors flex justify-between items-center"
+                    >
+                      <span className="font-medium text-gray-900 pr-2">
+                        {faq.question}
+                      </span>
+                      <svg
+                        className={`w-5 h-5 text-gray-500 flex-shrink-0 transition-transform ${
+                          expandedId === faq.id ? 'transform rotate-180' : ''
+                        }`}
+                        fill="none"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                    {expandedId === faq.id && (
+                      <div className="px-4 py-3 bg-white text-gray-700 text-sm">
+                        {faq.answer}
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
-            ))}
-            {isLoading && (
-              <div className="flex justify-start">
-                <div className="bg-gray-100 rounded-lg p-3">
-                  <div className="flex space-x-2">
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+            ) : (
+              <div className="text-center py-8">
+                <p className="text-gray-600 mb-4">
+                  No matching questions found.
+                </p>
+                <div className="bg-cool-50 border border-cool-200 rounded-lg p-4">
+                  <p className="font-semibold text-gray-900 mb-2">
+                    Still have questions?
+                  </p>
+                  <p className="text-sm text-gray-600 mb-3">
+                    We're here to help! Contact us directly:
+                  </p>
+                  <div className="space-y-2">
+                    <a
+                      href="tel:+1234567890"
+                      className="block px-4 py-2 bg-warm-500 text-white rounded-lg hover:bg-warm-600 transition-colors text-center"
+                    >
+                      Call (123) 456-7890
+                    </a>
+                    <a
+                      href="/contact"
+                      className="block px-4 py-2 bg-cool-500 text-white rounded-lg hover:bg-cool-600 transition-colors text-center"
+                    >
+                      Use Contact Form
+                    </a>
                   </div>
                 </div>
               </div>
             )}
-            <div ref={messagesEndRef} />
           </div>
 
-          {/* Input */}
-          <form onSubmit={handleSubmit} className="p-4 border-t">
-            <div className="flex space-x-2">
-              <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Type your question..."
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cool-500"
-                disabled={isLoading}
-              />
-              <button
-                type="submit"
-                disabled={isLoading || !input.trim()}
-                className="px-4 py-2 bg-cool-500 text-white rounded-lg hover:bg-cool-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors focus-visible-ring"
-              >
-                Send
-              </button>
-            </div>
-          </form>
+          {/* Footer */}
+          <div className="p-4 border-t bg-gray-50 rounded-b-lg">
+            <p className="text-xs text-gray-600 text-center">
+              Can't find what you're looking for?{' '}
+              <a href="/contact" className="text-cool-600 hover:text-cool-700 font-medium">
+                Contact us
+              </a>
+            </p>
+          </div>
         </div>
       )}
     </>

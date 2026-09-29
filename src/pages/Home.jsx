@@ -38,12 +38,21 @@ export default function Home() {
     <div className="min-h-screen">
       {/* Hero Section with Diagonal Warm/Cool Seam */}
       <section className="relative overflow-hidden h-[600px]">
-        {/* Diagonal Split Background */}
+        {/* Background Image */}
         <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-warm-500 via-warm-600 to-warm-700" 
+          <img
+            src="/images/Image_Assets/HVAC installation team working/074e249a88610dbbccfdf27b0d00f959.jpg"
+            alt="Premier Tech Solution HVAC team at work"
+            className="w-full h-full object-cover opacity-20"
+          />
+        </div>
+
+        {/* Diagonal Split Background Overlay */}
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-br from-warm-500/90 via-warm-600/90 to-warm-700/90" 
                style={{ clipPath: 'polygon(0 0, 100% 0, 55% 100%, 0% 100%)' }}>
           </div>
-          <div className="absolute inset-0 bg-gradient-to-bl from-cool-500 via-cool-600 to-cool-700"
+          <div className="absolute inset-0 bg-gradient-to-bl from-cool-500/90 via-cool-600/90 to-cool-700/90"
                style={{ clipPath: 'polygon(55% 100%, 100% 0, 100% 100%)' }}>
           </div>
         </div>
