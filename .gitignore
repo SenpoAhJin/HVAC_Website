@@ -33,3 +33,10 @@ dist-ssr
 .vercel
 
 .vercel
+
+# PHP configuration files (NEVER commit real credentials!)
+api/config.php
+private/
+
+# Deployment folder
+deploy/

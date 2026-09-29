@@ -1,0 +1,9 @@
+# Deny direct access to configuration and sensitive files
+<FilesMatch "^(config\.php|config\.sample\.php|.*\.sql|.*\.log)$">
+    Require all denied
+</FilesMatch>
+
+# Allow access to contact.php (the API endpoint)
+<Files "contact.php">
+    Require all granted
+</Files>

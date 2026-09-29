@@ -1416,3 +1416,157 @@ This rule says: "Any request that doesn't start with `/api/` should be served `i
 
 **Phase 1.10 Status:** ✅ CODE COMPLETE - AWAITING DEPLOYMENT
 **Deployment Required:** YES - vercel.json changes must be deployed to fix 404 issue
+
+## 2026-09-29 (Tuesday) — 8:15 PM - PHASE 2.0: GreenGeeks Hosting + MySQL Backend
+
+### Backend Infrastructure
+- **Created PHP Contact API** (`api/contact.php`)
+  - Accepts POST with JSON or form data
+  - Server-side validation (required fields, email format, max lengths)
+  - PDO with prepared statements for SQL injection protection
+  - Inserts to `leads` table first, then attempts email send
+  - Returns success even if email fails (lead is saved)
+  - Never exposes database errors to client
+  - Origin/Referer validation for CSRF protection
+  - Request size limit (500KB)
+  - Security headers (X-Content-Type-Options: nosniff)
+
+- **Security Features**
+  - Honeypot field (website) - bots fill it, submission silently rejected
+  - Rate limiting: 5 submissions per 10 minutes per IP
+  - IP address hashed with SHA-256 before storage (privacy)
+  - Prepared statements only - no string concatenation
+  - Input validation and sanitization
+  - Generic error messages (no stack traces)
+
+- **Email Integration**
+  - PHPMailer 6.9.3 vendored (no Composer required)
+  - SMTP authentication with configurable credentials
+  - Reply-To set to visitor's email
+  - From address must match configured mailbox
+  - HTML and plain text versions
+  - Logs email failures but still returns success to user
+
+### Configuration Management
+- **Created config system**
+  - `api/config.sample.php` - template with placeholder values
+  - Real config loads from `dirname(__DIR__, 2) . '/private/hvac-config.php'` (above web root)
+  - Falls back to `api/config.php` if private config doesn't exist
+  - Never commit real credentials to Git
+  - `.htaccess` denies web access to config files
+
+- **Configuration keys**
+  - DB_HOST, DB_NAME, DB_USER, DB_PASS
+  - SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS
+  - MAIL_TO, MAIL_FROM, SITE_URL
+
+### Database Schema
+- **Created MySQL schema** (`db/schema.sql`)
+  - `leads` table: id, created_at, name, email, phone, message, ip_hash, email_sent
+  - `rate_limits` table: id, ip_hash, created_at
+  - utf8mb4 charset for emoji and international characters
+  - Indexes on created_at, email_sent, and ip_hash for performance
+  - InnoDB engine for transaction support
+
+- **Database documentation** (`db/README.md`)
+  - Step-by-step phpMyAdmin import instructions
+  - Database user creation and privileges
+  - Configuration value reference
+
+### Frontend Updates
+- **Updated Contact form** (`src/pages/Contact.jsx`)
+  - Changed API endpoint from `/api/contact` to `/api/contact.php`
+  - Added honeypot field (hidden with absolute positioning, aria-hidden, tabindex -1)
+  - Updated to use server response message
+  - Removed phone number from generic error message
+  - Success message doesn't claim email was sent
+
+- **Created site configuration** (`src/config/site.js`)
+  - Centralized SITE_URL configuration
+  - Reads from VITE_SITE_URL environment variable
+  - Used for canonical URLs, OG tags, sitemap
+
+### Apache Configuration
+- **Created SPA .htaccess** (`public/.htaccess`)
+  - Enables mod_rewrite for SPA routing
+  - Rewrites all non-file/directory requests to index.html
+  - Skips /api/ paths (API still works)
+  - Disables directory listing
+  - Long cache headers on /assets/* (1 year, immutable)
+  - Gzip compression for text files
+  - Security headers (X-Content-Type-Options, X-XSS-Protection, X-Frame-Options)
+  - HTTPS force commented out (enable when SSL configured)
+
+- **Created API .htaccess** (`api/.htaccess`)
+  - Denies direct access to config.php, config.sample.php
+  - Denies access to *.sql and *.log files
+  - Allows access to contact.php
+
+### Build and Deployment
+- **Created build:deploy script** (`scripts/build-deploy.js`)
+  - Runs production build
+  - Assembles `deploy/` folder with:
+    - dist/ contents (built site)
+    - api/ folder (excluding config.php)
+    - .htaccess files
+  - Creates DEPLOY-INSTRUCTIONS.txt
+  - Skips node_modules, docs, source files
+
+- **Updated package.json**
+  - Added `build:deploy` script
+
+- **Updated .gitignore**
+  - Added api/config.php (never commit real credentials!)
+  - Added private/ folder
+  - Added deploy/ folder
+
+### Documentation
+- **Created comprehensive deployment guide** (`docs/DEPLOY-GREENGEEKS.md`)
+  - 6 phases: Database, Email, Config, Upload, Testing, Monitoring
+  - Step-by-step cPanel instructions with screenshots guidance
+  - Database creation and schema import
+  - Email account setup and SMTP configuration
+  - Private config file creation above web root
+  - File upload and permission setting
+  - Complete testing checklist (SPA routing, form, database, email, security)
+  - Troubleshooting section for common issues
+  - SSL certificate setup
+  - Maintenance tasks and security recommendations
+
+- **Updated README.md**
+  - Removed Vercel/Neon references
+  - Added GreenGeeks/PHP/MySQL stack information
+  - Added Database section with schema details
+  - Updated deployment instructions for GreenGeeks
+  - Added security features documentation
+  - Added troubleshooting section
+  - Updated configuration instructions
+
+### Dependencies
+- **Added PHPMailer 6.9.3** (vendored, no Composer)
+  - PHPMailer.php
+  - SMTP.php
+  - Exception.php
+  - Located in `api/vendor/PHPMailer/`
+
+### Testing Notes
+- **PHP syntax validation**: NOT TESTED (PHP not installed locally)
+- **Local MySQL test**: NOT TESTED (requires server environment)
+- **Security test**: NOT TESTED (requires live environment)
+- All PHP code follows best practices and uses prepared statements
+
+### Migration Notes
+- **This replaces Vercel serverless functions entirely**
+- Contact form now stores leads in MySQL (persistent storage)
+- Email notifications sent via SMTP (more reliable than API services)
+- No Node.js required on server - pure PHP + Apache
+- Rate limiting now database-backed instead of in-memory
+- Form submissions survive server restarts
+
+### What Owner Must Do
+1. Create database in cPanel and import schema.sql
+2. Create email account for SMTP
+3. Create private/hvac-config.php with real credentials
+4. Upload deploy/ folder contents to public_html/
+5. Test all functionality on live site
+6. Monitor leads in phpMyAdmin

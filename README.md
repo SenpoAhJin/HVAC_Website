@@ -1,6 +1,6 @@
 # Premier Tech Solution Website
 
-A modern, responsive marketing website for Premier Tech Solution, a residential HVAC company. Built with React, Vite, and Tailwind CSS.
+A modern, responsive marketing website for Premier Tech Solution, a residential HVAC company. Built with React, Vite, and Tailwind CSS, designed for GreenGeeks shared hosting with PHP/MySQL backend.
 
 ## Features
 
@@ -8,18 +8,18 @@ A modern, responsive marketing website for Premier Tech Solution, a residential 
 - 📱 Fully responsive (mobile, tablet, desktop)
 - ♿ Accessible (keyboard navigation, focus states, reduced motion support)
 - 🤖 AI-powered chatbot for customer questions
-- 📧 Working contact form with email delivery
+- 📧 Contact form with PHP backend and MySQL storage
 - 🎨 Custom diagonal warm/cool hero section
-- 🖼️ Image system ready for local photos
+- 🔒 Security features: rate limiting, honeypot, input validation
 
 ## Tech Stack
 
 - **Frontend:** React 18 + Vite
 - **Styling:** Tailwind CSS
-- **Routing:** React Router DOM
-- **Backend:** Serverless Functions (Vercel/Netlify compatible)
-- **AI:** OpenAI API for chatbot
-- **Deployment:** Vercel (recommended) or Netlify
+- **Routing:** React Router DOM (SPA)
+- **Backend:** PHP 7.4+ with PHPMailer
+- **Database:** MySQL 5.7+ / MariaDB 10.3+
+- **Hosting:** GreenGeeks Shared Hosting (Apache, cPanel)
 
 ## Project Structure
 
@@ -28,20 +28,27 @@ premier-tech-solution/
 ├── src/
 │   ├── components/     # Reusable components (Navbar, Footer, ChatWidget)
 │   ├── pages/          # Page components (Home, Services, About, Contact)
+│   ├── config/         # Configuration (contact, site)
 │   ├── App.jsx         # Main app with routing
-│   ├── main.jsx        # Entry point
-│   └── index.css       # Global styles + Tailwind
-├── api/                # Serverless functions
-│   ├── chat.js         # AI chatbot endpoint
-│   └── contact.js      # Contact form endpoint
-├── Image_Assets/       # Local photos organized by category
+│   └── main.jsx        # Entry point
+├── api/                # PHP backend
+│   ├── contact.php     # Contact form API endpoint
+│   ├── config.sample.php  # Sample configuration
+│   ├── .htaccess       # API security rules
+│   └── vendor/PHPMailer/  # Email library
+├── db/                 # Database
+│   ├── schema.sql      # MySQL schema
+│   └── README.md       # Database setup instructions
 ├── public/             # Static assets
-├── knowledge-base.txt  # Chatbot knowledge base
-├── CHANGELOG.md        # Project changelog
-└── vercel.json         # Deployment configuration
+│   └── .htaccess       # Apache SPA routing
+├── docs/               # Documentation
+│   └── DEPLOY-GREENGEEKS.md  # Full deployment guide
+└── scripts/            # Build tools
+    ├── check-placeholders.js  # Placeholder guard
+    └── build-deploy.js        # Deployment packager
 ```
 
-## Getting Started
+## Local Development
 
 ### Prerequisites
 
@@ -56,157 +63,108 @@ premier-tech-solution/
 npm install
 ```
 
-3. Copy `.env.example` to `.env.local` and add your API keys:
-```bash
-cp .env.example .env.local
-```
-
-4. Start the development server:
+3. Start the development server:
 ```bash
 npm run dev
 ```
 
-5. Open http://localhost:5173 in your browser
+4. Open http://localhost:5173
 
-## Configuration Required Before Launch
+**Note:** Contact form and chatbot won't work locally without backend setup.
 
-### 1. Business Information (High Priority)
+## Database
 
-Replace placeholder content throughout the site:
+This site uses MySQL to store contact form submissions and track rate limiting.
 
-- **Phone number:** Currently `(123) 456-7890` - update in:
-  - `src/components/Navbar.jsx`
-  - `src/components/Footer.jsx`
-  - `src/pages/Home.jsx`
-  - `src/pages/Services.jsx`
-  - `src/pages/Contact.jsx`
+### Schema
 
-- **Email:** Currently `info@premiertechsolution.com` - update in:
-  - `src/components/Footer.jsx`
-  - `src/pages/Contact.jsx`
+- **leads**: Contact form submissions
+  - `id`, `created_at`, `name`, `email`, `phone`, `message`, `ip_hash`, `email_sent`
+- **rate_limits**: Rate limiting tracker
+  - `id`, `ip_hash`, `created_at`
 
-- **Service Area:** Currently `[To be specified]` - update in:
-  - `src/components/Footer.jsx`
-  - `src/pages/Contact.jsx`
-  - `knowledge-base.txt`
+### Setup
 
-### 2. About Page Content (High Priority)
+See `db/README.md` and `docs/DEPLOY-GREENGEEKS.md` for complete database setup instructions.
 
-Edit `src/pages/About.jsx` to replace placeholder company story with:
-- Real founding story and background
-- Actual years in business
-- Specific mission and values
-- What makes your company unique
+## Configuration
 
-### 3. Chatbot Knowledge Base (Critical for Chatbot)
+### Business Contact Information
 
-Edit `knowledge-base.txt` and fill in all sections:
-- Service area details
-- Pricing approach
-- Scheduling policies
-- Emergency service details
-- FAQs specific to your business
-- What makes your company different
-- License numbers and certifications
+Update `src/config/contact.js` with your real business information:
 
-### 4. Photos (High Priority)
-
-Add your real photos to `Image_Assets/` folder:
-- Create subfolders matching your photo categories
-- Supported formats: JPG, PNG, WebP
-- Recommended: compress images for web before adding
-
-Current structure from existing photos:
-```
-Image_Assets/
-├── ductless mini split installation/
-├── furnace replacement installation/
-├── HVAC ductwork installation/
-├── HVAC installation team working/
-├── HVAC service van tools organized/
-├── HVAC technician servicing air handler/
-└── rooftop HVAC unit repair/
+```javascript
+export const CONTACT_INFO = {
+  PHONE_DISPLAY: '(555) 123-4567',
+  PHONE_TEL: '+15551234567',
+  EMAIL: 'contact@yourdomain.com',
+  ADDRESS: 'Your City, State',
+  HOURS: 'Mon-Fri 8AM-6PM, Sat 9AM-2PM'
+}
 ```
 
-### 5. Trust Signals (Medium Priority)
+### Site Configuration
 
-Update homepage trust signals in `src/pages/Home.jsx`:
-- Years in business
-- Number of 5-star reviews
-- License number
-- Any certifications or awards
+Update `src/config/site.js` or set environment variable:
+
+```javascript
+export const SITE_CONFIG = {
+  SITE_URL: 'https://yourdomain.com',
+  SITE_NAME: 'Premier Tech Solution',
+  // ...
+}
+```
+
+### Backend Configuration
+
+**IMPORTANT**: Never commit real credentials to Git!
+
+1. Create `/home/username/private/hvac-config.php` on server (above public_html)
+2. Copy from `api/config.sample.php`
+3. Fill in your database and SMTP credentials
+
+See `docs/DEPLOY-GREENGEEKS.md` for detailed instructions.
 
 ## Deployment
 
-### Option 1: Vercel (Recommended)
+### Build for Production
 
-1. Push your code to GitHub
-2. Go to [vercel.com](https://vercel.com) and sign in with GitHub
-3. Click "New Project" and import your repository
-4. Add environment variables:
-   - `OPENAI_API_KEY`
-   - `EMAIL_API_KEY`
-   - `TO_EMAIL`
-5. Deploy!
-
-### Option 2: Netlify
-
-1. Push your code to GitHub
-2. Go to [netlify.com](https://netlify.com) and sign in
-3. Click "New site from Git" and select your repository
-4. Build settings:
-   - Build command: `npm run build`
-   - Publish directory: `dist`
-5. Add environment variables in Site Settings
-6. Deploy!
-
-### Environment Variables
-
-Required environment variables for production:
-
-```
-OPENAI_API_KEY=sk-...           # For chatbot functionality
-EMAIL_API_KEY=...               # For contact form emails
-TO_EMAIL=info@example.com       # Where contact form goes
+```bash
+npm run build:deploy
 ```
 
-## Email Service Setup
+This creates a `deploy/` folder with everything needed for GreenGeeks.
 
-The contact form requires an email service. Recommended options:
+### Upload to GreenGeeks
 
-1. **Resend** (easiest): https://resend.com
-   - Free tier: 100 emails/day
-   - Good documentation
+1. Build deployment package locally
+2. Upload `deploy/` contents to `public_html/` via cPanel File Manager or FTP
+3. Create database and import `db/schema.sql` via phpMyAdmin
+4. Create configuration file in `/home/username/private/hvac-config.php`
+5. Test the site
 
-2. **SendGrid**: https://sendgrid.com
-   - Free tier: 100 emails/day
-   - Industry standard
-
-3. **Postmark**: https://postmarkapp.com
-   - Great deliverability
-   - Free trial available
-
-After choosing a service, update `api/contact.js` with the appropriate API integration.
-
-## Chatbot Setup
-
-The chatbot uses OpenAI's GPT-3.5-turbo model:
-
-1. Get API key from https://platform.openai.com
-2. Add to environment variables as `OPENAI_API_KEY`
-3. Fill out `knowledge-base.txt` with your business information
-4. Test thoroughly before launch
-
-**Cost:** ~$0.002 per conversation (very affordable)
+**Complete step-by-step guide**: See `docs/DEPLOY-GREENGEEKS.md`
 
 ## Development Commands
 
 ```bash
-npm run dev          # Start development server
-npm run build        # Build for production
-npm run preview      # Preview production build
-npm run lint         # Run ESLint
+npm run dev                 # Start development server
+npm run build               # Build for production
+npm run build:deploy        # Build + create deployment package
+npm run preview             # Preview production build
+npm run lint                # Run ESLint
+npm run check:placeholders  # Check for placeholder content
 ```
+
+## Security Features
+
+- **Rate Limiting**: 5 submissions per 10 minutes per IP
+- **Honeypot**: Bot detection and silent rejection
+- **Input Validation**: Server-side validation of all fields
+- **Prepared Statements**: SQL injection protection
+- **CSRF Protection**: Origin/Referer validation
+- **IP Privacy**: Only SHA-256 hashes stored, never raw IPs
+- **Config Protection**: `.htaccess` denies direct access to config files
 
 ## Browser Support
 
@@ -225,16 +183,63 @@ This site follows WCAG 2.1 Level AA guidelines:
 - Proper heading hierarchy
 - Sufficient color contrast
 
+## Placeholder Guard
+
+A pre-build script checks for placeholder content and unverified claims. Build will fail if found.
+
+Protected patterns include:
+- Phone: `(123) 456-7890`, `555-` patterns
+- Email: `example.com`, `test@`, placeholder domains
+- Text: `[To be specified]`, `Lorem ipsum`
+- Claims: `licensed`, `insured`, `certified`, `free estimate`, etc.
+
+Override only when absolutely necessary by editing `scripts/check-placeholders.js`.
+
+## Troubleshooting
+
+### Site shows 404 on page refresh
+
+- Verify `.htaccess` is uploaded to `public_html/`
+- Check that Apache `mod_rewrite` is enabled (usually is on GreenGeeks)
+
+### Contact form not working
+
+- Check database credentials in config file
+- Verify database tables exist in phpMyAdmin
+- Check PHP error logs in cPanel → Errors
+
+### No email notifications
+
+- Verify SMTP credentials in config file
+- Check email account exists in cPanel → Email Accounts
+- Ensure `MAIL_FROM` matches `SMTP_USER`
+- Check spam folder
+
+See `docs/DEPLOY-GREENGEEKS.md` for complete troubleshooting guide.
+
 ## Maintenance
 
-See `CHANGELOG.md` for a complete history of changes.
+- **Monitor leads**: Check phpMyAdmin weekly
+- **Backup database**: Export via phpMyAdmin monthly
+- **Clear rate limits**: Empty `rate_limits` table monthly
+- **Review logs**: Check cPanel error logs regularly
+
+## Documentation
+
+- **Deployment**: `docs/DEPLOY-GREENGEEKS.md` - Complete deployment guide
+- **Database**: `db/README.md` - Database setup instructions
+- **Changelog**: `CHANGELOG.md` - Version history
 
 ## Support
 
-For technical issues with the website code, refer to:
-- React docs: https://react.dev
-- Vite docs: https://vitejs.dev
-- Tailwind docs: https://tailwindcss.com
+For hosting issues:
+- **GreenGeeks Support**: Available 24/7 via cPanel
+
+For technical documentation:
+- React: https://react.dev
+- Vite: https://vitejs.dev
+- Tailwind: https://tailwindcss.com
+- PHPMailer: https://github.com/PHPMailer/PHPMailer
 
 ## License
 

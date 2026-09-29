@@ -6,7 +6,8 @@ export default function Contact() {
     name: '',
     email: '',
     phone: '',
-    message: ''
+    message: '',
+    website: '' // Honeypot field
   })
   const [status, setStatus] = useState({ type: '', message: '' })
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -24,26 +25,28 @@ export default function Contact() {
     setStatus({ type: '', message: '' })
 
     try {
-      const response = await fetch('/api/contact', {
+      const response = await fetch('/api/contact.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       })
 
-      if (!response.ok) throw new Error('Failed to send message')
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to send message')
+      }
 
       setStatus({
         type: 'success',
-        message: 'Thank you for your message! We\'ll get back to you soon.'
+        message: data.message || 'Thank you for your message. We will be in touch soon.'
       })
-      setFormData({ name: '', email: '', phone: '', message: '' })
+      setFormData({ name: '', email: '', phone: '', message: '', website: '' })
     } catch (error) {
       console.error('Contact form error:', error)
       setStatus({
         type: 'error',
-        message: CONTACT_INFO.PHONE_DISPLAY 
-          ? `Sorry, there was an error sending your message. Please call us directly at ${CONTACT_INFO.PHONE_DISPLAY}.`
-          : 'Sorry, there was an error sending your message. Please try again later or use another contact method below.'
+        message: 'Sorry, there was an error sending your message. Please try again later or use another contact method below.'
       })
     } finally {
       setIsSubmitting(false)
@@ -205,6 +208,20 @@ export default function Contact() {
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cool-500 focus:border-transparent resize-none"
                     disabled={isSubmitting}
                   ></textarea>
+                </div>
+
+                {/* Honeypot field - hidden from users, filled by bots */}
+                <div style={{ position: 'absolute', left: '-5000px' }} aria-hidden="true">
+                  <label htmlFor="website">Website</label>
+                  <input
+                    type="text"
+                    id="website"
+                    name="website"
+                    value={formData.website}
+                    onChange={handleChange}
+                    tabIndex="-1"
+                    autoComplete="off"
+                  />
                 </div>
 
                 <button
