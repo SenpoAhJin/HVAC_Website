@@ -5,13 +5,11 @@ import Home from './pages/Home'
 import Services from './pages/Services'
 import About from './pages/About'
 import Contact from './pages/Contact'
+import NotFound from './pages/NotFound'
 
 function App() {
-  // Remove trailing slash from BASE_URL for React Router basename
-  const basename = import.meta.env.BASE_URL.replace(/\/$/, '')
-  
   return (
-    <Router basename={basename}>
+    <Router>
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Layout />}>
@@ -20,6 +18,7 @@ function App() {
           <Route path="about" element={<About />} />
           <Route path="contact" element={<Contact />} />
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   )
