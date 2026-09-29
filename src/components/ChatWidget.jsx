@@ -1,6 +1,8 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { CONTACT_INFO } from '../config/contact'
 
-// Static FAQ data extracted from knowledge-base.txt
+// Static FAQ data
 const faqs = [
   {
     id: 1,
@@ -10,47 +12,47 @@ const faqs = [
   {
     id: 2,
     question: "Do you offer free estimates?",
-    answer: "Yes! We provide free estimates for new installations and replacements. Contact us at (123) 456-7890 or use our contact form to schedule your free estimate."
+    answer: "Yes! We provide free estimates for new installations and replacements. Please use our contact form to schedule your free estimate."
   },
   {
     id: 3,
     question: "What is your service area?",
-    answer: "Please call us at (123) 456-7890 to confirm we service your specific location, or use our contact form with your address."
+    answer: "Please use our contact form with your address, and we'll confirm whether we service your specific location."
   },
   {
     id: 4,
     question: "What are your business hours?",
-    answer: "For our current business hours, please call (123) 456-7890 or check our contact page. We also offer emergency service for urgent HVAC needs."
+    answer: "For our current business hours, please check our contact page or send us a message through the contact form."
   },
   {
     id: 5,
     question: "Do you provide emergency service?",
-    answer: "Yes, we offer emergency HVAC service for urgent repairs. Call (123) 456-7890 to speak with our team about your emergency service needs."
+    answer: "Yes, we offer emergency HVAC service for urgent repairs. Contact us through our contact form for immediate assistance with your emergency service needs."
   },
   {
     id: 6,
     question: "Are you licensed and insured?",
-    answer: "Yes, Premier Tech Solution is fully licensed and insured. Contact us for specific license and insurance information."
+    answer: "Contact us for specific information about our credentials and insurance coverage."
   },
   {
     id: 7,
     question: "Do you offer warranties?",
-    answer: "Yes, we stand behind our work with quality warranties. Contact us at (123) 456-7890 for details about our warranty policies."
+    answer: "Yes, we stand behind our work with quality warranties. Contact us for details about our warranty policies."
   },
   {
     id: 8,
     question: "How can I schedule service?",
-    answer: "You can schedule service by calling (123) 456-7890 or by filling out the contact form on our website. We'll get back to you promptly to confirm your appointment."
+    answer: "You can schedule service by filling out the contact form on our website. We'll get back to you promptly to confirm your appointment."
   },
   {
     id: 9,
     question: "What payment methods do you accept?",
-    answer: "Please contact us at (123) 456-7890 for information about payment methods and financing options."
+    answer: "Please contact us for information about payment methods and financing options."
   },
   {
     id: 10,
     question: "Do you offer maintenance plans?",
-    answer: "For information about our maintenance plans and services, please call (123) 456-7890 or use our contact form."
+    answer: "For information about our maintenance plans and services, please use our contact form."
   }
 ]
 
@@ -165,18 +167,20 @@ export default function ChatWidget() {
                     We're here to help! Contact us directly:
                   </p>
                   <div className="space-y-2">
-                    <a
-                      href="tel:+1234567890"
-                      className="block px-4 py-2 bg-warm-500 text-white rounded-lg hover:bg-warm-600 transition-colors text-center"
-                    >
-                      Call (123) 456-7890
-                    </a>
-                    <a
-                      href="/contact"
+                    {CONTACT_INFO.PHONE_TEL && (
+                      <a
+                        href={`tel:${CONTACT_INFO.PHONE_TEL}`}
+                        className="block px-4 py-2 bg-warm-500 text-white rounded-lg hover:bg-warm-600 transition-colors text-center"
+                      >
+                        Call {CONTACT_INFO.PHONE_DISPLAY}
+                      </a>
+                    )}
+                    <Link
+                      to="/contact"
                       className="block px-4 py-2 bg-cool-500 text-white rounded-lg hover:bg-cool-600 transition-colors text-center"
                     >
                       Use Contact Form
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>

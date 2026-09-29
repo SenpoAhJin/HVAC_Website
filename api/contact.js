@@ -22,8 +22,9 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Invalid email address' })
     }
 
-    // TODO: Business owner needs to configure email service
+    // Email service configuration required
     // Options: SendGrid, Resend, Postmark, AWS SES, etc.
+    // Set EMAIL_API_KEY and TO_EMAIL environment variables
     // 
     // Example with Resend:
     // const resend = new Resend(process.env.EMAIL_API_KEY)

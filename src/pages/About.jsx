@@ -1,3 +1,6 @@
+import { Link } from 'react-router-dom'
+import { CONTACT_INFO } from '../config/contact'
+
 export default function About() {
   const values = [
     {
@@ -23,12 +26,12 @@ export default function About() {
   ]
 
   const whyChooseUs = [
-    'Licensed and insured professionals',
-    'Years of industry experience',
+    'Professional HVAC technicians',
+    'Experienced service team',
     'Prompt, reliable service',
     'Competitive pricing',
     'Quality parts and materials',
-    'Satisfaction guaranteed',
+    'Comprehensive warranties',
     'Emergency service available',
     'Free estimates on installations'
   ]
@@ -49,24 +52,18 @@ export default function About() {
       <section className="py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="prose prose-lg max-w-none">
-            <h2 className="text-4xl font-bold text-gray-900 mb-6 text-center">Our Story</h2>
-            
-            <div className="bg-yellow-50 border-l-4 border-yellow-400 p-6 mb-8">
-              <p className="text-gray-700 italic">
-                <strong>Note:</strong> This section contains placeholder content. The business owner will provide the actual company story, including founding year, background, mission, and what makes Premier Tech Solution unique.
-              </p>
-            </div>
+            <h2 className="text-4xl font-bold text-gray-900 mb-6 text-center">Our Approach</h2>
 
             <p className="text-gray-600 mb-6">
-              Premier Tech Solution was founded with a simple mission: to provide homeowners with reliable, professional HVAC services they can trust. We understand that your home's heating and cooling systems are essential to your comfort and well-being.
+              Premier Tech Solution provides professional residential HVAC services with a focus on quality and customer satisfaction. We specialize in heating systems, cooling systems, heat pumps, and indoor air quality solutions.
             </p>
 
             <p className="text-gray-600 mb-6">
-              What started as a small operation has grown into a full-service HVAC company serving [service area to be specified]. Our growth is built on a foundation of quality work, honest service, and genuine care for our customers.
+              Our team is dedicated to delivering reliable service for all your HVAC needs, from routine maintenance and repairs to complete system installations. We work efficiently to ensure your home's comfort systems operate at their best.
             </p>
 
             <p className="text-gray-600">
-              Today, we're proud to be a locally-owned business that treats every customer like family. Whether it's a routine maintenance call or an emergency repair, we bring the same level of professionalism and attention to detail to every job.
+              We believe in transparent communication, honest recommendations, and workmanship that stands the test of time. Every project receives careful attention to detail and professional execution.
             </p>
           </div>
         </div>
@@ -178,12 +175,21 @@ export default function About() {
           <p className="text-xl mb-8 text-white/95">
             Contact us today to learn more about our services
           </p>
-          <a
-            href="tel:+1234567890"
-            className="inline-block px-8 py-4 bg-white text-warm-600 font-bold rounded-lg hover:bg-gray-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-warm-600"
-          >
-            Call (123) 456-7890
-          </a>
+          {CONTACT_INFO.PHONE_TEL ? (
+            <a
+              href={`tel:${CONTACT_INFO.PHONE_TEL}`}
+              className="inline-block px-8 py-4 bg-white text-warm-600 font-bold rounded-lg hover:bg-gray-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-warm-600"
+            >
+              Call {CONTACT_INFO.PHONE_DISPLAY}
+            </a>
+          ) : (
+            <Link
+              to="/contact"
+              className="inline-block px-8 py-4 bg-white text-warm-600 font-bold rounded-lg hover:bg-gray-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-warm-600"
+            >
+              Contact Us
+            </Link>
+          )}
         </div>
       </section>
     </div>

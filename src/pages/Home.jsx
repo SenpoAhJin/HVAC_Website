@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { CONTACT_INFO } from '../config/contact'
 import PhoneCallButton from '../components/PhoneCallButton'
 
 export default function Home() {
@@ -27,12 +28,6 @@ export default function Home() {
       icon: '🌿',
       color: 'cool'
     }
-  ]
-
-  const trustSignals = [
-    { label: 'Licensed & Insured', value: '✓' },
-    { label: 'Years in Business', value: '[To be specified]' },
-    { label: '5-Star Reviews', value: '[To be specified]' }
   ]
 
   return (
@@ -76,20 +71,6 @@ export default function Home() {
                 View Our Services
               </Link>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Trust Signals */}
-      <section className="bg-gray-50 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            {trustSignals.map((signal, index) => (
-              <div key={index} className="space-y-2">
-                <div className="text-3xl font-bold text-warm-600">{signal.value}</div>
-                <div className="text-gray-700 font-medium">{signal.label}</div>
-              </div>
-            ))}
           </div>
         </div>
       </section>
@@ -182,9 +163,15 @@ export default function Home() {
             Contact us today for a free estimate on your HVAC needs
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="tel:+1234567890" className="inline-block px-8 py-4 bg-white text-warm-600 font-bold rounded-lg hover:bg-gray-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-warm-600">
-              Call (123) 456-7890
-            </a>
+            {CONTACT_INFO.PHONE_TEL ? (
+              <a href={`tel:${CONTACT_INFO.PHONE_TEL}`} className="inline-block px-8 py-4 bg-white text-warm-600 font-bold rounded-lg hover:bg-gray-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-warm-600">
+                Call {CONTACT_INFO.PHONE_DISPLAY}
+              </a>
+            ) : (
+              <Link to="/contact" className="inline-block px-8 py-4 bg-white text-warm-600 font-bold rounded-lg hover:bg-gray-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-warm-600">
+                Contact Us
+              </Link>
+            )}
             <Link to="/contact" className="inline-block px-8 py-4 bg-transparent border-2 border-white text-white font-bold rounded-lg hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-cool-600">
               Request a Quote
             </Link>

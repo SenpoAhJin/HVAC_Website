@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { CONTACT_INFO } from '../config/contact'
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -40,7 +41,9 @@ export default function Contact() {
       console.error('Contact form error:', error)
       setStatus({
         type: 'error',
-        message: 'Sorry, there was an error sending your message. Please call us directly at (123) 456-7890.'
+        message: CONTACT_INFO.PHONE_DISPLAY 
+          ? `Sorry, there was an error sending your message. Please call us directly at ${CONTACT_INFO.PHONE_DISPLAY}.`
+          : 'Sorry, there was an error sending your message. Please try again later or use another contact method below.'
       })
     } finally {
       setIsSubmitting(false)
@@ -48,31 +51,31 @@ export default function Contact() {
   }
 
   const contactInfo = [
-    {
+    CONTACT_INFO.PHONE_DISPLAY && {
       icon: '📞',
       label: 'Phone',
-      value: '(123) 456-7890',
-      link: 'tel:+1234567890'
+      value: CONTACT_INFO.PHONE_DISPLAY,
+      link: `tel:${CONTACT_INFO.PHONE_TEL}`
     },
-    {
+    CONTACT_INFO.EMAIL && {
       icon: '✉️',
       label: 'Email',
-      value: 'info@premiertechsolution.com',
-      link: 'mailto:info@premiertechsolution.com'
+      value: CONTACT_INFO.EMAIL,
+      link: `mailto:${CONTACT_INFO.EMAIL}`
     },
-    {
+    CONTACT_INFO.ADDRESS && {
       icon: '📍',
       label: 'Service Area',
-      value: '[To be specified]',
+      value: CONTACT_INFO.ADDRESS,
       link: null
     },
-    {
+    CONTACT_INFO.HOURS && {
       icon: '🕐',
       label: 'Business Hours',
-      value: '[To be specified]',
+      value: CONTACT_INFO.HOURS,
       link: null
     }
-  ]
+  ].filter(Boolean) // Remove null/undefined entries
 
   return (
     <div className="min-h-screen bg-white">
@@ -123,20 +126,22 @@ export default function Contact() {
               </div>
 
               {/* Emergency Service Banner */}
-              <div className="mt-12 bg-gradient-to-br from-warm-50 to-cool-50 border-l-4 border-warm-500 p-6 rounded-r-lg">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">
-                  Emergency Service Available
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  HVAC emergency? We offer 24/7 emergency service for urgent repairs.
-                </p>
-                <a
-                  href="tel:+1234567890"
-                  className="inline-block px-6 py-3 bg-warm-500 text-white font-semibold rounded-lg hover:bg-warm-600 transition-colors focus-visible-ring"
-                >
-                  Call for Emergency Service
-                </a>
-              </div>
+              {CONTACT_INFO.PHONE_TEL && (
+                <div className="mt-12 bg-gradient-to-br from-warm-50 to-cool-50 border-l-4 border-warm-500 p-6 rounded-r-lg">
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">
+                    Emergency Service Available
+                  </h3>
+                  <p className="text-gray-600 mb-4">
+                    HVAC emergency? We offer emergency service for urgent repairs.
+                  </p>
+                  <a
+                    href={`tel:${CONTACT_INFO.PHONE_TEL}`}
+                    className="inline-block px-6 py-3 bg-warm-500 text-white font-semibold rounded-lg hover:bg-warm-600 transition-colors focus-visible-ring"
+                  >
+                    Call for Emergency Service
+                  </a>
+                </div>
+              )}
             </div>
 
             {/* Contact Form */}

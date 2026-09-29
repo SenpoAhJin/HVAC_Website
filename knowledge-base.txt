@@ -5,7 +5,7 @@ The business owner should fill this out with accurate, specific information abou
 
 ## IMPORTANT INSTRUCTIONS FOR THE CHATBOT:
 - Only answer questions using information in this knowledge base
-- If information isn't available here, direct customers to call (123) 456-7890 or use the contact form
+- If information isn't available here, direct customers to use the contact form
 - Do not provide generic HVAC advice or make up information
 - Be friendly, professional, and helpful
 
@@ -15,13 +15,13 @@ The business owner should fill this out with accurate, specific information abou
 
 **Company Name:** Premier Tech Solution
 
-**Service Area:** [To be specified by business owner - e.g., "Greater Phoenix area including Scottsdale, Mesa, Tempe, and Chandler"]
+**Service Area:** [Owner to specify service area]
 
-**Phone:** (123) 456-7890
+**Phone:** [Owner to specify phone number]
 
-**Email:** info@premiertechsolution.com
+**Email:** [Owner to specify email address]
 
-**Business Hours:** [To be specified - e.g., "Monday-Friday 8am-6pm, Saturday 9am-4pm, Sunday Emergency Only"]
+**Business Hours:** [Owner to specify business hours]
 
 ---
 

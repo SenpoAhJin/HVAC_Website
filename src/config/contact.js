@@ -1,32 +1,26 @@
 /**
  * Business Contact Information Configuration
  * 
- * ⚠️ IMPORTANT: These are PLACEHOLDER values that MUST be replaced with real business information
- * before going live. The current phone number (+1234567890) is NOT REAL.
- * 
- * TO UPDATE:
- * 1. Replace PHONE_DISPLAY with your business phone number (formatted for display)
- * 2. Replace PHONE_TEL with the same number in tel: link format (digits only with country code)
- * 3. Replace EMAIL with your business email address
- * 4. Replace ADDRESS with your business address (or service area description)
- * 5. Replace HOURS with your actual business hours
+ * TO UPDATE: Replace empty strings with real business information.
+ * Components will hide elements when values are empty.
  */
 
 export const CONTACT_INFO = {
-  // ⚠️ PLACEHOLDER - Replace with real phone number
-  PHONE_DISPLAY: '(123) 456-7890',
-  PHONE_TEL: '+1234567890',
+  // Business phone number (formatted for display, e.g., "(555) 123-4567")
+  PHONE_DISPLAY: '',
+  // Phone number for tel: links (digits only with country code, e.g., "+15551234567")
+  PHONE_TEL: '',
   
-  // ⚠️ PLACEHOLDER - Replace with real email
-  EMAIL: 'info@premiertechsolution.com',
+  // Business email address
+  EMAIL: '',
   
-  // ⚠️ PLACEHOLDER - Replace with real address or service area
-  ADDRESS: '[Service area to be specified]',
+  // Business address or service area description
+  ADDRESS: '',
   
-  // ⚠️ PLACEHOLDER - Replace with real business hours
-  HOURS: 'Monday - Friday: 8:00 AM - 6:00 PM\nSaturday: 9:00 AM - 4:00 PM\nSunday: Emergency service only',
+  // Business hours (use \n for line breaks)
+  HOURS: '',
   
-  // Social media links (optional - set to null if not available)
+  // Social media links (set to null if not available)
   FACEBOOK: null,
   INSTAGRAM: null,
   LINKEDIN: null,
