@@ -7,52 +7,27 @@ const faqs = [
   {
     id: 1,
     question: "What services do you offer?",
-    answer: "We offer comprehensive HVAC services including Heating (furnace installation, repair, and replacement), Cooling (AC installation, repair, and replacement), Heat Pumps, and Indoor Air Quality solutions (air purification, filtration, and ventilation systems)."
+    answer: "We offer HVAC services including heating systems (furnace installation, repair, and replacement), cooling systems (AC installation, repair, and replacement), heat pump systems, and indoor air quality solutions (air purification, filtration, and ventilation)."
   },
   {
     id: 2,
-    question: "Do you offer free estimates?",
-    answer: "Yes! We provide free estimates for new installations and replacements. Please use our contact form to schedule your free estimate."
-  },
-  {
-    id: 3,
     question: "What is your service area?",
     answer: "Please use our contact form with your address, and we'll confirm whether we service your specific location."
   },
   {
-    id: 4,
+    id: 3,
     question: "What are your business hours?",
-    answer: "For our current business hours, please check our contact page or send us a message through the contact form."
+    answer: "For our current business hours, please send us a message through the contact form and we'll respond with our schedule."
   },
   {
-    id: 5,
-    question: "Do you provide emergency service?",
-    answer: "Yes, we offer emergency HVAC service for urgent repairs. Contact us through our contact form for immediate assistance with your emergency service needs."
-  },
-  {
-    id: 6,
-    question: "Are you licensed and insured?",
-    answer: "Contact us for specific information about our credentials and insurance coverage."
-  },
-  {
-    id: 7,
-    question: "Do you offer warranties?",
-    answer: "Yes, we stand behind our work with quality warranties. Contact us for details about our warranty policies."
-  },
-  {
-    id: 8,
+    id: 4,
     question: "How can I schedule service?",
     answer: "You can schedule service by filling out the contact form on our website. We'll get back to you promptly to confirm your appointment."
   },
   {
-    id: 9,
+    id: 5,
     question: "What payment methods do you accept?",
-    answer: "Please contact us for information about payment methods and financing options."
-  },
-  {
-    id: 10,
-    question: "Do you offer maintenance plans?",
-    answer: "For information about our maintenance plans and services, please use our contact form."
+    answer: "Please contact us for information about payment methods and available options."
   }
 ]
 

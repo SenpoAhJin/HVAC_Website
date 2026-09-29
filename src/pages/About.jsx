@@ -26,14 +26,12 @@ export default function About() {
   ]
 
   const whyChooseUs = [
-    'Professional HVAC technicians',
-    'Experienced service team',
-    'Prompt, reliable service',
-    'Competitive pricing',
-    'Quality parts and materials',
-    'Comprehensive warranties',
-    'Emergency service available',
-    'Free estimates on installations'
+    'Heating system services',
+    'Cooling system services',
+    'Heat pump systems',
+    'Indoor air quality solutions',
+    'System maintenance',
+    'Repair services'
   ]
 
   return (
@@ -120,7 +118,7 @@ export default function About() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-4xl font-bold text-gray-900 mb-6 text-center">Our Team in Action</h2>
           <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-            Our certified technicians are the heart of our business. Each team member brings expertise, professionalism, and a commitment to your satisfaction.
+            Our technicians are the heart of our business. Each team member brings training and a commitment to quality service.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

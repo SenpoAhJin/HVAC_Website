@@ -65,7 +65,7 @@ export default function Home() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <PhoneCallButton className="inline-block px-8 py-4 bg-white text-warm-600 font-bold rounded-lg hover:bg-gray-100 transition-colors text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-warm-600">
-                Call for Free Estimate
+                Contact Us Today
               </PhoneCallButton>
               <Link to="/services" className="inline-block px-8 py-4 bg-transparent border-2 border-white text-white font-bold rounded-lg hover:bg-white/10 transition-colors text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-cool-600">
                 View Our Services
@@ -134,9 +134,9 @@ export default function Home() {
               <div className="bg-cool-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-3xl">⭐</span>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Expert Technicians</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Skilled Service</h3>
               <p className="text-gray-600">
-                Certified professionals with years of experience
+                Trained technicians for all HVAC services
               </p>
             </div>
 
@@ -144,9 +144,9 @@ export default function Home() {
               <div className="bg-warm-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-3xl">💯</span>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Satisfaction Guaranteed</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Quality Service</h3>
               <p className="text-gray-600">
-                We stand behind our work with quality guarantees
+                We stand behind our work with quality service
               </p>
             </div>
           </div>
@@ -160,7 +160,7 @@ export default function Home() {
             Ready to Get Started?
           </h2>
           <p className="text-xl mb-8 text-white/95">
-            Contact us today for a free estimate on your HVAC needs
+            Contact us today for your HVAC needs
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {CONTACT_INFO.PHONE_TEL ? (

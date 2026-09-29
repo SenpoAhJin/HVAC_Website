@@ -141,7 +141,7 @@ export default function Services() {
                             : 'bg-cool-500 text-white hover:bg-cool-600'
                         }`}
                       >
-                        Get Free Estimate
+                        Contact Us
                       </a>
                     ) : (
                       <Link
@@ -152,7 +152,7 @@ export default function Services() {
                             : 'bg-cool-500 text-white hover:bg-cool-600'
                         }`}
                       >
-                        Get Free Estimate
+                        Contact Us
                       </Link>
                     )}
                   </div>
@@ -160,33 +160,6 @@ export default function Services() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* Emergency Services Banner */}
-      <section className="bg-gray-900 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">
-            Need Emergency Service?
-          </h2>
-          <p className="text-xl text-gray-300 mb-8">
-            Contact us for urgent HVAC repairs
-          </p>
-          {CONTACT_INFO.PHONE_TEL ? (
-            <a
-              href={`tel:${CONTACT_INFO.PHONE_TEL}`}
-              className="inline-block px-8 py-4 bg-gradient-to-r from-warm-500 to-cool-500 text-white font-bold rounded-lg hover:shadow-lg transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
-            >
-              Call Now: {CONTACT_INFO.PHONE_DISPLAY}
-            </a>
-          ) : (
-            <Link
-              to="/contact"
-              className="inline-block px-8 py-4 bg-gradient-to-r from-warm-500 to-cool-500 text-white font-bold rounded-lg hover:shadow-lg transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
-            >
-              Contact Us Now
-            </Link>
-          )}
         </div>
       </section>
     </div>

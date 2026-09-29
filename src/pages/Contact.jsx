@@ -84,7 +84,7 @@ export default function Contact() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
           <h1 className="text-5xl font-bold mb-4">Contact Us</h1>
           <p className="text-xl text-white/95 max-w-2xl mx-auto">
-            Get in touch for a free estimate or to schedule service
+            Get in touch to schedule service
           </p>
         </div>
       </section>
@@ -97,7 +97,7 @@ export default function Contact() {
             <div>
               <h2 className="text-3xl font-bold text-gray-900 mb-6">Get In Touch</h2>
               <p className="text-lg text-gray-600 mb-8">
-                Have a question about our services? Need emergency HVAC repair? We're here to help. Reach out to us using any of the methods below.
+                Have a question about our services? Need HVAC service? We're here to help. Reach out to us using any of the methods below.
               </p>
 
               <div className="space-y-6">
@@ -124,24 +124,6 @@ export default function Contact() {
                   </div>
                 ))}
               </div>
-
-              {/* Emergency Service Banner */}
-              {CONTACT_INFO.PHONE_TEL && (
-                <div className="mt-12 bg-gradient-to-br from-warm-50 to-cool-50 border-l-4 border-warm-500 p-6 rounded-r-lg">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">
-                    Emergency Service Available
-                  </h3>
-                  <p className="text-gray-600 mb-4">
-                    HVAC emergency? We offer emergency service for urgent repairs.
-                  </p>
-                  <a
-                    href={`tel:${CONTACT_INFO.PHONE_TEL}`}
-                    className="inline-block px-6 py-3 bg-warm-500 text-white font-semibold rounded-lg hover:bg-warm-600 transition-colors focus-visible-ring"
-                  >
-                    Call for Emergency Service
-                  </a>
-                </div>
-              )}
             </div>
 
             {/* Contact Form */}

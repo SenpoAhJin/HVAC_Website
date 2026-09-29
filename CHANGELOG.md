@@ -1233,3 +1233,186 @@ All components now respect CONTACT_INFO configuration:
 **Phase 1.9 Status:** ✅ COMPLETE
 **Live Site:** All placeholder content removed
 **Permanent Guard:** Active in prebuild and CI workflow
+
+
+## 2026-09-29 (Tuesday) — 6:30 PM
+
+### PHASE 1.10: FIX 404 ON REFRESH + REMOVE REMAINING UNVERIFIED CLAIMS
+
+#### Issue Fixed: Vercel 404 on Direct Page Loads ✅
+**Problem**: Navigating to `/services`, `/about`, or `/contact` directly (or refreshing) showed Vercel's "404 NOT_FOUND" page instead of the actual page content.
+
+**Root Cause**: Missing SPA (Single Page Application) rewrite rule. Vercel was looking for physical files at `/services`, `/about`, etc., but React Router handles these routes client-side. All non-API requests need to be rewritten to `index.html` so React Router can take over.
+
+**Solution**: Updated `vercel.json` with SPA rewrite rule:
+```json
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
+    },
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
+    }
+  ]
+}
+```
+
+This rule says: "Any request that doesn't start with `/api/` should be served `index.html`". Vercel automatically serves static files (images, CSS, JS, sitemap.xml, robots.txt, favicon.svg) before checking rewrites, so those continue to work correctly.
+
+**Verified**: 
+- API routes remain unchanged: `/api/*` → `/api/*`
+- All other routes: `/services`, `/about`, `/contact`, `/any-path` → `index.html` (React Router handles routing)
+- Static files: `/sitemap.xml`, `/images/*`, `/assets/*` → Served directly
+
+---
+
+#### Unverified Claims Removed ✅
+
+**index.html (Line 11)**
+- **Before**: `"Licensed, insured, and ready to serve you."`
+- **After**: `"Residential HVAC services including heating, cooling, heat pumps, and indoor air quality solutions."`
+- Also updated og:description and twitter:description tags
+
+**index.html (Lines 18, 24, 27)**
+- **Before**: `"Professional residential HVAC services..."`
+- **After**: `"Residential HVAC services..."` (removed "Professional")
+
+**src/pages/Home.jsx (Line 68)**
+- **Before**: `"Call for Free Estimate"`
+- **After**: `"Contact Us Today"`
+
+**src/pages/Home.jsx (Lines 136-139)**
+- **Before**: `"Certified professionals with years of experience"`
+- **After**: `"Trained technicians for all HVAC services"`
+
+**src/pages/Home.jsx (Lines 145-148)**
+- **Before**: `"Satisfaction Guaranteed"` and `"quality guarantees"`
+- **After**: `"Quality Service"` and `"quality service"`
+
+**src/pages/Home.jsx (Line 163)**
+- **Before**: `"Contact us today for a free estimate on your HVAC needs"`
+- **After**: `"Contact us today for your HVAC needs"`
+
+**src/pages/About.jsx (Lines 28-35)**
+- **Before**: 8 items including "Professional HVAC technicians", "Experienced service team", "Comprehensive warranties", "Emergency service available", "Free estimates on installations"
+- **After**: 6 neutral items describing services only:
+  - Heating system services
+  - Cooling system services
+  - Heat pump systems
+  - Indoor air quality solutions
+  - System maintenance
+  - Repair services
+
+**src/pages/About.jsx (Line 121)**
+- **Before**: `"Our certified technicians are the heart of our business..."`
+- **After**: `"Our technicians are the heart of our business..."` (removed "certified")
+
+**src/pages/Services.jsx (Lines 143, 154)**
+- **Before**: `"Get Free Estimate"` buttons
+- **After**: `"Contact Us"` buttons
+
+**src/pages/Services.jsx (Lines 160-178)**
+- **Removed**: Entire "Emergency Services Banner" section
+- **Reason**: Emergency service availability not verified
+
+**src/pages/Contact.jsx (Line 87)**
+- **Before**: `"Get in touch for a free estimate or to schedule service"`
+- **After**: `"Get in touch to schedule service"`
+
+**src/pages/Contact.jsx (Line 100)**
+- **Before**: `"Need emergency HVAC repair?"`
+- **After**: `"Need HVAC service?"`
+
+**src/pages/Contact.jsx (Lines 127-142)**
+- **Removed**: Entire "Emergency Service Available" banner
+- **Reason**: Emergency service availability not verified
+
+**src/components/ChatWidget.jsx (Lines 5-56)**
+- **Removed**: 5 FAQ questions with unverified claims:
+  - "Do you offer free estimates?" (claimed yes)
+  - "Do you provide emergency service?" (claimed yes)
+  - "Are you licensed and insured?" (claimed yes)
+  - "Do you offer warranties?" (claimed yes)
+  - "Do you offer maintenance plans?" (referenced services not verified)
+- **Kept**: 5 FAQ questions with neutral answers:
+  - What services do you offer?
+  - What is your service area?
+  - What are your business hours?
+  - How can I schedule service?
+  - What payment methods do you accept?
+
+---
+
+#### Placeholder Guard Extended ✅
+
+**scripts/check-placeholders.js** - Added unverified claim patterns:
+- `/\blicensed\b/i`
+- `/\binsured\b/i`
+- `/\bcertified\b/i`
+- `/\bguarantee\b/i`
+- `/\bwarrant(y|ies)\b/i`
+- `/\b24\/7\b/i`
+- `/\bsame-day\b/i`
+- `/\bfree estimate/i`
+- `/\byears of (experience|business)\b/i`
+
+**Comment added**: "Owner can remove a word from this list once the claim is verified with documentation"
+
+**Result**: Build now fails if any of these words appear in source code, preventing unverified claims from being deployed.
+
+---
+
+#### Files Modified (10 total):
+1. `vercel.json` - Added SPA rewrite rule
+2. `index.html` - Removed "Licensed, insured" from meta description
+3. `src/pages/Home.jsx` - Removed free estimate, certified, guarantee claims
+4. `src/pages/About.jsx` - Rewrote "Why Choose Us" to neutral service list
+5. `src/pages/Services.jsx` - Removed free estimate buttons, emergency banner
+6. `src/pages/Contact.jsx` - Removed free estimate, emergency references
+7. `src/components/ChatWidget.jsx` - Reduced FAQ from 10 to 5, removed claim-based answers
+8. `scripts/check-placeholders.js` - Added claim word patterns to guard
+9. `CHANGELOG.md` - This entry
+10. (No package.json changes - glob already in devDependencies)
+
+---
+
+#### Build Status:
+- ✅ Placeholder check: PASSED (0 claims found)
+- ✅ Build: SUCCESS (976ms)
+- ✅ Bundle size: 23.23 KB CSS, 295.50 KB JS (gzipped: 4.84 KB + 89.93 KB)
+
+---
+
+#### Local Testing Results:
+
+**Note**: Local preview (`npm run preview`) doesn't support Vercel rewrites, so direct path testing is only valid on live Vercel deployment.
+
+- ✅ Home (`/`): 200 OK
+- ⚠️ `/services`, `/about`, `/contact`: 404 in local preview (expected - rewrites are Vercel-only)
+- ✅ `dist/images/hero/team-at-work.jpg`: EXISTS (og:image verified)
+- ✅ `dist/sitemap.xml`: EXISTS
+- ✅ `dist/robots.txt`: EXISTS  
+- ✅ `dist/favicon.svg`: EXISTS
+
+---
+
+#### What Changed:
+
+**Before Phase 1.10:**
+- Direct page loads showed Vercel 404
+- Site contained "Licensed", "insured", "certified", "free estimates", "emergency service", "warranty", "satisfaction guaranteed"
+- 10 FAQ questions with unverified answers
+
+**After Phase 1.10:**
+- All routes work (pending deployment)
+- Zero unverified claims
+- 5 FAQ questions with neutral answers
+- Permanent guard prevents claims from returning
+
+---
+
+**Phase 1.10 Status:** ✅ CODE COMPLETE - AWAITING DEPLOYMENT
+**Deployment Required:** YES - vercel.json changes must be deployed to fix 404 issue

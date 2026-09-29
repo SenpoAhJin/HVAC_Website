@@ -19,6 +19,7 @@ const __dirname = path.dirname(__filename)
 const projectRoot = path.resolve(__dirname, '..')
 
 // Patterns to search for (case-insensitive)
+// Owner can remove a word from this list once the claim is verified with documentation
 const PLACEHOLDER_PATTERNS = [
   /placeholder\s*=\s*["'][^"']*\bplaceholder\b/i, // Only match placeholder="...placeholder..." not input placeholder attribute
   /this section contains/i,
@@ -40,6 +41,16 @@ const PLACEHOLDER_PATTERNS = [
   /123-456-7890/i,
   /\+?1?234567890/i,
   /info@premiertechsolution\.com/i,
+  // Unverified claims - remove from list once owner verifies
+  /\blicensed\b/i,
+  /\binsured\b/i,
+  /\bcertified\b/i,
+  /\bguarantee\b/i,
+  /\bwarrant(y|ies)\b/i,
+  /\b24\/7\b/i,
+  /\bsame-day\b/i,
+  /\bfree estimate/i,
+  /\byears of (experience|business)\b/i,
 ];
 
 // Directories/files to ignore
