@@ -81,7 +81,7 @@ export default function About() {
             {values.map((value, index) => (
               <div
                 key={index}
-                className="bg-white p-6 rounded-lg shadow-md text-center"
+                className="bg-white p-6 rounded-lg shadow-md text-center card-hover"
               >
                 <div className="text-5xl mb-4">{value.icon}</div>
                 <h3 className="text-xl font-bold text-gray-900 mb-3">{value.title}</h3>
@@ -127,7 +127,7 @@ export default function About() {
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="rounded-lg overflow-hidden shadow-lg">
+            <div className="rounded-lg overflow-hidden shadow-lg card-hover">
               <img
                 src="/images/Image_Assets/HVAC technician servicing air handler/056d30e7da63ca784a837f102726a549.jpg"
                 alt="HVAC technician at work"
@@ -139,7 +139,7 @@ export default function About() {
               </div>
             </div>
 
-            <div className="rounded-lg overflow-hidden shadow-lg">
+            <div className="rounded-lg overflow-hidden shadow-lg card-hover">
               <img
                 src="/images/Image_Assets/HVAC service van tools organized/34368c5ce805de383f9110ef861dfa94.jpg"
                 alt="Organized service van with tools"
@@ -151,7 +151,7 @@ export default function About() {
               </div>
             </div>
 
-            <div className="rounded-lg overflow-hidden shadow-lg">
+            <div className="rounded-lg overflow-hidden shadow-lg card-hover">
               <img
                 src="/images/Image_Assets/HVAC technician servicing air handler/2fb31cf5559f0320b7aca0c0f6d6493d.jpg"
                 alt="HVAC technician servicing equipment"

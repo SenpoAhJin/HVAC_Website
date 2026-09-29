@@ -83,7 +83,7 @@ export default function Services() {
               >
                 {/* Image/Visual */}
                 <div className="flex-shrink-0">
-                  <div className="w-80 h-64 rounded-2xl overflow-hidden shadow-lg">
+                  <div className="w-80 h-64 rounded-2xl overflow-hidden shadow-lg card-hover">
                     <img
                       src={service.image}
                       alt={`${service.title} service`}

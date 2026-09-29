@@ -81,7 +81,7 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-gray-200">
+          <div className="md:hidden py-4 border-t border-gray-200 mobile-menu-enter">
             <div className="flex flex-col space-y-2">
               {navLinks.map((link) => (
                 <Link

@@ -106,7 +106,7 @@ export default function Home() {
             {services.map((service, index) => (
               <div
                 key={index}
-                className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow border border-gray-100"
+                className="bg-white p-6 rounded-lg shadow-md border border-gray-100 card-hover"
               >
                 <div className={`text-5xl mb-4 ${service.color === 'warm' ? 'text-warm-500' : 'text-cool-500'}`}>
                   {service.icon}

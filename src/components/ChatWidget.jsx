@@ -145,7 +145,7 @@ export default function ChatWidget() {
                       </svg>
                     </button>
                     {expandedId === faq.id && (
-                      <div className="px-4 py-3 bg-white text-gray-700 text-sm">
+                      <div className="px-4 py-3 bg-white text-gray-700 text-sm accordion-content">
                         {faq.answer}
                       </div>
                     )}
