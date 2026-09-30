@@ -40,3 +40,6 @@ private/
 
 # Deployment folder
 deploy/
+
+# Test configuration (never commit!)
+test-config/

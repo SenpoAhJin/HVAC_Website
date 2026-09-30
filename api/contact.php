@@ -6,6 +6,10 @@
  * Security: Rate limiting, honeypot, input validation, prepared statements only
  */
 
+// ========================================
+// CHEAP CHECKS FIRST (before config/database)
+// ========================================
+
 // Prevent direct access to this file via browser
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -19,6 +23,71 @@ header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: DENY');
 header('X-XSS-Protection: 1; mode=block');
 header('Content-Type: application/json');
+
+// Maximum request size (500KB) - check BEFORE loading config
+if (isset($_SERVER['CONTENT_LENGTH']) && $_SERVER['CONTENT_LENGTH'] > 512000) {
+    http_response_code(413);
+    echo json_encode(['error' => 'Request too large']);
+    exit;
+}
+
+// Parse input early (needed for cheap validation checks)
+$contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+
+if (strpos($contentType, 'application/json') !== false) {
+    $input = json_decode(file_get_contents('php://input'), true);
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Invalid JSON']);
+        exit;
+    }
+} else {
+    $input = $_POST;
+}
+
+// Honeypot check - if filled, reject silently (BEFORE config/database)
+if (!empty($input['website'] ?? '')) {
+    http_response_code(200);
+    echo json_encode(['success' => true, 'message' => 'Thank you for your message']);
+    exit;
+}
+
+// Validate required fields (BEFORE config/database)
+$errors = [];
+
+if (empty($input['name']) || strlen(trim($input['name'])) < 2) {
+    $errors[] = 'Name is required (minimum 2 characters)';
+}
+if (empty($input['email']) || !filter_var($input['email'], FILTER_VALIDATE_EMAIL)) {
+    $errors[] = 'Valid email is required';
+}
+if (empty($input['message']) || strlen(trim($input['message'])) < 10) {
+    $errors[] = 'Message is required (minimum 10 characters)';
+}
+
+// Max lengths
+if (strlen($input['name'] ?? '') > 100) {
+    $errors[] = 'Name is too long (max 100 characters)';
+}
+if (strlen($input['email'] ?? '') > 255) {
+    $errors[] = 'Email is too long (max 255 characters)';
+}
+if (strlen($input['phone'] ?? '') > 20) {
+    $errors[] = 'Phone is too long (max 20 characters)';
+}
+if (strlen($input['message'] ?? '') > 5000) {
+    $errors[] = 'Message is too long (max 5000 characters)';
+}
+
+if (!empty($errors)) {
+    http_response_code(400);
+    echo json_encode(['error' => 'Validation failed', 'details' => $errors]);
+    exit;
+}
+
+// ========================================
+// NOW LOAD CONFIG (after cheap checks passed)
+// ========================================
 
 // Load configuration - check multiple locations in priority order
 // NEVER use a path inside public web root as the preferred location
@@ -50,13 +119,6 @@ if (!$configLoaded) {
 // Rate limiting configuration
 define('RATE_LIMIT_MAX', 5);  // Max submissions per time window
 define('RATE_LIMIT_WINDOW', 600); // 10 minutes in seconds
-
-// Maximum request size (500KB)
-if (isset($_SERVER['CONTENT_LENGTH']) && $_SERVER['CONTENT_LENGTH'] > 512000) {
-    http_response_code(413);
-    echo json_encode(['error' => 'Request too large']);
-    exit;
-}
 
 /**
  * Validate origin/referer to prevent CSRF
@@ -231,64 +293,10 @@ function sendEmailNotification($data, $config) {
 
 // Main execution
 try {
-    // Validate origin
+    // Validate origin (needs SITE_URL from config, but before database)
     if (!validateOrigin(SITE_URL)) {
         http_response_code(403);
         echo json_encode(['error' => 'Invalid request origin']);
-        exit;
-    }
-    
-    // Parse input (support both JSON and form data)
-    $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
-    
-    if (strpos($contentType, 'application/json') !== false) {
-        $input = json_decode(file_get_contents('php://input'), true);
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            http_response_code(400);
-            echo json_encode(['error' => 'Invalid JSON']);
-            exit;
-        }
-    } else {
-        $input = $_POST;
-    }
-    
-    // Honeypot check - if filled, reject silently
-    if (!empty($input['website'] ?? '')) {
-        http_response_code(200);
-        echo json_encode(['success' => true, 'message' => 'Thank you for your message']);
-        exit;
-    }
-    
-    // Validate required fields
-    $errors = [];
-    
-    if (empty($input['name']) || strlen(trim($input['name'])) < 2) {
-        $errors[] = 'Name is required (minimum 2 characters)';
-    }
-    if (empty($input['email']) || !filter_var($input['email'], FILTER_VALIDATE_EMAIL)) {
-        $errors[] = 'Valid email is required';
-    }
-    if (empty($input['message']) || strlen(trim($input['message'])) < 10) {
-        $errors[] = 'Message is required (minimum 10 characters)';
-    }
-    
-    // Max lengths
-    if (strlen($input['name'] ?? '') > 100) {
-        $errors[] = 'Name is too long (max 100 characters)';
-    }
-    if (strlen($input['email'] ?? '') > 255) {
-        $errors[] = 'Email is too long (max 255 characters)';
-    }
-    if (strlen($input['phone'] ?? '') > 20) {
-        $errors[] = 'Phone is too long (max 20 characters)';
-    }
-    if (strlen($input['message'] ?? '') > 5000) {
-        $errors[] = 'Message is too long (max 5000 characters)';
-    }
-    
-    if (!empty($errors)) {
-        http_response_code(400);
-        echo json_encode(['error' => 'Validation failed', 'details' => $errors]);
         exit;
     }
     
