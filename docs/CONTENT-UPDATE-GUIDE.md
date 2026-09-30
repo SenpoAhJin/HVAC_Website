@@ -47,7 +47,6 @@ This guide shows exactly where to update common content. Use "Find and Replace" 
 
 1. `src/components/Footer.jsx` (line ~49)
 2. `src/pages/Contact.jsx` (line ~54)
-3. `knowledge-base.txt` (line ~24)
 
 **Find:** `[To be specified]`  
 **Replace With:** Your service area (e.g., "Greater Phoenix area including Scottsdale, Mesa, and Tempe")
@@ -61,7 +60,6 @@ This guide shows exactly where to update common content. Use "Find and Replace" 
 **Files to Update:**
 
 1. `src/pages/Contact.jsx` (line ~58)
-2. `knowledge-base.txt` (line ~30)
 
 **Find:** `[To be specified]`  
 **Replace With:** Your business hours (e.g., "Monday-Friday 8am-6pm, Saturday 9am-4pm")
@@ -126,27 +124,6 @@ const trustSignals = [
 
 ---
 
-## Chatbot Knowledge Base
-
-**File:** `knowledge-base.txt`
-
-**What to Fill Out:**
-- Lines 24-26: Service area, phone, email, hours
-- Lines 32-34: Heating services details
-- Lines 36-38: Cooling services details
-- Lines 40-42: Heat pump details
-- Lines 44-46: Indoor air quality details
-- Lines 52-55: Pricing information
-- Lines 61-64: Scheduling details
-- Lines 70-74: Emergency service info
-- Lines 80-100: FAQs
-- Lines 106-110: What makes you different
-- Lines 116-118: Payment and financing
-
-**Pro Tip:** Be specific! The more details you provide, the better the chatbot can help customers.
-
----
-
 ## Adding Photos
 
 **Location:** `Image_Assets/` folder (at project root)
@@ -189,7 +166,6 @@ Use your code editor's "Find in Files" feature:
 - [ ] Find `[To be specified]` → Replace with real info (each instance might be different)
 - [ ] Update `src/pages/About.jsx` company story
 - [ ] Update `src/pages/Home.jsx` trust signals
-- [ ] Fill out `knowledge-base.txt` completely
 - [ ] Add photos to `Image_Assets/`
 
 ---
@@ -226,12 +202,10 @@ After making updates:
 - Forget to update tel: links when changing phone number
 - Leave any `[To be specified]` placeholders
 - Use uncompressed photos (slows site down)
-- Skip filling out chatbot knowledge base
 - Commit `.env.local` file to git (keep secrets secret!)
 
 ✅ **Do:**
 - Update ALL instances of phone/email
-- Be thorough with chatbot knowledge base
 - Compress photos before adding
 - Test everything after making changes
 - Keep CHANGELOG.md updated with your changes

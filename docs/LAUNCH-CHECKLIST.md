@@ -75,27 +75,13 @@ This comprehensive checklist ensures your Premier Tech Solution website is fully
 
 ### 1.4 Contact Form Integration 🔧 (Essential)
 
-- [ ] **Get EMAIL_API_KEY**
-  - Option A: Resend.com (Recommended, free tier: 3000 emails/month)
-    1. Sign up: https://resend.com
-    2. Verify domain or use onboarding domain
-    3. Generate API key
-  
-  - Option B: SendGrid (free tier: 100 emails/day)
-    1. Sign up: https://sendgrid.com
-    2. Verify sender email
-    3. Generate API key
-
-- [ ] **Add EMAIL_API_KEY to Vercel**
-  1. Log in to Vercel dashboard
-  2. Select project: premier-tech-solution
-  3. Settings → Environment Variables
-  4. Add: Name: `EMAIL_API_KEY`, Value: [your key]
-  5. Environments: Production, Preview, Development
-  6. Save and redeploy
+- [ ] **Configure email delivery in contact.php**
+  - Update SMTP settings in `api/contact.php`
+  - Or use PHP's built-in mail() function (check with hosting provider)
+  - Set recipient email address for form submissions
 
 - [ ] **Test contact form**
-  - Visit live site
+  - Visit live site after deployment
   - Fill out form with real data
   - Submit and verify email received
   - Check spam folder if not in inbox
@@ -104,39 +90,26 @@ This comprehensive checklist ensures your Premier Tech Solution website is fully
 
 ## Phase 2: Technical Verification
 
-### 2.1 GitHub Pages Deployment ✅
+### 2.1 GreenGeeks Deployment
 
-- [ ] **Check workflow status**
-  - Visit: https://github.com/SenpoAhJin/HVAC_Website/actions
-  - Latest run should show green checkmark
-  - If failed: Review logs and fix errors
+- [ ] **Upload files via FTP/SFTP**
+  - Follow: `docs/DEPLOY-GREENGEEKS.md`
+  - Upload entire `deploy/` folder contents to public_html
 
-- [ ] **Test GitHub Pages URL**
-  - Visit: https://senpoahjin.github.io/HVAC_Website/
+- [ ] **Test production URL**
+  - Visit your domain
   - Should load homepage (no white screen)
   - Open DevTools (F12) → Console → No red errors
 
 - [ ] **Verify all pages load**
-  - Home: https://senpoahjin.github.io/HVAC_Website/
-  - Services: https://senpoahjin.github.io/HVAC_Website/services
-  - About: https://senpoahjin.github.io/HVAC_Website/about
-  - Contact: https://senpoahjin.github.io/HVAC_Website/contact
+  - Home: https://yourdomain.com/
+  - Services: https://yourdomain.com/services
+  - About: https://yourdomain.com/about
+  - Contact: https://yourdomain.com/contact
 
-**Reference:** See `POST-DEPLOYMENT-VERIFICATION.md` for detailed testing guide
+**Reference:** See `docs/DEPLOY-GREENGEEKS.md` for deployment guide
 
-### 2.2 Vercel Deployment ✅
-
-- [ ] **Test Vercel URL**
-  - Visit: https://premier-tech-solution.vercel.app
-  - Should load correctly
-  - All pages functional
-
-- [ ] **Verify environment variables**
-  - Check EMAIL_API_KEY is set
-  - Test contact form submission
-  - Should show success message
-
-### 2.3 Cross-Browser Testing
+### 2.2 Cross-Browser Testing
 
 Test on multiple browsers and devices:
 
@@ -158,15 +131,10 @@ Test on multiple browsers and devices:
   - [ ] 1024px width (small laptops)
   - [ ] 1920px width (desktop)
 
-### 2.4 Performance Testing
-
-- [ ] **Run Lighthouse Audit**
-  1. Open site in Chrome
-  2. DevTools (F12) → Lighthouse tab
-  3. Generate report for Mobile + Desktop
-  4. Target scores: Performance >80, Accessibility >90, Best Practices >90, SEO >90
+### 2.3 Performance Testing
 
 - [ ] **Check page load speed**
+  - Use tools like: GTmetrix, Pingdom, or WebPageTest
   - First Contentful Paint: <2 seconds
   - Largest Contentful Paint: <3 seconds
   - Time to Interactive: <4 seconds
@@ -184,12 +152,12 @@ Test on multiple browsers and devices:
 
 - [ ] **Verify site ownership**
   1. Go to: https://search.google.com/search-console
-  2. Add property: https://premier-tech-solution.vercel.app
+  2. Add property: https://yourdomain.com
   3. Verify via HTML file upload or DNS record
 
 - [ ] **Submit sitemap**
   1. In Search Console → Sitemaps
-  2. Submit: https://premier-tech-solution.vercel.app/sitemap.xml
+  2. Submit: https://yourdomain.com/sitemap.xml
   3. Wait for Google to index (1-7 days)
 
 - [ ] **Monitor indexing status**
@@ -351,13 +319,13 @@ Submit business information to these directories:
 
 ### 5.3 Monitoring Setup
 
-- [ ] **Uptime monitoring**
+- [ ] **Monitoring setup**
   - Tool: UptimeRobot (free for basic monitoring)
   - Get alerts if site goes down
 
 - [ ] **Performance monitoring**
-  - Vercel analytics (built-in, free)
-  - Monitors page load times
+  - Use GTmetrix or Pingdom for regular performance checks
+  - Set up weekly or monthly monitoring
 
 ---
 
@@ -428,7 +396,7 @@ Submit business information to these directories:
   - Note any confusion or requests
 
 - [ ] **Technical health check**
-  - Run Lighthouse audit again
+  - Check page performance with GTmetrix or similar tools
   - Check for any console errors
   - Verify all links still working
 
@@ -457,9 +425,9 @@ Submit business information to these directories:
 - [ ] Business hours added
 
 ### Technical (1-2 hours)
-- [ ] EMAIL_API_KEY added to Vercel
+- [ ] Email delivery configured in contact.php
 - [ ] Contact form tested and working
-- [ ] Both URLs loading correctly (Vercel + GitHub Pages)
+- [ ] Production URL loading correctly
 
 ### SEO (1 hour)
 - [ ] Google Search Console setup
@@ -526,14 +494,14 @@ Submit business information to these directories:
 ## Post-Launch Support Contacts
 
 ### Technical Issues
-- **Hosting:** Vercel Support (https://vercel.com/support)
+- **Hosting:** GreenGeeks Support (https://www.greengeeks.com/support)
 - **Domain:** Your domain registrar support
-- **Email API:** Resend or SendGrid support
+- **Email:** Your email provider support
 
 ### Development Questions
 - Review documentation files in project
-- Post-deployment guide: `POST-DEPLOYMENT-VERIFICATION.md`
-- Content updates: `CONTENT-UPDATE-GUIDE.md`
+- Deployment guide: `docs/DEPLOY-GREENGEEKS.md`
+- Content updates: `docs/CONTENT-UPDATE-GUIDE.md`
 
 ### Future Development
 - Review: `PHASE-2-ADVANCED-FEATURES.md`
@@ -565,8 +533,8 @@ Track these KPIs after launch:
 Once you've completed the "Quick Launch Checklist" section, you're ready to go live!
 
 **Final Pre-Launch Question:** Have you backed up all credentials?
-- [ ] EMAIL_API_KEY saved securely
-- [ ] Vercel account credentials
+- [ ] Email configuration details saved securely
+- [ ] FTP/SFTP credentials saved
 - [ ] Domain registrar login
 - [ ] GitHub repository access
 
