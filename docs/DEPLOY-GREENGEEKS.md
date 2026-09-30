@@ -6,7 +6,7 @@ Complete step-by-step instructions for deploying Premier Tech Solution to GreenG
 
 - GreenGeeks hosting account with cPanel access
 - Supabase account (free tier available)
-- Email account for SMTP notifications
+- Email account on your domain for notifications
 - Domain name configured and pointing to GreenGeeks
 
 ## Phase 1: Database Setup (Supabase)
@@ -102,7 +102,7 @@ Using cPanel **File Manager**:
 return [
   'supabase' => [
     'SUPABASE_URL' => 'https://xxxxxxxxxxxxx.supabase.co',
-    'SUPABASE_SECRET_KEY' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+    'SUPABASE_SECRET_KEY' => 'PASTE_YOUR_SECRET_KEY_HERE',
   ],
   
   'email' => [

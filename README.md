@@ -117,9 +117,9 @@ export const SITE_CONFIG = {
 
 **IMPORTANT**: Never commit real credentials to Git!
 
-1. Create `/home/username/private/hvac-config.php` on server (above public_html)
+1. Create `/home/username/private_config/premier_tech_config.php` on server (above public_html)
 2. Copy from `api/config.sample.php`
-3. Fill in your database and SMTP credentials
+3. Fill in your Supabase URL, secret key, and email addresses
 
 See `docs/DEPLOY-GREENGEEKS.md` for detailed instructions.
 
@@ -208,9 +208,9 @@ Override only when absolutely necessary by editing `scripts/check-placeholders.j
 
 ### No email notifications
 
-- Verify SMTP credentials in config file
+- Verify email addresses in config file (MAIL_FROM and MAIL_TO)
 - Check email account exists in cPanel → Email Accounts
-- Ensure `MAIL_FROM` matches `SMTP_USER`
+- Check cPanel → Email Deliverability for SPF/DKIM issues
 - Check spam folder
 
 See `docs/DEPLOY-GREENGEEKS.md` for complete troubleshooting guide.
@@ -225,7 +225,8 @@ See `docs/DEPLOY-GREENGEEKS.md` for complete troubleshooting guide.
 ## Documentation
 
 - **Deployment**: `docs/DEPLOY-GREENGEEKS.md` - Complete deployment guide
-- **Database**: `db/README.md` - Database setup instructions
+- **Content Updates**: `docs/CONTENT-UPDATE-GUIDE.md` - Update guide
+- **Launch Checklist**: `docs/LAUNCH-CHECKLIST.md` - Pre-launch tasks
 - **Changelog**: `CHANGELOG.md` - Version history
 
 ## Support
@@ -237,7 +238,7 @@ For technical documentation:
 - React: https://react.dev
 - Vite: https://vitejs.dev
 - Tailwind: https://tailwindcss.com
-- PHPMailer: https://github.com/PHPMailer/PHPMailer
+- Supabase: https://supabase.com/docs
 
 ## License
 

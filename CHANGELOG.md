@@ -580,3 +580,41 @@ The following features were developed before the first git commit on 2026-09-29:
 - No secrets in tracked files ✓
 
 **End-to-end test:** not run (no local Supabase config available)
+
+---
+
+## 2026-09-30 (pending) — Phase 2.3: Backend Verification and Security Fixes
+
+**Git commit:** (to be added after commit)
+
+### Documentation
+- Removed all SMTP/PHPMailer references (email now uses PHP mail() directly)
+- Updated README.md: fixed config path, removed SMTP credentials references
+- Updated DEPLOY-GREENGEEKS.md: removed SMTP terminology
+- Changed config.sample.php placeholder key from JWT format to plain text "PASTE_YOUR_SECRET_KEY_HERE"
+- Verified no actual secrets in git history
+
+### Security Fixes
+- **Stored raw text**: Database now stores visitor input as typed (trim + control char stripping only, no HTML escaping)
+- Email sent as plain text, so no HTML escaping needed
+- **Email header injection prevention**:
+  - Subject changed to fixed text "New Contact Form Submission" (no user input)
+  - Reply-To only added if email passes FILTER_VALIDATE_EMAIL
+  - CR/LF characters stripped from all header values
+- **Client IP**: Changed from X-Forwarded-For to REMOTE_ADDR only (prevents IP spoofing)
+- **Rate limit**: URL-encode timestamp and ip_hash in Supabase query
+
+### Testing
+- PHP syntax checks: All files passed ✓
+- Keepalive web access: Returns empty body (exits for non-CLI) ✓
+- Keepalive CLI: Prints "FAILED: Config file not found" (generic message) ✓
+- Email injection test: `a@b.com\r\nBcc: x@y.com` sanitized to invalid email, Reply-To not added ✓
+- Input sanitization test: `Tom & Jerry's <b>` stored as-is (raw text preserved) ✓
+
+### Config Location Verified
+- Local: `/home/username/../private_config/premier_tech_config.php` (outside repo)
+- GreenGeeks: `/home/username/private_config/premier_tech_config.php` (outside public_html)
+- Missing file: contact.php returns HTTP 503, keepalive.php prints FAILED
+
+### What Was Not Run
+- End-to-end test with real Supabase: not run (no local config file)

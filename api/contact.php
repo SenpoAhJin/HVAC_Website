@@ -67,6 +67,14 @@ $email = trim($data['email'] ?? '');
 $phone = isset($data['phone']) ? trim($data['phone']) : null;
 $message = trim($data['message'] ?? '');
 
+// Strip control characters except line breaks (\r\n) in message
+$name = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/u', '', $name);
+$email = preg_replace('/[\x00-\x1F\x7F]/u', '', $email);
+if ($phone !== null) {
+  $phone = preg_replace('/[\x00-\x1F\x7F]/u', '', $phone);
+}
+$message = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/u', '', $message);
+
 $errors = [];
 
 // Name: 1-100 characters
@@ -95,15 +103,8 @@ if (!empty($errors)) {
   exit;
 }
 
-// Sanitize inputs
-$name = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
-$email = filter_var($email, FILTER_SANITIZE_EMAIL);
-$phone = $phone ? htmlspecialchars($phone, ENT_QUOTES, 'UTF-8') : null;
-$message = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
-
 // 3. Compute ip_hash and user_agent
-$clientIp = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? 'unknown';
-$clientIp = explode(',', $clientIp)[0]; // Take first IP if multiple
+$clientIp = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
 $ipHash = hash('sha256', $config['security']['IP_HASH_SALT'] . $clientIp);
 
 $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
@@ -111,7 +112,7 @@ $userAgent = substr($userAgent, 0, 300); // Trim to 300 chars
 
 // 4. Rate limit: 5 leads per ip_hash per hour
 $oneHourAgo = gmdate('Y-m-d\TH:i:s\Z', time() - 3600);
-$rateLimitUrl = $config['supabase']['SUPABASE_URL'] . '/rest/v1/leads?select=id&ip_hash=eq.' . $ipHash . '&created_at=gte.' . $oneHourAgo;
+$rateLimitUrl = $config['supabase']['SUPABASE_URL'] . '/rest/v1/leads?select=id&ip_hash=eq.' . rawurlencode($ipHash) . '&created_at=gte.' . rawurlencode($oneHourAgo);
 
 $rateLimitCheck = @file_get_contents($rateLimitUrl, false, stream_context_create([
   'http' => [
@@ -180,7 +181,11 @@ if ($insertResult !== false || (isset($http_response_header) && strpos($http_res
 
 // 6. Email the lead
 $emailSent = false;
-$emailSubject = 'New Contact Form Submission from ' . $name;
+
+// Fixed subject with no visitor input
+$emailSubject = 'New Contact Form Submission';
+
+// Plain text body
 $emailBody = "New contact form submission:\n\n";
 $emailBody .= "Name: {$name}\n";
 $emailBody .= "Email: {$email}\n";
@@ -189,12 +194,21 @@ if ($phone) {
 }
 $emailBody .= "\nMessage:\n{$message}\n";
 
+// Strip CR/LF from all header values
+$mailFrom = str_replace(["\r", "\n"], '', $config['email']['MAIL_FROM']);
+$replyToEmail = str_replace(["\r", "\n"], '', $email);
+
+// Build headers
 $headers = [
-  'From: ' . $config['email']['MAIL_FROM'],
-  'Reply-To: ' . $email,
+  'From: ' . $mailFrom,
   'X-Mailer: PHP/' . phpversion(),
   'Content-Type: text/plain; charset=UTF-8'
 ];
+
+// Add Reply-To only if email is valid
+if (filter_var($replyToEmail, FILTER_VALIDATE_EMAIL)) {
+  $headers[] = 'Reply-To: ' . $replyToEmail;
+}
 
 if (@mail($config['email']['MAIL_TO'], $emailSubject, $emailBody, implode("\r\n", $headers))) {
   $emailSent = true;

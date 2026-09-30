@@ -11,7 +11,7 @@
 return [
   'supabase' => [
     'SUPABASE_URL' => 'https://xxxxxxxxxxxxx.supabase.co',
-    'SUPABASE_SECRET_KEY' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.example_fake_key_do_not_use',
+    'SUPABASE_SECRET_KEY' => 'PASTE_YOUR_SECRET_KEY_HERE',
   ],
   
   'email' => [
