@@ -543,7 +543,7 @@ The following features were developed before the first git commit on 2026-09-29:
 
 ## 2026-09-30 18:05 — Phase 2.2: Supabase Backend
 
-**Git commit:** 6438f4e
+**Git commit:** 4e3346e
 
 - Complete database migration from MySQL to Supabase (PostgreSQL via REST API)
 - Created `db/supabase-schema.sql` with RLS-enabled leads table
