@@ -21,6 +21,32 @@ export default function envReplacePlugin() {
           '  VITE_SITE_URL=https://yourdomain.com\n'
         );
       }
+      
+      // Validate URL format
+      const urlLower = siteUrl.toLowerCase();
+      
+      if (!urlLower.startsWith('https://')) {
+        throw new Error(
+          '\n❌ ERROR: VITE_SITE_URL must start with https://\n\n' +
+          `Current value: ${siteUrl}\n\n` +
+          'Production sites must use HTTPS for security.\n' +
+          'Example: https://example.com\n'
+        );
+      }
+      
+      // Check for placeholder/test domains
+      const invalidDomains = ['yourdomain', 'example.com', 'localhost', 'vercel.app'];
+      const hasInvalidDomain = invalidDomains.some(domain => urlLower.includes(domain));
+      
+      if (hasInvalidDomain) {
+        throw new Error(
+          '\n❌ ERROR: VITE_SITE_URL contains a placeholder or test domain!\n\n' +
+          `Current value: ${siteUrl}\n\n` +
+          'Invalid domains: yourdomain, example.com, localhost, vercel.app\n\n' +
+          'Please set your actual production domain:\n' +
+          '  VITE_SITE_URL=https://your-actual-domain.com\n'
+        );
+      }
     },
     
     transformIndexHtml(html) {

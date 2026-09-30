@@ -25,17 +25,30 @@ header('X-XSS-Protection: 1; mode=block');
 header('Content-Type: application/json');
 
 // Maximum request size (500KB) - check BEFORE loading config
-if (isset($_SERVER['CONTENT_LENGTH']) && $_SERVER['CONTENT_LENGTH'] > 512000) {
+define('MAX_BODY_SIZE', 512000);
+
+if (isset($_SERVER['CONTENT_LENGTH']) && $_SERVER['CONTENT_LENGTH'] > MAX_BODY_SIZE) {
     http_response_code(413);
     echo json_encode(['error' => 'Request too large']);
     exit;
 }
 
 // Parse input early (needed for cheap validation checks)
+// Enforce body size limit even if Content-Length is missing/wrong
 $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
 
 if (strpos($contentType, 'application/json') !== false) {
-    $input = json_decode(file_get_contents('php://input'), true);
+    // Read at most MAX_BODY_SIZE bytes from input stream
+    $rawInput = stream_get_contents(fopen('php://input', 'r'), MAX_BODY_SIZE + 1);
+    
+    // If we read more than the limit, reject
+    if (strlen($rawInput) > MAX_BODY_SIZE) {
+        http_response_code(413);
+        echo json_encode(['error' => 'Request too large']);
+        exit;
+    }
+    
+    $input = json_decode($rawInput, true);
     if (json_last_error() !== JSON_ERROR_NONE) {
         http_response_code(400);
         echo json_encode(['error' => 'Invalid JSON']);
