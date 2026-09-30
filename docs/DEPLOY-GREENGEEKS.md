@@ -5,48 +5,61 @@ Complete step-by-step instructions for deploying Premier Tech Solution to GreenG
 ## Prerequisites
 
 - GreenGeeks hosting account with cPanel access
-- Database access (MySQL)
+- Supabase account (free tier available)
 - Email account for SMTP notifications
 - Domain name configured and pointing to GreenGeeks
 
-## Phase 1: Database Setup
+## Phase 1: Database Setup (Supabase)
 
-### 1.1 Create Database
+### 1.1 Create Supabase Project
 
-1. Login to **cPanel**
-2. Navigate to **MySQL® Databases**
-3. Under "Create New Database":
-   - Database Name: `hvac` (full name will be `username_hvac`)
-   - Click **Create Database**
+1. Go to [supabase.com](https://supabase.com) and sign in
+2. Click **New Project**
+3. Fill in:
+   - **Name**: premier-tech-hvac (or your choice)
+   - **Database Password**: Generate a strong password (you won't need this for the website)
+   - **Region**: Choose closest to your customers
+4. Click **Create new project**
+5. Wait 2-3 minutes for project to be ready
 
-### 1.2 Create Database User
+### 1.2 Run Database Schema
 
-1. Scroll to "MySQL Users" → "Add New User"
-2. Username: `hvacuser` (full name will be `username_hvacuser`)
-3. Generate a strong password (use Password Generator)
-4. **Save this password securely** - you'll need it for configuration
-5. Click **Create User**
+1. In your Supabase project, click **SQL Editor** in the left sidebar
+2. Click **New Query**
+3. Open `db/supabase-schema.sql` from your project folder on your computer
+4. Copy the entire contents
+5. Paste into the Supabase SQL Editor
+6. Click **Run** (or press Ctrl+Enter)
+7. Should see success message: "Success. No rows returned"
 
-### 1.3 Grant Privileges
+### 1.3 Confirm Row Level Security (RLS)
 
-1. Scroll to "Add User To Database"
-2. Select the user (`username_hvacuser`)
-3. Select the database (`username_hvac`)
-4. Click **Add**
-5. On the next screen, check **ALL PRIVILEGES**
-6. Click **Make Changes**
+1. In Supabase, click **Table Editor** in the left sidebar
+2. Select the `leads` table
+3. Look for a shield icon or "RLS enabled" indicator
+4. It should show **RLS is enabled**
+5. If not, go back to SQL Editor and run:
+   ```sql
+   alter table public.leads enable row level security;
+   ```
 
-### 1.4 Import Schema
+### 1.4 Create Secret Key
 
-1. Navigate to **phpMyAdmin** in cPanel
-2. Select your database (`username_hvac`) from the left sidebar
-3. Click the **Import** tab
-4. Click **Choose File** and select `db/schema.sql` from your project
-5. Ensure format is set to **SQL**
-6. Click **Go**
-7. Verify success message and check that two tables exist:
-   - `leads`
-   - `rate_limits`
+1. In Supabase, click **Settings** (gear icon at bottom left)
+2. Click **API** in the settings menu
+3. Scroll to **Project API keys** section
+4. Find **service_role** key (not the anon key)
+5. Click **Reveal** and copy the key
+6. **Save this key securely** - you'll need it for configuration
+7. Give the key a name: go to **Settings** → **API** → **API Key Management** → **Create Service Role Key**
+8. Name it: `greengeeks-contact-form`
+9. Copy the key and save it
+
+**Important Notes:**
+- The service_role key starts with `eyJ...` and is very long
+- Never commit this key to git
+- Never share it publicly
+- This key bypasses RLS, so keep it secret
 
 ## Phase 2: Email Configuration
 
@@ -60,13 +73,13 @@ Complete step-by-step instructions for deploying Premier Tech Solution to GreenG
 6. Set mailbox quota (2048 MB is usually sufficient)
 7. Click **Create**
 
-### 2.2 SMTP Settings
+### 2.2 Check Email Deliverability
 
-Your SMTP settings will be:
-- **Host**: `mail.yourdomain.com`
-- **Port**: `587` (TLS) or `465` (SSL)
-- **Username**: `noreply@yourdomain.com` (full email address)
-- **Password**: The password you just created
+1. In cPanel, find **Email Deliverability**
+2. Check your domain
+3. Look for green checkmarks on SPF and DKIM
+4. If issues are shown, click **Manage** and follow the repair steps
+5. This helps ensure your emails don't go to spam
 
 ## Phase 3: Configuration File
 
@@ -75,44 +88,49 @@ Your SMTP settings will be:
 Using cPanel **File Manager**:
 
 1. Navigate to your home directory (`/home/username/`)
-2. Click **+ Folder** and create `private/`
+2. Click **+ Folder** and create `private_config/`
 3. This folder is ABOVE `public_html/` and not web-accessible
 
 ### 3.2 Create Config File
 
-1. In the `private/` folder, create a new file: `hvac-config.php`
-2. Copy the contents from `api/config.sample.php`
+1. In the `private_config/` folder, create a new file: `premier_tech_config.php`
+2. Copy the contents from `api/config.sample.php` in your project
 3. Edit with your real values:
 
 ```php
 <?php
-// Database Configuration
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'username_hvac');              // Replace username_
-define('DB_USER', 'username_hvacuser');          // Replace username_
-define('DB_PASS', 'your_database_password_here');
-
-// SMTP Configuration
-define('SMTP_HOST', 'mail.yourdomain.com');      // Replace yourdomain.com
-define('SMTP_PORT', 587);
-define('SMTP_USER', 'noreply@yourdomain.com');   // Replace yourdomain.com
-define('SMTP_PASS', 'your_email_password_here');
-
-// Email Addresses
-define('MAIL_TO', 'contact@yourdomain.com');     // Where to send notifications
-define('MAIL_FROM', 'noreply@yourdomain.com');   // Must match SMTP_USER
-
-// Site Configuration
-define('SITE_URL', 'https://yourdomain.com');    // Your actual domain
+return [
+  'supabase' => [
+    'SUPABASE_URL' => 'https://xxxxxxxxxxxxx.supabase.co',
+    'SUPABASE_SECRET_KEY' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+  ],
+  
+  'email' => [
+    'MAIL_TO' => 'info@yourdomain.com',
+    'MAIL_FROM' => 'noreply@yourdomain.com',
+  ],
+  
+  'security' => [
+    'IP_HASH_SALT' => 'random_string_at_least_32_chars_long',
+  ],
+];
 ?>
 ```
+
+**Where to find each value:**
+
+- **SUPABASE_URL**: In Supabase → Settings → API → Project URL
+- **SUPABASE_SECRET_KEY**: The service_role key you created in step 1.4
+- **MAIL_TO**: Your business email where you want to receive contact form notifications
+- **MAIL_FROM**: The email account you created in step 2.1
+- **IP_HASH_SALT**: Generate a random string (at least 32 characters). You can use: [random.org/strings](https://www.random.org/strings/)
 
 4. **Save the file**
 
 ### 3.3 Set Permissions
 
 In File Manager:
-1. Right-click `hvac-config.php` → **Permissions**
+1. Right-click `premier_tech_config.php` → **Permissions**
 2. Set to **600** (owner read/write only)
 3. Click **Change Permissions**
 
@@ -120,11 +138,19 @@ In File Manager:
 
 ### 4.1 Build Deployment Package
 
-On your local machine:
+On your local machine, set your production URL:
 
 ```bash
+# Windows PowerShell
+$env:VITE_SITE_URL="https://yourdomain.com"
+npm run build:deploy
+
+# Mac/Linux
+export VITE_SITE_URL=https://yourdomain.com
 npm run build:deploy
 ```
+
+Replace `yourdomain.com` with your actual domain.
 
 This creates a `deploy/` folder with all necessary files.
 
@@ -159,10 +185,9 @@ public_html/
 │   └── ...
 ├── api/
 │   ├── contact.php
+│   ├── keepalive.php
 │   ├── .htaccess
-│   ├── config.sample.php
-│   └── vendor/
-│       └── PHPMailer/
+│   └── config.sample.php
 └── images/ (if any)
 ```
 
@@ -172,17 +197,37 @@ In File Manager:
 1. Navigate to `public_html/api/`
 2. Right-click `contact.php` → **Permissions**
 3. Set to **755** (rwxr-xr-x)
-4. Verify `.htaccess` is **644**
+4. Do the same for `keepalive.php`
+5. Verify `.htaccess` is **644**
 
-## Phase 5: Testing
+## Phase 5: Cron Job (Keep-Alive)
 
-### 5.1 Basic Site Test
+Supabase Free tier pauses your database after 7 days of inactivity. To prevent this, set up a cron job.
+
+### 5.1 Add Cron Job
+
+1. In cPanel, go to **Cron Jobs**
+2. Under "Add New Cron Job":
+   - **Common Settings**: Select "Twice Per Week (0 0 * * 0,4)"
+   - Or set manually: `0 0 * * 0,4` (runs Sunday and Thursday at midnight)
+3. **Command**: 
+   ```
+   /usr/bin/php /home/username/public_html/api/keepalive.php >> /home/username/logs/keepalive.log 2>&1
+   ```
+   Replace `username` with your actual cPanel username
+4. Click **Add New Cron Job**
+
+This runs every 2-3 days to keep your Supabase project active.
+
+## Phase 6: Testing
+
+### 6.1 Basic Site Test
 
 1. Visit `https://yourdomain.com`
 2. Should load the homepage
 3. Click through all nav links (Home, Services, About, Contact)
 
-### 5.2 SPA Routing Test
+### 6.2 SPA Routing Test
 
 1. Visit `https://yourdomain.com/services` directly (type in browser)
 2. Should load Services page (not 404)
@@ -192,7 +237,7 @@ In File Manager:
 
 ✅ If you see 404 errors, check that `.htaccess` was uploaded correctly
 
-### 5.3 Contact Form Test
+### 6.3 Contact Form Test
 
 1. Visit `https://yourdomain.com/contact`
 2. Fill out the form with test data:
@@ -201,66 +246,72 @@ In File Manager:
 3. Click **Send Message**
 4. Should see success message
 
-### 5.4 Database Verification
+### 6.4 Database Verification
 
-1. Go to **phpMyAdmin** in cPanel
-2. Select your database
-3. Click on the `leads` table
-4. Click **Browse**
-5. Should see your test submission
-6. Verify `email_sent` is `1`
+1. Go to Supabase dashboard
+2. Click **Table Editor**
+3. Select the `leads` table
+4. Should see your test submission
+5. Check that all fields are filled correctly
 
-### 5.5 Email Notification Test
+### 6.5 Email Notification Test
 
-1. Check the inbox for `MAIL_TO` address
+1. Check the inbox for `MAIL_TO` address (from your config)
 2. Should receive an email notification with:
-   - Subject: "New Contact Form Submission - Premier Tech Solution"
+   - Subject: "New Contact Form Submission from [Name]"
    - Body contains form data
    - Reply-To is the visitor's email
 
-### 5.6 Security Tests
+### 6.6 Delete Test Row
 
-**Test 1: Honeypot (Bot Protection)**
-1. Open browser developer tools
-2. Go to Contact page
-3. In Console, type:
-   ```javascript
-   document.getElementById('website').value = 'spam';
-   ```
-4. Submit form
-5. Should appear to succeed (200 OK) but NOT save to database
-6. Check phpMyAdmin - no new lead should be added
+1. In Supabase Table Editor, find your test lead
+2. Hover over the row
+3. Click the trash icon
+4. Confirm deletion
+5. This keeps your database clean
 
-**Test 2: Rate Limiting**
-1. Submit contact form successfully
-2. Immediately submit 5 more times rapidly
-3. After 5 submissions, should get "Too many requests" error
-4. Wait 10 minutes before testing again
+## Phase 7: Ongoing Maintenance
 
-**Test 3: Config File Protection**
-1. Try to access `https://yourdomain.com/api/config.php`
-2. Should get **403 Forbidden**
-3. Try `https://yourdomain.com/api/config.sample.php`
-4. Should also get **403 Forbidden**
+### 7.1 Monitor Leads
 
-## Phase 6: Monitoring
+- **Supabase Dashboard**: Click Table Editor → leads table to see new submissions
+- Check weekly for new contact form submissions
+- Update status column as you respond to leads (new → contacted → closed)
 
-### 6.1 Check Error Logs
+### 7.2 Supabase Plan Decision
 
-In cPanel:
-1. Navigate to **Errors**
-2. Check for PHP errors related to `contact.php`
-3. Common issues:
-   - Database connection failures → Check DB credentials
-   - Email send failures → Check SMTP credentials
-   - Permission errors → Check file permissions
+**Free Tier:**
+- Good for: Low-traffic sites (< 500MB database, < 5GB bandwidth/month)
+- **Important**: Pauses after 7 days of no activity (cron job prevents this)
+- Resumes instantly when accessed
+- No credit card required
 
-### 6.2 Monitor Leads
+**Pro Tier ($25/month):**
+- Never pauses
+- Higher limits
+- Daily backups
+- Better support
+- Recommended for production businesses
 
-Check phpMyAdmin regularly:
-- Review new entries in `leads` table
-- Monitor `email_sent` column (should be 1)
-- If `email_sent` is 0, check SMTP configuration
+**When to upgrade**: When you get 10+ leads per month or want guaranteed uptime.
+
+### 7.3 Secret Key Rotation
+
+For security, rotate your Supabase secret key every 6-12 months:
+
+1. In Supabase → Settings → API → API Key Management
+2. Create a new service role key with a new name
+3. Update your config file with the new key
+4. Test the contact form
+5. Delete the old key
+
+### 7.4 Backup
+
+Supabase Pro tier includes automatic daily backups. On Free tier:
+
+1. Go to Supabase → Database → Backups
+2. Click **Download Backup** monthly
+3. Save the file securely
 
 ## Troubleshooting
 
@@ -274,33 +325,43 @@ Check phpMyAdmin regularly:
 
 ### Problem: Contact form shows "Service temporarily unavailable"
 
-**Cause**: Configuration file not found or database connection failed
+**Cause**: Configuration file not found or Supabase connection failed
 
 **Solution**:
-1. Verify `/home/username/private/hvac-config.php` exists
-2. Check database credentials in config
-3. Test database connection in phpMyAdmin
+1. Verify `/home/username/private_config/premier_tech_config.php` exists
+2. Check that SUPABASE_URL and SUPABASE_SECRET_KEY are correct
+3. Test connection by visiting your Supabase dashboard
+4. Check PHP error logs in cPanel
 
 ### Problem: Form submits but no email received
 
-**Cause**: SMTP configuration incorrect
+**Cause**: Email configuration incorrect
 
 **Solution**:
-1. Check SMTP credentials in config file
-2. Verify email account exists in cPanel
-3. Check that `MAIL_FROM` matches `SMTP_USER`
-4. Check spam folder for test emails
-5. Review error logs for SMTP errors
+1. Verify email account exists in cPanel
+2. Check that `MAIL_FROM` matches an existing email on your domain
+3. Check spam folder for test emails
+4. Review cPanel → Email Deliverability for issues
+5. Check PHP error logs for mail() errors
 
-### Problem: "Too many requests" on first submission
+### Problem: "Too many requests" error
 
-**Cause**: Rate limit table has stale entries
+**Cause**: Submitted more than 5 forms in 1 hour from the same IP
 
 **Solution**:
-1. Go to phpMyAdmin
-2. Select `rate_limits` table
-3. Click **Empty** to clear old entries
-4. Try submitting again
+1. This is normal rate limiting behavior
+2. Wait 1 hour before testing again
+3. Or test from a different network/device
+
+### Problem: Supabase database paused
+
+**Cause**: Free tier pauses after 7 days of inactivity
+
+**Solution**:
+1. Visit your Supabase dashboard - it will resume automatically
+2. Check that your cron job is running (cPanel → Cron Jobs)
+3. Check cron logs: `/home/username/logs/keepalive.log`
+4. Upgrade to Pro tier for no pauses
 
 ### Problem: Images not loading
 
@@ -329,37 +390,15 @@ GreenGeeks provides free Let's Encrypt SSL:
 2. Find your domain
 3. Click **Run AutoSSL**
 4. Certificate should install automatically
-5. Force HTTPS by uncommenting lines in `.htaccess`:
-   ```apache
-   RewriteEngine On
-   RewriteCond %{HTTPS} off
-   RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
-   ```
-
-## Maintenance
-
-### Regular Tasks
-
-1. **Monitor leads**: Check phpMyAdmin weekly for new submissions
-2. **Clear rate limits**: Monthly, empty `rate_limits` table
-3. **Backup database**: Use phpMyAdmin Export feature monthly
-4. **Update dependencies**: Periodically check for PHPMailer updates
-
-### Security Recommendations
-
-1. Change database password every 90 days
-2. Use strong, unique passwords for all accounts
-3. Keep backup of configuration file in secure location (not in git!)
-4. Monitor error logs for suspicious activity
-5. Keep GreenGeeks hosting and PHP version updated
+5. Your site should now load with `https://`
 
 ## Support
 
 - **GreenGeeks Support**: Available 24/7 via cPanel ticket system
+- **Supabase Support**: [supabase.com/support](https://supabase.com/support)
 - **PHP Errors**: Check cPanel → Errors
 - **Email Issues**: Check cPanel → Email Deliverability
-- **Database Issues**: Use phpMyAdmin error messages
 
 ---
 
-**Deployment Complete!** Your site is now live on GreenGeeks shared hosting with PHP/MySQL backend.
+**Deployment Complete!** Your site is now live on GreenGeeks shared hosting with Supabase database backend.

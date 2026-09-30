@@ -116,11 +116,13 @@ const trustSignals = [
 **Update To:**
 ```javascript
 const trustSignals = [
-  { label: 'Licensed & Insured', value: 'License #12345' }, // Your real license #
-  { label: 'Years in Business', value: '15+' }, // Your actual years
-  { label: '5-Star Reviews', value: '200+' } // Your actual review count
+  { label: 'Licensed & Insured', value: 'License #XXXXX' }, // Your actual license number
+  { label: 'Years in Business', value: 'XX+' }, // Your actual years
+  { label: '5-Star Reviews', value: 'XXX+' } // Your actual review count from Google/Yelp
 ]
 ```
+
+**Note:** Only use real, verifiable numbers. Do not invent statistics.
 
 ---
 
@@ -189,10 +191,6 @@ After making updates:
    - Click phone number (should open dialer on mobile)
    - Click email (should open email client)
    - Test contact form
-
-4. **Test chatbot:**
-   - Ask questions you expect customers to ask
-   - Verify answers are accurate and on-brand
 
 ---
 

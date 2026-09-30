@@ -73,18 +73,46 @@ This comprehensive checklist ensures your Premier Tech Solution website is fully
   - Follow: `screenshots/README.md`
   - 8 screenshots total (desktop/mobile views)
 
-### 1.4 Contact Form Integration 🔧 (Essential)
+### 1.4 Database & Backend Setup 🔧 (Essential)
 
-- [ ] **Configure email delivery in contact.php**
-  - Update SMTP settings in `api/contact.php`
-  - Or use PHP's built-in mail() function (check with hosting provider)
-  - Set recipient email address for form submissions
+- [ ] **Create Supabase project**
+  - Sign up at supabase.com (free tier available)
+  - Create new project
+  - Run `db/supabase-schema.sql` in SQL Editor
+  - Confirm RLS is enabled
+
+- [ ] **Create Supabase secret key**
+  - In Supabase: Settings → API → Create Service Role Key
+  - Name it: `greengeeks-contact-form`
+  - Save the key securely (starts with `eyJ...`)
+
+- [ ] **Decide on Supabase plan**
+  - **Free**: Good for low traffic, pauses after 7 days of inactivity (prevented by cron)
+  - **Pro ($25/mo)**: Never pauses, daily backups, better for production
+  - Recommendation: Start with Free, upgrade when you get 10+ leads/month
+
+- [ ] **Configure email delivery**
+  - Create email account in cPanel
+  - Check Email Deliverability (SPF, DKIM)
+  - Fill in config file with email settings
+
+- [ ] **Set up private config file**
+  - Create `/home/username/private_config/premier_tech_config.php`
+  - Fill in: Supabase URL, secret key, email addresses, IP hash salt
+  - Set permissions to 600
+
+- [ ] **Add cron job for Supabase keep-alive** (if using Free tier)
+  - In cPanel: Cron Jobs
+  - Schedule: Twice per week (0 0 * * 0,4)
+  - Command: `/usr/bin/php /home/username/public_html/api/keepalive.php`
+  - Prevents Free tier from pausing
 
 - [ ] **Test contact form**
   - Visit live site after deployment
   - Fill out form with real data
   - Submit and verify email received
-  - Check spam folder if not in inbox
+  - Check Supabase Table Editor for new lead
+  - Delete test lead
 
 ---
 
@@ -533,9 +561,17 @@ Track these KPIs after launch:
 Once you've completed the "Quick Launch Checklist" section, you're ready to go live!
 
 **Final Pre-Launch Question:** Have you backed up all credentials?
+- [ ] Supabase URL and secret key saved securely
 - [ ] Email configuration details saved securely
 - [ ] FTP/SFTP credentials saved
 - [ ] Domain registrar login
 - [ ] GitHub repository access
+- [ ] IP hash salt value saved
+
+**Post-Launch Security Tasks:**
+- [ ] **Rotate Supabase secret key** every 6-12 months (Settings → API → Create new service role key)
+- [ ] **Monitor leads** weekly in Supabase Table Editor
+- [ ] **Check cron job** monthly to ensure keep-alive is running (if Free tier)
+- [ ] **Backup database** monthly (Supabase → Database → Backups → Download)
 
 **Launch the site and start growing your business!** 🚀

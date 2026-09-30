@@ -2,424 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-Entries are listed in reverse chronological order (newest first).
-
----
-
-## 2026-09-30 16:03 — Phase 2.0d: Final Cleanups Before Deployment
-
-**Git commit:** 087eab5
-
-- Deleted unused files: test-routes.js, vercel.json, .vercel/, screenshots/
-- Enhanced VITE_SITE_URL validation: reject placeholders (yourdomain, example.com, localhost, vercel.app) and require https://
-- Enforced body size limit in contact.php even when Content-Length header missing/wrong
-- Tested: build fails on placeholder domains, contact.php rejects oversized payloads (520KB → 413)
-
----
-
-## 2026-09-30 15:27 — Phase 2.0c: Corrections and Cleanup
-
-**Git commit:** d81d540
-
-- Removed all old platform references from documentation
-- Deleted knowledge-base.txt (chatbot removed in Phase 1.6)
-- Moved deployment and content guides to docs/ folder
-- Cleaned up 22 obsolete documentation files
-- Updated all documentation to reflect GreenGeeks + PHP + MySQL architecture
-- Verified no references to Vercel, Neon, OpenAI, or chatbot features remain
-
----
-
-## 2026-09-29 21:25 — Phase 2.0b: Harden Backend, Fix Config Paths
-
-**Git commit:** 2d1527a
-
-- Fixed database config path to use absolute path for private directory
-- Enforced rate limiting in contact form (5 submissions per IP per hour)
-- Enforced body size limits (512KB max) with proper validation
-- Added comprehensive input validation and sanitization
-- Updated VITE_SITE_URL validation in build process
-- Created DEPLOY-GREENGEEKS.md with complete deployment guide
-
----
-
-## 2026-09-29 20:28 — Phase 2.0: GreenGeeks Hosting + MySQL Backend
-
-**Git commit:** dc3b4ea
-
-- Complete architecture pivot from serverless (Vercel) to traditional hosting (GreenGeeks)
-- Replaced Vercel API routes with PHP backend (api/contact.php)
-- Replaced Resend email service with PHP mail() + SMTP
-- Replaced Neon serverless database with MySQL
-- Added database schema for contact form submissions
-- Implemented rate limiting (5 submissions/hour per IP)
-- Added email notifications for new submissions
-- Created deploy/ folder for production builds
-- Updated build process for GreenGeeks deployment
-
----
-
-## 2026-09-29 19:51 — Phase 1.10: Fix 404 on Refresh + Remove Unverified Claims
-
-**Git commit:** 964606f
-
-- Fixed 404 errors on page refresh by implementing .htaccess rewrite rules
-- Removed all unverified trust signals and statistics
-- Removed review count, years in business, service count placeholders
-- Cleaned up About page to remove unverified claims
-- Added deployment diagnostics and verification guides
-
----
-
-## 2026-09-29 19:04 — Phase 1.9: Remove Placeholders + Add Guards
-
-**Git commit:** f40c6f8
-
-- Removed all [To be specified] placeholders from codebase
-- Added permanent placeholder guards to prevent reintroduction
-- Updated About page to remove placeholder warning box
-- Cleaned up documentation
-
----
-
-## 2026-09-29 18:25 — Phase 1.8: Add Completion Report
-
-**Git commit:** 7107ca8
-
-- Created Phase 1.8 completion report
-- Documented all changes and testing results
-
----
-
-## 2026-09-29 18:23 — Phase 1.8: Add Manual Testing Documentation
-
-**Git commit:** a275e49
-
-- Created comprehensive manual testing documentation
-- Added test checklists for all features
-
----
-
-## 2026-09-29 18:15 — Phase 1.8: Drop GitHub Pages + Fix Scroll-to-Top
-
-**Git commit:** f8af6d9
-
-- Removed GitHub Pages deployment (consolidated to Vercel only)
-- Fixed scroll-to-top functionality using useLayoutEffect
-- Added 404 error page
-- Removed GitHub Pages workflows and configuration
-
----
-
-## 2026-09-29 17:04 — Fix GitHub Pages Router
-
-**Git commit:** 0028d45
-
-- Fixed GitHub Pages router basename and 404 fallback
-
----
-
-## 2026-09-29 16:51 — Add Deployment Diagnostics
-
-**Git commit:** 129cefe
-
-- Added deployment diagnostics
-- Documented: both sites down, local works
-
----
-
-## 2026-09-29 14:05 — Add Contact Config and PhoneCallButton
-
-**Git commit:** 1068e99
-
-- Added contact configuration
-- Implemented PhoneCallButton component
-
----
-
-## 2026-09-29 13:47 — Fix Broken Images on GitHub Pages
-
-**Git commit:** cb30cd9
-
-- Fixed broken images on GitHub Pages
-- Implemented BASE_URL for asset paths
-- Renamed image files for compatibility
-
----
-
-## 2026-09-29 13:14 — Add Project Summary
-
-**Git commit:** 0d0680c
-
-- Added final project summary
-- Updated changelog
-- Marked PROJECT COMPLETE
-
----
-
-## 2026-09-29 13:08 — Add Post-Launch Documentation
-
-**Git commit:** 060228d
-
-- Created comprehensive post-launch documentation
-- Added multiple guide files
-- Documented all launch processes
-
----
-
-## 2026-09-29 12:52 — GitHub Pages White Screen Fix + UI/UX Polish
-
-**Git commit:** 1bc5c0f
-
-#### Part A: GitHub Pages White Screen Fix
-
-- Fixed vite.config.js conditional detection
-- Changed to detect Vercel's native VERCEL environment variable
-- Reliable asset path handling for GitHub Pages vs Vercel
-- All assets now load correctly with proper base paths
-
-#### Part B: Scroll-to-Top on Navigation
-
-- Created ScrollToTop component using useLocation hook
-- Implemented on all navigation: navbar, footer, mobile menu, CTAs
-- Works on browser back/forward navigation
-
-#### Part C: UI/UX Polish Pass (7-Point Audit)
-
-1. **Typography Hierarchy**
-   - Added leading-tight to h1/h2, leading-snug to h3, leading-relaxed to paragraphs
-   - Added max-w-prose constraint for optimal reading
-
-2. **Spacing Rhythm**
-   - Verified consistent spacing across all pages
-   - Already optimal (no changes needed)
-
-3. **Hover/Focus States**
-   - Enhanced all buttons with scale effects (hover:scale-105, active:scale-100)
-   - Created .card-hover utility class (shadow-lg + -translate-y-1 on hover)
-   - Applied to 15 cards across Home, Services, About pages
-   - All transitions: 200ms ease-out
-
-4. **Micro-interactions**
-   - Added button scale effects
-   - Created accordion animation for FAQ widget (250ms)
-   - Created mobile menu slide-down animation (200ms)
-   - Professional, responsive feel
-
-5. **Mobile Nav Menu**
-   - Added mobile-menu-enter animation class
-   - Menu slides down smoothly with fade-in
-   - Active page indicator works on mobile
-
-6. **Color Contrast**
-   - Audited all text-over-image sections
-   - Verified WCAG AA compliance (contrast ratio >7:1)
-
-7. **Loading/Empty States**
-   - Contact form shows clear submit states
-   - Error handling with actionable feedback
-   - All states distinguishable
-
-#### Part D: Button and Link Audit
-
-- Audited 45 interactive elements via code inspection
-- All navigation links route correctly
-- All phone/email links configured properly
-- All hover/focus states working
-- Contact form fails gracefully with clear guidance
-
-#### Files Created/Modified
-
-- Created: ScrollToTop.jsx, BUTTON-LINK-AUDIT.md, WHITE-SCREEN-FIX-REPORT.md
-- Modified: vite.config.js, deploy-gh-pages.yml, App.jsx, index.css
-- Modified: Navbar.jsx, ChatWidget.jsx, Home.jsx, About.jsx, Services.jsx
-
----
-
-## 2026-09-29 11:47 — Fix GitHub Pages Routing
-
-**Git commit:** cb53fe8
-
-- Fixed GitHub Pages routing
-- Added server startup tutorial
-
----
-
-## 2026-09-29 11:37 — Add Phase 1.7 Completion Report
-
-**Git commit:** 5501205
-
-- Created Phase 1.7 completion report
-- Documented live URLs for Vercel and GitHub Pages
-
----
-
-## 2026-09-29 11:32 — Phase 1.7: Meta Tags, Sitemap, CI/CD, Production Deploy
-
-**Git commit:** 6fbfa27
-
-#### Visual Documentation Setup
-- Created /screenshots directory with comprehensive README
-- Documented screenshot capture process
-- Listed 8 screenshots to capture
-
-#### Image Optimization Analysis
-- Analyzed all 23 images in Image_Assets
-- Images already optimally compressed (2.70 MB total)
-- No optimization needed
-
-#### Favicon Implementation
-- Created custom SVG favicon with PT initials
-- Warm/cool gradient split theme
-- Professional circular logo design
-
-#### Meta Tags & SEO
-- Updated page title: "Premier Tech Solution - Expert HVAC Services | Heating & Cooling"
-- Added comprehensive meta description
-- Implemented Open Graph tags
-- Added Twitter Card meta tags
-- Set theme color (#F09820)
-- Used hero team photo as social media preview image
-
-#### Sitemap & Robots
-- Created sitemap.xml with all 4 pages
-- Set proper priority levels and change frequencies
-- Created robots.txt referencing sitemap
-- Configured to allow all search engine crawlers
-
-#### Continuous Integration
-- Created GitHub Actions workflow (.github/workflows/ci.yml)
-- Runs on pull requests and pushes to main
-- Tests Node.js versions 18.x and 20.x
-- Validates: dependencies, linting, production build
-
-#### Production Deployment
-- Successfully deployed to Vercel
-- Build completed in 845ms
-- Live URLs: https://premier-tech-solution.vercel.app
-- Automatic deployments configured
-
-#### Files Created/Modified
-- screenshots/README.md, scripts/optimize-images.js
-- public/favicon.svg, index.html (enhanced meta tags)
-- public/sitemap.xml, public/robots.txt
-- .github/workflows/ci.yml, package.json
-
----
-
-## 2026-09-29 11:04 — Add Phase 1.6 Completion Report
-
-**Git commit:** 674403a
-
-- Created Phase 1.6 completion report
-- Documented all chatbot and image changes
-
----
-
-## 2026-09-29 11:02 — Phase 1.6: Static FAQ Chatbot + Real Images
-
-**Git commit:** f1334a0
-
-#### Chatbot Conversion (Conversational AI → Static FAQ)
-
-- Removed OpenAI-powered backend (deleted api/chat.js)
-- Removed OPENAI_API_KEY from .env.example and documentation
-- Built static FAQ widget with 10 Q&A pairs
-- Implemented searchable FAQ interface with expand/collapse
-- Added fallback message directing to contact form
-- Maintained same floating widget position and visual style
-- No AI API calls or network requests - fully client-side
-
-#### Real Image Integration
-
-- Located Image_Assets folder (parent directory)
-- Copied all images to public/images/Image_Assets/
-- Total images: 22 photos across 7 categories
-- Applied image mapping:
-  - Homepage hero: HVAC installation team working
-  - Heating service: furnace replacement installation
-  - Cooling service: rooftop HVAC unit repair
-  - Heat Pumps service: ductless mini split installation
-  - Indoor Air Quality service: HVAC ductwork installation
-  - About page gallery: 3 technician/van photos
-
-#### Visual Adjustments
-
-- Added hero image with gradient overlay
-- Replaced emoji icons with real service photos (w-80 h-64 rounded)
-- Created 3-column gallery layout for About page
-- Applied object-cover CSS for proper image cropping
-- All images display cleanly
-
-#### Visual Verification
-
-- Dev server tested on http://localhost:5174/
-- All pages load without errors
-- All images display correctly
-- FAQ widget opens/closes smoothly
-- FAQ search functionality works
-- Layout clean and professional
-
-#### Files Modified
-
-1. src/components/ChatWidget.jsx - Complete rebuild as static FAQ
-2. src/pages/Home.jsx - Added hero background image
-3. src/pages/Services.jsx - Replaced icons with service photos
-4. src/pages/About.jsx - Added 3-photo team gallery
-5. .env.example - Removed OpenAI references
-6. Deleted: api/chat.js
-7. Added: 22 images in public/images/Image_Assets/
-
-#### Benefits
-
-- No API costs (eliminates $5-20/month OpenAI expense)
-- Instant responses (no network latency)
-- Always available (no external dependencies)
-- Real visuals (professional photos vs placeholder content)
-- Authentic presentation (actual work showcased)
-
----
-
-## 2026-09-29 10:35 — Update CHANGELOG with Phase 1.5
-
-**Git commit:** c335dd9
-
-- Updated CHANGELOG with Phase 1.5 completion details
-
----
-
-## 2026-09-29 10:34 — Phase 1.5: Fix Vercel Config + Add Test Results
-
-**Git commit:** c2142e4
-
-#### PHASE 1.5: PUSH, TEST & HARDEN
-
-- Initialized Git repository and committed all files
-- Pushed code to GitHub repository (https://github.com/SenpoAhJin/HVAC_Website)
-- Fixed vercel.json configuration (removed invalid runtime specification)
-- Tested all pages locally - zero console errors on any page
-- Verified responsive design works on all breakpoints
-- Confirmed all components render correctly
-- Tested client-side form validation
-- API function testing blocked - requires OPENAI_API_KEY and EMAIL_API_KEY
-- Vercel GitHub connection blocked - requires repository admin/write access
-- Created PHASE-1.5-TEST-RESULTS.md with complete test report
-
-#### What's Working
-
-- Frontend: 100% functional
-- Navigation: Works perfectly
-- Responsive design: Verified on all screen sizes
-- Build process: Clean, no errors
-- GitHub integration: Code successfully pushed
-
-#### What Requires Business Owner Action
-
-1. Get OpenAI API key from platform.openai.com
-2. Get email service API key from resend.com or sendgrid.com
-3. Grant Vercel app access to GitHub repository
-4. Add API keys to .env.local for local testing
-5. Add API keys to Vercel environment variables for production
+Entries are listed in chronological order (oldest to newest), append-only.
 
 ---
 
@@ -503,8 +86,8 @@ The following features were developed before the first git commit on 2026-09-29:
 #### Build & Testing
 
 - Fixed Tailwind CSS configuration for stable v3 compatibility
-- Successfully built production bundle (20.77 KB CSS, 290.84 KB JS)
-- Verified all components compile correctly
+- Built production bundle (20.77 KB CSS, 290.84 KB JS)
+- Components compile correctly
 
 #### Final Documentation Suite
 
@@ -523,21 +106,477 @@ The following features were developed before the first git commit on 2026-09-29:
 - Documentation Files: 10
 - Total Files Created: 25+
 - Build Size: 20.77 KB CSS, 290.84 KB JS (gzipped)
-- Production Status: ✅ READY
 
-#### What's Next for Business Owner
+---
 
-1. Add real business information (phone, email, service area)
-2. Write company story for About page
-3. Fill out chatbot knowledge base
-4. Add business photos
-5. Get API keys (OpenAI, email service)
-6. Deploy to Vercel
-7. Complete pre-launch checklist
+## 2026-09-29 10:34 — Phase 1.5: Fix Vercel Config + Add Test Results
 
-**Note:** These features represent approximately 4 hours of development work completed before version control was initialized.
+**Git commit:** c2142e4
+
+#### PHASE 1.5: PUSH, TEST & HARDEN
+
+- Initialized Git repository and committed all files
+- Pushed code to GitHub repository (https://github.com/SenpoAhJin/HVAC_Website)
+- Fixed vercel.json configuration (removed invalid runtime specification)
+- Tested all pages locally - zero console errors on any page
+- Responsive design verified on multiple breakpoints
+- Components render correctly
+- Tested client-side form validation
+- API function testing blocked - requires OPENAI_API_KEY and EMAIL_API_KEY
+- Vercel GitHub connection blocked - requires repository admin/write access
+- Created PHASE-1.5-TEST-RESULTS.md with complete test report
+
+#### What's Working
+
+- Frontend: functional
+- Navigation: works
+- Responsive design: tested on multiple screen sizes
+- Build process: clean, no errors
+- GitHub integration: code pushed
+
+#### What Requires Business Owner Action
+
+1. Get OpenAI API key from platform.openai.com
+2. Get email service API key from resend.com or sendgrid.com
+3. Grant Vercel app access to GitHub repository
+4. Add API keys to .env.local for local testing
+5. Add API keys to Vercel environment variables for production
+
+---
+
+## 2026-09-29 10:35 — Update CHANGELOG with Phase 1.5
+
+**Git commit:** c335dd9
+
+- Updated CHANGELOG with Phase 1.5 completion details
+
+---
+
+## 2026-09-29 11:02 — Phase 1.6: Static FAQ Chatbot + Real Images
+
+**Git commit:** f1334a0
+
+#### Chatbot Conversion (Conversational AI → Static FAQ)
+
+- Removed OpenAI-powered backend (deleted api/chat.js)
+- Removed OPENAI_API_KEY from .env.example and documentation
+- Built static FAQ widget with 10 Q&A pairs
+- Implemented searchable FAQ interface with expand/collapse
+- Added fallback message directing to contact form
+- Maintained same floating widget position and visual style
+- No AI API calls or network requests - fully client-side
+
+#### Real Image Integration
+
+- Located Image_Assets folder (parent directory)
+- Copied all images to public/images/Image_Assets/
+- Total images: 22 photos across 7 categories
+- Applied image mapping:
+  - Homepage hero: HVAC installation team working
+  - Heating service: furnace replacement installation
+  - Cooling service: rooftop HVAC unit repair
+  - Heat Pumps service: ductless mini split installation
+  - Indoor Air Quality service: HVAC ductwork installation
+  - About page gallery: 3 technician/van photos
+
+#### Visual Adjustments
+
+- Added hero image with gradient overlay
+- Replaced emoji icons with real service photos (w-80 h-64 rounded)
+- Created 3-column gallery layout for About page
+- Applied object-cover CSS for proper image cropping
+- All images display cleanly
+
+#### Visual Verification
+
+- Dev server tested on http://localhost:5174/
+- All pages load without errors
+- All images display correctly
+- FAQ widget opens/closes smoothly
+- FAQ search functionality works
+- Layout clean and professional
+
+#### Files Modified
+
+1. src/components/ChatWidget.jsx - Complete rebuild as static FAQ
+2. src/pages/Home.jsx - Added hero background image
+3. src/pages/Services.jsx - Replaced icons with service photos
+4. src/pages/About.jsx - Added 3-photo team gallery
+5. .env.example - Removed OpenAI references
+6. Deleted: api/chat.js
+7. Added: 22 images in public/images/Image_Assets/
+
+#### Benefits
+
+- No API costs (eliminates OpenAI expense)
+- Instant responses (no network latency)
+- Always available (no external dependencies)
+- Real visuals (professional photos vs placeholder content)
+
+---
+
+## 2026-09-29 11:04 — Add Phase 1.6 Completion Report
+
+**Git commit:** 674403a
+
+- Created Phase 1.6 completion report
+- Documented all chatbot and image changes
+
+---
+
+## 2026-09-29 11:32 — Phase 1.7: Meta Tags, Sitemap, CI/CD, Production Deploy
+
+**Git commit:** 6fbfa27
+
+#### Visual Documentation Setup
+- Created /screenshots directory with comprehensive README
+- Documented screenshot capture process
+- Listed 8 screenshots to capture
+
+#### Image Optimization Analysis
+- Analyzed all 23 images in Image_Assets
+- Images at 2.70 MB total
+- No optimization needed
+
+#### Favicon Implementation
+- Created custom SVG favicon with PT initials
+- Warm/cool gradient split theme
+- Professional circular logo design
+
+#### Meta Tags & SEO
+- Updated page title: "Premier Tech Solution - Expert HVAC Services | Heating & Cooling"
+- Added comprehensive meta description
+- Implemented Open Graph tags
+- Added Twitter Card meta tags
+- Set theme color (#F09820)
+- Used hero team photo as social media preview image
+
+#### Sitemap & Robots
+- Created sitemap.xml with all 4 pages
+- Set priority levels and change frequencies
+- Created robots.txt referencing sitemap
+- Configured to allow all search engine crawlers
+
+#### Continuous Integration
+- Created GitHub Actions workflow (.github/workflows/ci.yml)
+- Runs on pull requests and pushes to main
+- Tests Node.js versions 18.x and 20.x
+- Validates: dependencies, linting, production build
+
+#### Production Deployment
+- Deployed to Vercel
+- Build completed in 845ms
+- Live URLs: https://premier-tech-solution.vercel.app
+
+#### Files Created/Modified
+- screenshots/README.md, scripts/optimize-images.js
+- public/favicon.svg, index.html (enhanced meta tags)
+- public/sitemap.xml, public/robots.txt
+- .github/workflows/ci.yml, package.json
+
+---
+
+## 2026-09-29 11:37 — Add Phase 1.7 Completion Report
+
+**Git commit:** 5501205
+
+- Created Phase 1.7 completion report
+- Documented live URLs for Vercel and GitHub Pages
+
+---
+
+## 2026-09-29 11:47 — Fix GitHub Pages Routing
+
+**Git commit:** cb53fe8
+
+- Fixed GitHub Pages routing
+- Added server startup tutorial
+
+---
+
+## 2026-09-29 12:52 — GitHub Pages White Screen Fix + UI/UX Polish
+
+**Git commit:** 1bc5c0f
+
+#### Part A: GitHub Pages White Screen Fix
+
+- Fixed vite.config.js conditional detection
+- Changed to detect Vercel's native VERCEL environment variable
+- Reliable asset path handling for GitHub Pages vs Vercel
+- All assets now load correctly with proper base paths
+
+#### Part B: Scroll-to-Top on Navigation
+
+- Created ScrollToTop component using useLocation hook
+- Implemented on all navigation: navbar, footer, mobile menu, CTAs
+- Works on browser back/forward navigation
+
+#### Part C: UI/UX Polish Pass (7-Point Audit)
+
+1. **Typography Hierarchy**
+   - Added leading-tight to h1/h2, leading-snug to h3, leading-relaxed to paragraphs
+   - Added max-w-prose constraint for optimal reading
+
+2. **Spacing Rhythm**
+   - Checked spacing consistency across all pages
+   - Already consistent (no changes needed)
+
+3. **Hover/Focus States**
+   - Enhanced all buttons with scale effects (hover:scale-105, active:scale-100)
+   - Created .card-hover utility class (shadow-lg + -translate-y-1 on hover)
+   - Applied to 15 cards across Home, Services, About pages
+   - All transitions: 200ms ease-out
+
+4. **Micro-interactions**
+   - Added button scale effects
+   - Created accordion animation for FAQ widget (250ms)
+   - Created mobile menu slide-down animation (200ms)
+   - Professional, responsive feel
+
+5. **Mobile Nav Menu**
+   - Added mobile-menu-enter animation class
+   - Menu slides down smoothly with fade-in
+   - Active page indicator works on mobile
+
+6. **Color Contrast**
+   - Audited all text-over-image sections
+   - Checked WCAG guidelines
+
+7. **Loading/Empty States**
+   - Contact form shows clear submit states
+   - Error handling with actionable feedback
+   - All states distinguishable
+
+#### Part D: Button and Link Audit
+
+- Reviewed interactive elements via code inspection
+- All navigation links route correctly
+- All phone/email links configured properly
+- All hover/focus states working
+- Contact form fails gracefully with clear guidance
+
+#### Files Created/Modified
+
+- Created: ScrollToTop.jsx, BUTTON-LINK-AUDIT.md, WHITE-SCREEN-FIX-REPORT.md
+- Modified: vite.config.js, deploy-gh-pages.yml, App.jsx, index.css
+- Modified: Navbar.jsx, ChatWidget.jsx, Home.jsx, About.jsx, Services.jsx
+
+---
+
+## 2026-09-29 13:08 — Add Post-Launch Documentation
+
+**Git commit:** 060228d
+
+- Created comprehensive post-launch documentation
+- Added multiple guide files
+- Documented all launch processes
+
+---
+
+## 2026-09-29 13:14 — Add Project Summary
+
+**Git commit:** 0d0680c
+
+- Added final project summary
+- Updated changelog
+- Marked PROJECT COMPLETE
+
+---
+
+## 2026-09-29 13:47 — Fix Broken Images on GitHub Pages
+
+**Git commit:** cb30cd9
+
+- Fixed broken images on GitHub Pages
+- Implemented BASE_URL for asset paths
+- Renamed image files for compatibility
+
+---
+
+## 2026-09-29 14:05 — Add Contact Config and PhoneCallButton
+
+**Git commit:** 1068e99
+
+- Added contact configuration
+- Implemented PhoneCallButton component
+
+---
+
+## 2026-09-29 16:51 — Add Deployment Diagnostics
+
+**Git commit:** 129cefe
+
+- Added deployment diagnostics
+- Documented: both sites down, local works
+
+---
+
+## 2026-09-29 17:04 — Fix GitHub Pages Router
+
+**Git commit:** 0028d45
+
+- Fixed GitHub Pages router basename and 404 fallback
+
+---
+
+## 2026-09-29 18:15 — Phase 1.8: Drop GitHub Pages + Fix Scroll-to-Top
+
+**Git commit:** f8af6d9
+
+- Removed GitHub Pages deployment (consolidated to Vercel only)
+- Fixed scroll-to-top functionality using useLayoutEffect
+- Added 404 error page
+- Removed GitHub Pages workflows and configuration
+
+---
+
+## 2026-09-29 18:23 — Phase 1.8: Add Manual Testing Documentation
+
+**Git commit:** a275e49
+
+- Created comprehensive manual testing documentation
+- Added test checklists for all features
+
+---
+
+## 2026-09-29 18:25 — Phase 1.8: Add Completion Report
+
+**Git commit:** 7107ca8
+
+- Created Phase 1.8 completion report
+- Documented all changes and testing results
+
+---
+
+## 2026-09-29 19:04 — Phase 1.9: Remove Placeholders + Add Guards
+
+**Git commit:** f40c6f8
+
+- Removed all [To be specified] placeholders from codebase
+- Added permanent placeholder guards to prevent reintroduction
+- Updated About page to remove placeholder warning box
+- Cleaned up documentation
+
+---
+
+## 2026-09-29 19:51 — Phase 1.10: Fix 404 on Refresh + Remove Unverified Claims
+
+**Git commit:** 964606f
+
+- Fixed 404 errors on page refresh by implementing .htaccess rewrite rules
+- Removed all unverified trust signals and statistics
+- Removed review count, years in business, service count placeholders
+- Cleaned up About page to remove unverified claims
+- Added deployment diagnostics and verification guides
+
+---
+
+## 2026-09-29 20:28 — Phase 2.0: GreenGeeks Hosting + MySQL Backend
+
+**Git commit:** dc3b4ea
+
+- Complete architecture pivot from serverless (Vercel) to traditional hosting (GreenGeeks)
+- Replaced Vercel API routes with PHP backend (api/contact.php)
+- Replaced Resend email service with PHP mail() + SMTP
+- Replaced Neon serverless database with MySQL
+- Added database schema for contact form submissions
+- Implemented rate limiting (5 submissions/hour per IP)
+- Added email notifications for new submissions
+- Created deploy/ folder for production builds
+- Updated build process for GreenGeeks deployment
+
+---
+
+## 2026-09-29 21:25 — Phase 2.0b: Harden Backend, Fix Config Paths
+
+**Git commit:** 2d1527a
+
+- Fixed database config path to use absolute path for private directory
+- Enforced rate limiting in contact form (5 submissions per IP per hour)
+- Enforced body size limits (512KB max) with proper validation
+- Added comprehensive input validation and sanitization
+- Updated VITE_SITE_URL validation in build process
+- Created DEPLOY-GREENGEEKS.md with complete deployment guide
+
+---
+
+## 2026-09-30 15:27 — Phase 2.0c: Corrections and Cleanup
+
+**Git commit:** d81d540
+
+- Removed old platform references from documentation
+- Deleted knowledge-base.txt (chatbot removed in Phase 1.6)
+- Moved deployment and content guides to docs/ folder
+- Cleaned up 22 obsolete documentation files
+- Updated all documentation to reflect GreenGeeks + PHP + MySQL architecture
+
+---
+
+## 2026-09-30 16:03 — Phase 2.0d: Final Cleanups Before Deployment
+
+**Git commit:** 087eab5
+
+- Deleted unused files: test-routes.js, vercel.json, .vercel/, screenshots/
+- Enhanced VITE_SITE_URL validation: reject placeholders (yourdomain, example.com, localhost, vercel.app) and require https://
+- Enforced body size limit in contact.php even when Content-Length header missing/wrong
+- Tested: build fails on placeholder domains, contact.php rejects oversized payloads (520KB → 413)
+
+---
+
+## 2026-09-30 16:25 — Phase 2.1: Corrections from Phase 2.0d
+
+**Git commit:** 60c8700
+
+- Removed all old platform references from docs (Vercel, GitHub Pages, OpenAI, Neon, knowledge-base, chatbot, ROI, revenue, Lighthouse)
+- Cleaned CONTENT-UPDATE-GUIDE.md: removed knowledge-base.txt references, removed invented statistics from Trust Signals examples
+- Cleaned LAUNCH-CHECKLIST.md: replaced Vercel/GitHub Pages with GreenGeeks, removed Lighthouse audits
+- Rebuilt CHANGELOG.md with real git commit dates from git log
+- Tested build with valid https domain (https://www.premiertech-hvac.net) - succeeded
+- Tested body size enforcement with Transfer-Encoding: chunked (520KB → HTTP 413)
 
 ---
 
 **Document maintained by:** Kiro AI Development Agent  
 **Last Updated:** 2026-09-30
+
+---
+
+## 2026-09-30 18:05 — Phase 2.2: Supabase Backend
+
+**Git commit:** 6438f4e
+
+- Complete database migration from MySQL to Supabase (PostgreSQL via REST API)
+- Created `db/supabase-schema.sql` with RLS-enabled leads table
+- Rewrote `api/contact.php` to use Supabase REST API with cURL
+- Removed all MySQL/PDO code
+- Created `api/keepalive.php` for Free tier pause prevention (cron job)
+- Updated config structure: replaced MySQL credentials with Supabase URL and secret key
+- Rate limiting now queries Supabase via REST API
+- Email functionality unchanged (still uses PHP mail())
+- Deleted: db/schema.sql, db/README.md, api/contact.js, api/vendor/PHPMailer
+- Rewrote docs/DEPLOY-GREENGEEKS.md with plain-language Supabase setup instructions
+- Updated docs/LAUNCH-CHECKLIST.md with Supabase plan decision, cron job, secret key rotation
+- Removed all MySQL/phpMyAdmin/PDO references from all documentation
+- Fixed CONTENT-UPDATE-GUIDE.md Trust Signals section to not suggest invented statistics
+
+### Testing Results
+
+**PHP Syntax:**
+- api/contact.php: No syntax errors
+- api/keepalive.php: No syntax errors
+- api/config.sample.php: No syntax errors
+
+**HTTP Tests:**
+- Wrong method (GET): HTTP 405 ✓
+- Bad JSON: HTTP 400 ✓
+- Missing fields: HTTP 400 ✓
+- 520KB chunked body: HTTP 413 ✓
+- Valid payload with fake Supabase: HTTP 503 (expected - both save and email failed) ✓
+
+**Security:**
+- Private config outside repository ✓
+- Git history clean (no sb_secret_, service_role, or JWT patterns) ✓
+- Sample config has obviously fake values ✓
+- No secrets in tracked files ✓
+
+**End-to-end test:** not run (no local Supabase config available)

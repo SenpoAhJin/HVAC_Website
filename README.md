@@ -1,24 +1,23 @@
 # Premier Tech Solution Website
 
-A modern, responsive marketing website for Premier Tech Solution, a residential HVAC company. Built with React, Vite, and Tailwind CSS, designed for GreenGeeks shared hosting with PHP/MySQL backend.
+A modern, responsive marketing website for Premier Tech Solution, a residential HVAC company. Built with React, Vite, and Tailwind CSS, designed for GreenGeeks shared hosting with PHP backend and Supabase database.
 
 ## Features
 
 - ✨ Modern, sleek design with custom warm/cool color scheme
 - 📱 Fully responsive (mobile, tablet, desktop)
 - ♿ Accessible (keyboard navigation, focus states, reduced motion support)
-- 🤖 AI-powered chatbot for customer questions
-- 📧 Contact form with PHP backend and MySQL storage
+- 📧 Contact form with PHP backend and Supabase storage
 - 🎨 Custom diagonal warm/cool hero section
-- 🔒 Security features: rate limiting, honeypot, input validation
+- 🔒 Security features: rate limiting, input validation
 
 ## Tech Stack
 
 - **Frontend:** React 18 + Vite
 - **Styling:** Tailwind CSS
 - **Routing:** React Router DOM (SPA)
-- **Backend:** PHP 7.4+ with PHPMailer
-- **Database:** MySQL 5.7+ / MariaDB 10.3+
+- **Backend:** PHP 7.4+
+- **Database:** Supabase (PostgreSQL via REST API)
 - **Hosting:** GreenGeeks Shared Hosting (Apache, cPanel)
 
 ## Project Structure
@@ -33,12 +32,11 @@ premier-tech-solution/
 │   └── main.jsx        # Entry point
 ├── api/                # PHP backend
 │   ├── contact.php     # Contact form API endpoint
+│   ├── keepalive.php   # Supabase connection check (cron)
 │   ├── config.sample.php  # Sample configuration
-│   ├── .htaccess       # API security rules
-│   └── vendor/PHPMailer/  # Email library
+│   └── .htaccess       # API security rules
 ├── db/                 # Database
-│   ├── schema.sql      # MySQL schema
-│   └── README.md       # Database setup instructions
+│   └── supabase-schema.sql  # Database schema
 ├── public/             # Static assets
 │   └── .htaccess       # Apache SPA routing
 ├── docs/               # Documentation
@@ -70,11 +68,11 @@ npm run dev
 
 4. Open http://localhost:5173
 
-**Note:** Contact form and chatbot won't work locally without backend setup.
+**Note:** Contact form won't work locally without backend setup.
 
 ## Database
 
-This site uses MySQL to store contact form submissions and track rate limiting.
+This site uses Supabase (PostgreSQL) to store contact form submissions and track rate limiting.
 
 ### Schema
 
@@ -139,7 +137,7 @@ This creates a `deploy/` folder with everything needed for GreenGeeks.
 
 1. Build deployment package locally
 2. Upload `deploy/` contents to `public_html/` via cPanel File Manager or FTP
-3. Create database and import `db/schema.sql` via phpMyAdmin
+3. Create Supabase project and run `db/supabase-schema.sql` in SQL Editor
 4. Create configuration file in `/home/username/private/hvac-config.php`
 5. Test the site
 
@@ -205,7 +203,7 @@ Override only when absolutely necessary by editing `scripts/check-placeholders.j
 ### Contact form not working
 
 - Check database credentials in config file
-- Verify database tables exist in phpMyAdmin
+- Verify database tables exist in Supabase Table Editor
 - Check PHP error logs in cPanel → Errors
 
 ### No email notifications
@@ -219,8 +217,8 @@ See `docs/DEPLOY-GREENGEEKS.md` for complete troubleshooting guide.
 
 ## Maintenance
 
-- **Monitor leads**: Check phpMyAdmin weekly
-- **Backup database**: Export via phpMyAdmin monthly
+- **Monitor leads**: Check Supabase dashboard weekly
+- **Backup database**: Supabase automatic backups (Pro plan)
 - **Clear rate limits**: Empty `rate_limits` table monthly
 - **Review logs**: Check cPanel error logs regularly
 

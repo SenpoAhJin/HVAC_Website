@@ -1,37 +1,25 @@
 <?php
 /**
- * Sample Configuration File for Premier Tech Solution Contact API
+ * Premier Tech Solution - Configuration Template
  * 
- * IMPORTANT: Copy this file to create your actual config:
+ * Copy this file to: /home/username/private_config/premier_tech_config.php
+ * (Replace 'username' with your cPanel username)
  * 
- * RECOMMENDED (secure, outside web root):
- *   Copy to: /home/username/private/hvac-config.php
- *   (Two levels above public_html)
- * 
- * FALLBACK (inside web root, protected by .htaccess):
- *   Copy to: api/config.php
- * 
- * Then fill in your actual values. Never commit the real config.php to Git!
+ * IMPORTANT: Never commit the real config file to git!
  */
 
-// Database Configuration
-define('DB_HOST', 'localhost');                    // Usually 'localhost' on shared hosting
-define('DB_NAME', 'your_database_name');           // Database name from cPanel
-define('DB_USER', 'your_database_user');           // Database user from cPanel
-define('DB_PASS', 'your_database_password');       // Database password from cPanel
-
-// SMTP Configuration (for sending email notifications)
-define('SMTP_HOST', 'mail.yourdomain.com');        // SMTP server (often mail.yourdomain.com)
-define('SMTP_PORT', 587);                          // Usually 587 for TLS, or 465 for SSL
-define('SMTP_USER', 'noreply@yourdomain.com');     // Email account username
-define('SMTP_PASS', 'your_email_password');        // Email account password
-
-// Email Addresses
-define('MAIL_TO', 'contact@yourdomain.com');       // Where to send notifications
-define('MAIL_FROM', 'noreply@yourdomain.com');     // From address (should match SMTP_USER)
-
-// Site Configuration
-define('SITE_URL', 'https://yourdomain.com');      // Your site URL (for CSRF protection)
-
-// Proxy Configuration
-define('TRUST_PROXY', false);                      // Set to true only if behind CloudFlare/proxy
+return [
+  'supabase' => [
+    'SUPABASE_URL' => 'https://xxxxxxxxxxxxx.supabase.co',
+    'SUPABASE_SECRET_KEY' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.example_fake_key_do_not_use',
+  ],
+  
+  'email' => [
+    'MAIL_TO' => 'info@example.com',
+    'MAIL_FROM' => 'noreply@example.com',
+  ],
+  
+  'security' => [
+    'IP_HASH_SALT' => 'random_string_at_least_32_chars_long_change_this_value',
+  ],
+];
