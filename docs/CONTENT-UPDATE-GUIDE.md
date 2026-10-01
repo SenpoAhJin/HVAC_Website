@@ -1,68 +1,36 @@
 # Content Update Guide - Quick Reference
 
-This guide shows exactly where to update common content. Use "Find and Replace" in your code editor for fastest updates.
+**NOTE:** All business information is now centralized in `src/config/contact.js`. Update that file and rebuild - no need to search/replace across multiple files.
 
 ---
 
-## Phone Number Updates
+## Business Information
 
-**Current Placeholder:** `(123) 456-7890` or `tel:+1234567890`
+**File:** `src/config/contact.js`
 
-**Files to Update:**
+Update all fields in this single file:
 
-1. `src/components/Navbar.jsx` (line ~55 and ~96)
-2. `src/components/Footer.jsx` (line ~39)
-3. `src/pages/Home.jsx` (lines ~48, ~149, ~181)
-4. `src/pages/Services.jsx` (lines ~96, ~178)
-5. `src/pages/Contact.jsx` (lines ~44, ~127)
+```javascript
+export const CONTACT_INFO = {
+  PHONE_DISPLAY: '',    // e.g., "(415) 555-0198"
+  PHONE_TEL: '',        // e.g., "+14155550198"
+  EMAIL: '',            // Your business email
+  ADDRESS: '',          // Service area
+  HOURS: '',           // Business hours
+  DOMAIN: '',          // yourdomain.com (no https://)
+  // Social media links
+  FACEBOOK: null,
+  INSTAGRAM: null,
+  LINKEDIN: null,
+}
+```
 
-**Find:** `(123) 456-7890`  
-**Replace With:** Your real phone number
+**After updating, rebuild:**
+```bash
+npm run build:greengeeks
+```
 
-**Also Find:** `tel:+1234567890`  
-**Replace With:** `tel:+1YOURNUMBER` (no spaces or dashes)
-
----
-
-## Email Address Updates
-
-**Current Placeholder:** `info@premiertechsolution.com`
-
-**Files to Update:**
-
-1. `src/components/Footer.jsx` (line ~43)
-2. `src/pages/Contact.jsx` (lines ~50, ~152)
-3. `.env.example` (line ~11)
-
-**Find:** `info@premiertechsolution.com`  
-**Replace With:** Your real email address
-
----
-
-## Service Area Updates
-
-**Current Placeholder:** `[To be specified]`
-
-**Files to Update:**
-
-1. `src/components/Footer.jsx` (line ~49)
-2. `src/pages/Contact.jsx` (line ~54)
-
-**Find:** `[To be specified]`  
-**Replace With:** Your service area (e.g., "Greater Phoenix area including Scottsdale, Mesa, and Tempe")
-
----
-
-## Business Hours Updates
-
-**Current Placeholder:** `[To be specified]`
-
-**Files to Update:**
-
-1. `src/pages/Contact.jsx` (line ~58)
-
-**Find:** `[To be specified]`  
-**Replace With:** Your business hours (e.g., "Monday-Friday 8am-6pm, Saturday 9am-4pm")
+UI elements automatically hide when values are empty.
 
 ---
 
@@ -108,8 +76,8 @@ This guide shows exactly where to update common content. Use "Find and Replace" 
 ```javascript
 const trustSignals = [
   { label: 'Licensed & Insured', value: '✓' },
-  { label: 'Years in Business', value: '[To be specified]' },
-  { label: '5-Star Reviews', value: '[To be specified]' }
+  { label: 'Years in Business', value: '' },
+  { label: '5-Star Reviews', value: '' }
 ]
 ```
 
@@ -158,17 +126,14 @@ Image_Assets/
 
 ---
 
-## Quick Find & Replace Checklist
+## Quick Checklist
 
-Use your code editor's "Find in Files" feature:
-
-- [ ] Find `(123) 456-7890` → Replace with real phone
-- [ ] Find `tel:+1234567890` → Replace with real tel: link
-- [ ] Find `info@premiertechsolution.com` → Replace with real email
-- [ ] Find `[To be specified]` → Replace with real info (each instance might be different)
+- [ ] Update `src/config/contact.js` with business info
+- [ ] Run `npm run check:placeholders` to verify
 - [ ] Update `src/pages/About.jsx` company story
 - [ ] Update `src/pages/Home.jsx` trust signals
 - [ ] Add photos to `Image_Assets/`
+- [ ] Rebuild: `npm run build:greengeeks`
 
 ---
 
@@ -197,7 +162,7 @@ After making updates:
 ## Common Mistakes to Avoid
 
 ❌ **Don't:**
-- Forget to update tel: links when changing phone number
+- Forget to rebuild after updating contact info
 - Leave any `[To be specified]` placeholders
 - Use uncompressed photos (slows site down)
 - Commit `.env.local` file to git (keep secrets secret!)

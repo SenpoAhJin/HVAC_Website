@@ -37,10 +37,7 @@ const PLACEHOLDER_PATTERNS = [
   /your text here/i,
   /coming soon/i,
   /example\.com/i,
-  /\(123\)\s*456-7890/i,
-  /123-456-7890/i,
   /\+?1?234567890/i,
-  /info@premiertechsolution\.com/i,
   // Unverified claims - remove from list once owner verifies
   /\blicensed\b/i,
   /\binsured\b/i,

@@ -6,9 +6,9 @@
  */
 
 export const CONTACT_INFO = {
-  // Business phone number (formatted for display, e.g., "(555) 123-4567")
+  // Business phone number (formatted for display, e.g., "(415) 555-0198")
   PHONE_DISPLAY: '',
-  // Phone number for tel: links (digits only with country code, e.g., "+15551234567")
+  // Phone number for tel: links (digits only with country code, e.g., "+14155550198")
   PHONE_TEL: '',
   
   // Business email address

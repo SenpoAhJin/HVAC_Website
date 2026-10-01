@@ -15,8 +15,8 @@ Before building and deploying, update your business information in `src/config/c
 
 ```javascript
 export const CONTACT_INFO = {
-  PHONE_DISPLAY: '(555) 123-4567',  // Your formatted phone number
-  PHONE_TEL: '+15551234567',         // Phone number for tel: links
+  PHONE_DISPLAY: '(415) 555-0123',  // Your formatted phone number
+  PHONE_TEL: '+14155550123',         // Phone number for tel: links
   EMAIL: 'contact@yourdomain.com',   // Your business email
   ADDRESS: 'Your City, State',       // Service area
   HOURS: 'Mon-Fri 8AM-6PM',         // Business hours
@@ -139,7 +139,7 @@ return [
 **Where to find each value:**
 
 - **SUPABASE_URL**: In Supabase → Settings → API → Project URL
-- **SUPABASE_SECRET_KEY**: The service_role key you created in step 1.4
+- **SUPABASE_SECRET_KEY**: The secret key you created in step 1.4
 - **MAIL_TO**: Your business email where you want to receive contact form notifications
 - **MAIL_FROM**: The email account you created in step 2.1
 - **IP_HASH_SALT**: Generate a random string (at least 32 characters). You can use: [random.org/strings](https://www.random.org/strings/)

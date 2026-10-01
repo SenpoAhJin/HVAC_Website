@@ -93,8 +93,8 @@ Update `src/config/contact.js` with your real business information:
 
 ```javascript
 export const CONTACT_INFO = {
-  PHONE_DISPLAY: '(555) 123-4567',
-  PHONE_TEL: '+15551234567',
+  PHONE_DISPLAY: '(415) 555-0123',
+  PHONE_TEL: '+14155550123',
   EMAIL: 'contact@yourdomain.com',
   ADDRESS: 'Your City, State',
   HOURS: 'Mon-Fri 8AM-6PM, Sat 9AM-2PM'
@@ -186,9 +186,9 @@ This site follows WCAG 2.1 Level AA guidelines:
 A pre-build script checks for placeholder content and unverified claims. Build will fail if found.
 
 Protected patterns include:
-- Phone: `(123) 456-7890`, `555-` patterns
+- Phone: Specific fake patterns
 - Email: `example.com`, `test@`, placeholder domains
-- Text: `[To be specified]`, `Lorem ipsum`
+- Text: `Lorem ipsum`
 - Claims: `licensed`, `insured`, `certified`, `free estimate`, etc.
 
 Override only when absolutely necessary by editing `scripts/check-placeholders.js`.
