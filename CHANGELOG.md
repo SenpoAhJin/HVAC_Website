@@ -618,3 +618,27 @@ The following features were developed before the first git commit on 2026-09-29:
 
 ### What Was Not Run
 - End-to-end test with real Supabase: not run (no local config file)
+
+---
+
+## 2026-10-01 14:05 — About Page: Merge Gallery into Our Approach Section
+
+**Git commit:** (pending)
+
+### Changes
+- Merged "Our Team in Action" gallery into "Our Approach" section
+- Deleted separate gallery section, heading, and intro paragraph
+- Removed three photo captions and unverified claim sentence
+- Layout: two-column grid on desktop (text left, photo collage right), single column on mobile
+- Photo collage: 2×2 grid with ladder technician photo spanning two rows (left), rooftop photo (top-right), service van (bottom-right)
+- Applied object-top to ladder photo to keep person's upper body in view
+- Container: max-w-6xl with proper spacing
+- All images have explicit width/height attributes, descriptive alt text, and loading="lazy"
+
+### Files Modified
+- src/pages/About.jsx
+
+### Testing
+- Dev server ran successfully on port 5174
+- Production build passed with VITE_SITE_URL=https://premiertechsolution.com
+- Screenshots not run (no headless browser available in Windows PowerShell environment)

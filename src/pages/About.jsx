@@ -48,21 +48,65 @@ export default function About() {
 
       {/* Company Story */}
       <section className="py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-bold text-gray-900 mb-6 text-center">Our Approach</h2>
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+            {/* Left column: text content */}
+            <div>
+              <h2 className="text-4xl font-bold text-gray-900 mb-6 text-left">Our Approach</h2>
 
-          <div className="space-y-6 text-lg">
-            <p className="text-gray-600">
-              Premier Tech Solution provides professional residential HVAC services with a focus on quality and customer satisfaction. We specialize in heating systems, cooling systems, heat pumps, and indoor air quality solutions.
-            </p>
+              <div className="space-y-6 text-lg">
+                <p className="text-gray-600">
+                  Premier Tech Solution provides professional residential HVAC services with a focus on quality and customer satisfaction. We specialize in heating systems, cooling systems, heat pumps, and indoor air quality solutions.
+                </p>
 
-            <p className="text-gray-600">
-              Our team is dedicated to delivering reliable service for all your HVAC needs, from routine maintenance and repairs to complete system installations. We work efficiently to ensure your home's comfort systems operate at their best.
-            </p>
+                <p className="text-gray-600">
+                  Our team is dedicated to delivering reliable service for all your HVAC needs, from routine maintenance and repairs to complete system installations. We work efficiently to ensure your home's comfort systems operate at their best.
+                </p>
 
-            <p className="text-gray-600">
-              We believe in transparent communication, honest recommendations, and workmanship that stands the test of time. Every project receives careful attention to detail and professional execution.
-            </p>
+                <p className="text-gray-600">
+                  We believe in transparent communication, honest recommendations, and workmanship that stands the test of time. Every project receives careful attention to detail and professional execution.
+                </p>
+              </div>
+            </div>
+
+            {/* Right column: photo collage */}
+            <div className="grid grid-cols-2 grid-rows-2 gap-4 h-[22rem] sm:h-[32rem]">
+              {/* Ladder technician photo - spans two rows */}
+              <div className="relative overflow-hidden rounded-xl shadow-md row-span-2">
+                <img
+                  src={`${import.meta.env.BASE_URL}images/about/technician-1.jpg`}
+                  alt="HVAC technician on ladder servicing air handler unit"
+                  className="w-full h-full object-cover object-top"
+                  loading="lazy"
+                  width="400"
+                  height="640"
+                />
+              </div>
+
+              {/* Rooftop unit photo - top right */}
+              <div className="relative overflow-hidden rounded-xl shadow-md">
+                <img
+                  src={`${import.meta.env.BASE_URL}images/about/technician-2.jpg`}
+                  alt="Technician performing maintenance on rooftop HVAC equipment"
+                  className="w-full h-full object-cover object-center"
+                  loading="lazy"
+                  width="400"
+                  height="310"
+                />
+              </div>
+
+              {/* Service van photo - bottom right */}
+              <div className="relative overflow-hidden rounded-xl shadow-md">
+                <img
+                  src={`${import.meta.env.BASE_URL}images/about/service-van.jpg`}
+                  alt="Professional service van with organized HVAC tools and equipment"
+                  className="w-full h-full object-cover object-center"
+                  loading="lazy"
+                  width="400"
+                  height="310"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -109,57 +153,6 @@ export default function About() {
                 <span className="text-lg text-gray-700">{reason}</span>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Team Section */}
-      <section className="bg-gray-50 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-bold text-gray-900 mb-6 text-center">Our Team in Action</h2>
-          <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-            Our technicians are the heart of our business. Each team member brings training and a commitment to quality service.
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="rounded-lg overflow-hidden shadow-lg card-hover">
-              <img
-                src={`${import.meta.env.BASE_URL}images/about/technician-1.jpg`}
-                alt="HVAC technician performing professional air handler service"
-                className="w-full h-64 object-cover"
-                loading="lazy"
-              />
-              <div className="p-4 bg-white">
-                <h3 className="font-semibold text-gray-900">Professional Service</h3>
-                <p className="text-sm text-gray-600">Our technicians bring expertise to every job</p>
-              </div>
-            </div>
-
-            <div className="rounded-lg overflow-hidden shadow-lg card-hover">
-              <img
-                src={`${import.meta.env.BASE_URL}images/about/service-van.jpg`}
-                alt="Fully stocked HVAC service van with organized professional tools"
-                className="w-full h-64 object-cover"
-                loading="lazy"
-              />
-              <div className="p-4 bg-white">
-                <h3 className="font-semibold text-gray-900">Fully Equipped</h3>
-                <p className="text-sm text-gray-600">We arrive prepared for any job</p>
-              </div>
-            </div>
-
-            <div className="rounded-lg overflow-hidden shadow-lg card-hover">
-              <img
-                src={`${import.meta.env.BASE_URL}images/about/technician-2.jpg`}
-                alt="Expert HVAC technician providing quality equipment maintenance"
-                className="w-full h-64 object-cover"
-                loading="lazy"
-              />
-              <div className="p-4 bg-white">
-                <h3 className="font-semibold text-gray-900">Quality Workmanship</h3>
-                <p className="text-sm text-gray-600">Attention to detail in every repair</p>
-              </div>
-            </div>
           </div>
         </div>
       </section>
