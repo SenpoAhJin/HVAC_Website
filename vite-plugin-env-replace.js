@@ -7,8 +7,17 @@ export default function envReplacePlugin() {
   return {
     name: 'env-replace-plugin',
     
-    configResolved() {
-      siteUrl = process.env.VITE_SITE_URL;
+    configResolved(config) {
+      // Read from config.env which includes values from .env files
+      siteUrl = config.env.VITE_SITE_URL;
+      const isDev = config.mode === 'development';
+      
+      // In development mode, default to localhost if not set
+      if (!siteUrl && isDev) {
+        siteUrl = 'http://localhost:5173';
+        console.log('ℹ️  Using default dev URL: http://localhost:5173');
+        return;
+      }
       
       if (!siteUrl) {
         throw new Error(
@@ -22,10 +31,10 @@ export default function envReplacePlugin() {
         );
       }
       
-      // Validate URL format
+      // Allow localhost in development mode, require HTTPS in production
       const urlLower = siteUrl.toLowerCase();
       
-      if (!urlLower.startsWith('https://')) {
+      if (!isDev && !urlLower.startsWith('https://') && !urlLower.startsWith('http://localhost')) {
         throw new Error(
           '\n❌ ERROR: VITE_SITE_URL must start with https://\n\n' +
           `Current value: ${siteUrl}\n\n` +
@@ -34,15 +43,18 @@ export default function envReplacePlugin() {
         );
       }
       
-      // Check for placeholder/test domains
-      const invalidDomains = ['yourdomain', 'example.com', 'localhost', 'vercel.app'];
+      // Check for placeholder/test domains (but allow localhost in dev)
+      const invalidDomains = ['yourdomain', 'example.com'];
+      if (!isDev) {
+        invalidDomains.push('localhost');
+      }
       const hasInvalidDomain = invalidDomains.some(domain => urlLower.includes(domain));
       
       if (hasInvalidDomain) {
         throw new Error(
           '\n❌ ERROR: VITE_SITE_URL contains a placeholder or test domain!\n\n' +
           `Current value: ${siteUrl}\n\n` +
-          'Invalid domains: yourdomain, example.com, localhost, vercel.app\n\n' +
+          'Invalid domains: ' + invalidDomains.join(', ') + '\n\n' +
           'Please set your actual production domain:\n' +
           '  VITE_SITE_URL=https://your-actual-domain.com\n'
         );

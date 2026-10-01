@@ -10,25 +10,35 @@ if (PHP_SAPI !== 'cli') {
   exit(1);
 }
 
+// Load shared validator
+require __DIR__ . '/config-validator.php';
+
 // Load configuration
 $privateConfigPath = dirname(__DIR__) . '/../private_config/premier_tech_config.php';
 if (!file_exists($privateConfigPath)) {
-  echo "FAILED: Config file not found\n";
+  echo "FAILED: bad config\n";
   exit(1);
 }
 
 $config = require $privateConfigPath;
 
+// Validate config
+$validation = validate_config($config);
+if (!$validation['valid']) {
+  echo "FAILED: bad config\n";
+  exit(1);
+}
+
 // Perform lightweight GET on leads table (limit=1)
 $url = $config['supabase']['SUPABASE_URL'] . '/rest/v1/leads?select=id&limit=1';
+
+$headers = get_supabase_headers($config['supabase']['SUPABASE_SECRET_KEY']);
+$headers[] = 'Content-Type: application/json';
 
 $context = stream_context_create([
   'http' => [
     'method' => 'GET',
-    'header' => [
-      'apikey: ' . $config['supabase']['SUPABASE_SECRET_KEY'],
-      'Content-Type: application/json'
-    ],
+    'header' => $headers,
     'timeout' => 8
   ],
   'ssl' => [

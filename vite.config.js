@@ -5,5 +5,5 @@ import envReplacePlugin from './vite-plugin-env-replace.js'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), envReplacePlugin()],
-  base: '/',
+  base: process.env.VITE_BASE || '/',
 })

@@ -9,10 +9,13 @@ if (PHP_SAPI === 'cli') {
   exit(1);
 }
 
+// Load shared validator
+require __DIR__ . '/config-validator.php';
+
 // Load configuration
 $privateConfigPath = dirname(__DIR__) . '/../private_config/premier_tech_config.php';
 if (!file_exists($privateConfigPath)) {
-  error_log('[contact.php] Config file not found: ' . $privateConfigPath);
+  error_log('[contact.php] Config file not found');
   http_response_code(503);
   header('Content-Type: application/json');
   echo json_encode(['ok' => false, 'error' => 'unavailable']);
@@ -20,6 +23,16 @@ if (!file_exists($privateConfigPath)) {
 }
 
 $config = require $privateConfigPath;
+
+// Validate config
+$validation = validate_config($config);
+if (!$validation['valid']) {
+  error_log('[contact.php] Config validation failed');
+  http_response_code(503);
+  header('Content-Type: application/json');
+  echo json_encode(['ok' => false, 'error' => 'unavailable']);
+  exit;
+}
 
 // Security headers
 header('X-Content-Type-Options: nosniff');
@@ -67,13 +80,31 @@ $email = trim($data['email'] ?? '');
 $phone = isset($data['phone']) ? trim($data['phone']) : null;
 $message = trim($data['message'] ?? '');
 
-// Strip control characters except line breaks (\r\n) in message
-$name = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/u', '', $name);
-$email = preg_replace('/[\x00-\x1F\x7F]/u', '', $email);
-if ($phone !== null) {
-  $phone = preg_replace('/[\x00-\x1F\x7F]/u', '', $phone);
+// Validate UTF-8
+if (!preg_match('//u', $name) || !preg_match('//u', $email) || 
+    ($phone !== null && !preg_match('//u', $phone)) || !preg_match('//u', $message)) {
+  http_response_code(400);
+  echo json_encode(['ok' => false, 'error' => 'Invalid character encoding']);
+  exit;
 }
-$message = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/u', '', $message);
+
+// Strip control characters except line breaks (\r\n) in message
+$nameClean = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/u', '', $name);
+$emailClean = preg_replace('/[\x00-\x1F\x7F]/u', '', $email);
+$phoneClean = $phone !== null ? preg_replace('/[\x00-\x1F\x7F]/u', '', $phone) : null;
+$messageClean = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/u', '', $message);
+
+// Guard against null results from preg_replace
+if ($nameClean === null || $emailClean === null || ($phone !== null && $phoneClean === null) || $messageClean === null) {
+  http_response_code(400);
+  echo json_encode(['ok' => false, 'error' => 'Invalid character encoding']);
+  exit;
+}
+
+$name = $nameClean;
+$email = $emailClean;
+$phone = $phoneClean;
+$message = $messageClean;
 
 $errors = [];
 
@@ -108,19 +139,21 @@ $clientIp = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
 $ipHash = hash('sha256', $config['security']['IP_HASH_SALT'] . $clientIp);
 
 $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+// Reduce to printable ASCII before trimming
+$userAgent = preg_replace('/[^\x20-\x7E]/', '', $userAgent);
 $userAgent = substr($userAgent, 0, 300); // Trim to 300 chars
 
 // 4. Rate limit: 5 leads per ip_hash per hour
 $oneHourAgo = gmdate('Y-m-d\TH:i:s\Z', time() - 3600);
 $rateLimitUrl = $config['supabase']['SUPABASE_URL'] . '/rest/v1/leads?select=id&ip_hash=eq.' . rawurlencode($ipHash) . '&created_at=gte.' . rawurlencode($oneHourAgo);
 
+$supabaseHeaders = get_supabase_headers($config['supabase']['SUPABASE_SECRET_KEY']);
+$supabaseHeaders[] = 'Content-Type: application/json';
+
 $rateLimitCheck = @file_get_contents($rateLimitUrl, false, stream_context_create([
   'http' => [
     'method' => 'GET',
-    'header' => [
-      'apikey: ' . $config['supabase']['SUPABASE_SECRET_KEY'],
-      'Content-Type: application/json'
-    ],
+    'header' => $supabaseHeaders,
     'timeout' => 3
   ],
   'ssl' => [
@@ -152,16 +185,24 @@ $leadData = [
   'status' => 'new'
 ];
 
+$leadJson = json_encode($leadData, JSON_INVALID_UTF8_SUBSTITUTE);
+if ($leadJson === false) {
+  error_log('[contact.php] JSON encoding failed');
+  http_response_code(503);
+  echo json_encode(['ok' => false, 'error' => 'unavailable']);
+  exit;
+}
+
 $insertUrl = $config['supabase']['SUPABASE_URL'] . '/rest/v1/leads';
+$insertHeaders = get_supabase_headers($config['supabase']['SUPABASE_SECRET_KEY']);
+$insertHeaders[] = 'Content-Type: application/json';
+$insertHeaders[] = 'Prefer: return=minimal';
+
 $insertContext = stream_context_create([
   'http' => [
     'method' => 'POST',
-    'header' => [
-      'apikey: ' . $config['supabase']['SUPABASE_SECRET_KEY'],
-      'Content-Type: application/json',
-      'Prefer: return=minimal'
-    ],
-    'content' => json_encode($leadData),
+    'header' => $insertHeaders,
+    'content' => $leadJson,
     'timeout' => 8
   ],
   'ssl' => [
@@ -200,9 +241,10 @@ $replyToEmail = str_replace(["\r", "\n"], '', $email);
 
 // Build headers
 $headers = [
+  'MIME-Version: 1.0',
+  'Content-Type: text/plain; charset=UTF-8',
   'From: ' . $mailFrom,
-  'X-Mailer: PHP/' . phpversion(),
-  'Content-Type: text/plain; charset=UTF-8'
+  'X-Mailer: PHP/' . phpversion()
 ];
 
 // Add Reply-To only if email is valid
@@ -210,7 +252,13 @@ if (filter_var($replyToEmail, FILTER_VALIDATE_EMAIL)) {
   $headers[] = 'Reply-To: ' . $replyToEmail;
 }
 
-if (@mail($config['email']['MAIL_TO'], $emailSubject, $emailBody, implode("\r\n", $headers))) {
+// Use -f parameter only if MAIL_FROM is valid
+$additionalParams = '';
+if (filter_var($config['email']['MAIL_FROM'], FILTER_VALIDATE_EMAIL)) {
+  $additionalParams = '-f' . $config['email']['MAIL_FROM'];
+}
+
+if (@mail($config['email']['MAIL_TO'], $emailSubject, $emailBody, implode("\r\n", $headers), $additionalParams)) {
   $emailSent = true;
 } else {
   error_log('[contact.php] Failed to send email notification');

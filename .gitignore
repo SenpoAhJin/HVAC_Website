@@ -37,9 +37,16 @@ dist-ssr
 # PHP configuration files (NEVER commit real credentials!)
 api/config.php
 private/
+private_config/
+**/premier_tech_config.php
 
 # Deployment folder
 deploy/
 
 # Test configuration (never commit!)
 test-config/
+# Test and screenshot files
+test-contact.ps1
+test-utf8.php
+take-screenshots.cjs
+screenshots/

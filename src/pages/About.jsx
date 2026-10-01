@@ -84,11 +84,11 @@ export default function About() {
               </div>
 
               {/* Rooftop unit photo - top right */}
-              <div className="relative overflow-hidden rounded-xl shadow-md">
+              <div className="relative overflow-hidden rounded-xl shadow-md min-h-[10rem]">
                 <img
                   src={`${import.meta.env.BASE_URL}images/about/technician-2.jpg`}
                   alt="Technician performing maintenance on rooftop HVAC equipment"
-                  className="w-full h-full object-cover object-center"
+                  className="w-full h-full object-cover object-top"
                   loading="lazy"
                   width="400"
                   height="310"

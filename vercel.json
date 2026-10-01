@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "buildCommand": "VITE_DEPLOY_TARGET=vercel npm run build && node scripts/inject-noindex.js"
+}

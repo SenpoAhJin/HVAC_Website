@@ -33,20 +33,47 @@ export default function Contact() {
 
       const data = await response.json()
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to send message')
+      if (response.ok) {
+        // 200 success
+        setStatus({
+          type: 'success',
+          message: data.message || 'Thank you for your message. We will be in touch soon.'
+        })
+        setFormData({ name: '', email: '', phone: '', message: '', website: '' })
+      } else if (response.status === 400) {
+        // Validation error
+        setStatus({
+          type: 'error',
+          message: data.error || 'Please check your information and try again.'
+        })
+      } else if (response.status === 429) {
+        // Rate limit
+        const phoneMsg = CONTACT_INFO.PHONE_DISPLAY 
+          ? ` Please call us at ${CONTACT_INFO.PHONE_DISPLAY}.`
+          : ' Please try again later or use another contact method below.';
+        setStatus({
+          type: 'error',
+          message: 'Too many messages sent from your network. Please try again later or call us.' + phoneMsg
+        })
+      } else {
+        // 503 or other errors
+        const phoneMsg = CONTACT_INFO.PHONE_DISPLAY 
+          ? ` Please call us at ${CONTACT_INFO.PHONE_DISPLAY}.`
+          : '';
+        setStatus({
+          type: 'error',
+          message: 'Please call us' + phoneMsg
+        })
       }
-
-      setStatus({
-        type: 'success',
-        message: data.message || 'Thank you for your message. We will be in touch soon.'
-      })
-      setFormData({ name: '', email: '', phone: '', message: '', website: '' })
     } catch (error) {
+      // Network error or JSON parse error
       console.error('Contact form error:', error)
+      const phoneMsg = CONTACT_INFO.PHONE_DISPLAY 
+        ? ` Please call us at ${CONTACT_INFO.PHONE_DISPLAY}.`
+        : '';
       setStatus({
         type: 'error',
-        message: 'Sorry, there was an error sending your message. Please try again later or use another contact method below.'
+        message: 'Please call us' + phoneMsg
       })
     } finally {
       setIsSubmitting(false)
