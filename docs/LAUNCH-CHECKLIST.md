@@ -81,10 +81,10 @@ This comprehensive checklist ensures your Premier Tech Solution website is fully
   - Run `db/supabase-schema.sql` in SQL Editor
   - Confirm RLS is enabled
 
-- [ ] **Create Supabase secret key**
-  - In Supabase: Settings → API → Create Service Role Key
-  - Name it: `greengeeks-contact-form`
-  - Save the key securely (starts with `eyJ...`)
+- [ ] **Get Supabase secret API key**
+  - In Supabase: Settings → API → Project API keys
+  - Copy the **secret key** (starts with `sb_secret_`)
+  - Save the key securely
 
 - [ ] **Decide on Supabase plan**
   - **Free**: Good for low traffic, pauses after 7 days of inactivity (prevented by cron)

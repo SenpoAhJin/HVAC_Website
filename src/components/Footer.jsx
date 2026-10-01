@@ -61,19 +61,25 @@ export default function Footer() {
           <div>
             <h3 className="text-white font-semibold mb-4">Contact Us</h3>
             <ul className="space-y-3 text-sm">
-              <li>
-                <a href={`tel:${CONTACT_INFO.PHONE_TEL}`} className="hover:text-warm-400 transition-colors focus-visible-ring rounded">
-                  Phone: {CONTACT_INFO.PHONE_DISPLAY}
-                </a>
-              </li>
-              <li>
-                <a href={`mailto:${CONTACT_INFO.EMAIL}`} className="hover:text-warm-400 transition-colors focus-visible-ring rounded">
-                  {CONTACT_INFO.EMAIL}
-                </a>
-              </li>
-              <li className="text-gray-400">
-                Service Area: {CONTACT_INFO.ADDRESS}
-              </li>
+              {CONTACT_INFO.PHONE_TEL && (
+                <li>
+                  <a href={`tel:${CONTACT_INFO.PHONE_TEL}`} className="hover:text-warm-400 transition-colors focus-visible-ring rounded">
+                    Phone: {CONTACT_INFO.PHONE_DISPLAY}
+                  </a>
+                </li>
+              )}
+              {CONTACT_INFO.EMAIL && (
+                <li>
+                  <a href={`mailto:${CONTACT_INFO.EMAIL}`} className="hover:text-warm-400 transition-colors focus-visible-ring rounded">
+                    {CONTACT_INFO.EMAIL}
+                  </a>
+                </li>
+              )}
+              {CONTACT_INFO.ADDRESS && (
+                <li className="text-gray-400">
+                  Service Area: {CONTACT_INFO.ADDRESS}
+                </li>
+              )}
             </ul>
           </div>
         </div>

@@ -9,6 +9,28 @@ Complete step-by-step instructions for deploying Premier Tech Solution to GreenG
 - Email account on your domain for notifications
 - Domain name configured and pointing to GreenGeeks
 
+## Fill These In Before Launch
+
+Before building and deploying, update your business information in `src/config/contact.js`:
+
+```javascript
+export const CONTACT_INFO = {
+  PHONE_DISPLAY: '(555) 123-4567',  // Your formatted phone number
+  PHONE_TEL: '+15551234567',         // Phone number for tel: links
+  EMAIL: 'contact@yourdomain.com',   // Your business email
+  ADDRESS: 'Your City, State',       // Service area
+  HOURS: 'Mon-Fri 8AM-6PM',         // Business hours
+  DOMAIN: 'yourdomain.com',          // Your production domain (no https://)
+}
+```
+
+**Then rebuild:**
+```bash
+npm run build:greengeeks
+```
+
+This single command rebuilds with your updated information.
+
 ## Phase 1: Database Setup (Supabase)
 
 ### 1.1 Create Supabase Project
@@ -43,23 +65,20 @@ Complete step-by-step instructions for deploying Premier Tech Solution to GreenG
    alter table public.leads enable row level security;
    ```
 
-### 1.4 Create Secret Key
+### 1.4 Get Secret API Key
 
 1. In Supabase, click **Settings** (gear icon at bottom left)
 2. Click **API** in the settings menu
 3. Scroll to **Project API keys** section
-4. Find **service_role** key (not the anon key)
-5. Click **Reveal** and copy the key
+4. Find the **secret key** (starts with `sb_secret_`, not the public anon key)
+5. Click the **Copy** button to copy the key
 6. **Save this key securely** - you'll need it for configuration
-7. Give the key a name: go to **Settings** → **API** → **API Key Management** → **Create Service Role Key**
-8. Name it: `greengeeks-contact-form`
-9. Copy the key and save it
 
 **Important Notes:**
-- The service_role key starts with `eyJ...` and is very long
+- The secret key starts with `sb_secret_` followed by random characters
 - Never commit this key to git
 - Never share it publicly
-- This key bypasses RLS, so keep it secret
+- This key has elevated permissions, so keep it secret
 
 ## Phase 2: Email Configuration
 

@@ -19,16 +19,11 @@ export default function envReplacePlugin() {
         return;
       }
       
+      // In production, allow empty/unset for template mode
       if (!siteUrl) {
-        throw new Error(
-          '\n❌ ERROR: VITE_SITE_URL environment variable is not set!\n\n' +
-          'Set it before building:\n' +
-          '  export VITE_SITE_URL=https://yourdomain.com   (Mac/Linux)\n' +
-          '  set VITE_SITE_URL=https://yourdomain.com      (Windows CMD)\n' +
-          '  $env:VITE_SITE_URL="https://yourdomain.com"   (Windows PowerShell)\n\n' +
-          'Or add it to .env.production:\n' +
-          '  VITE_SITE_URL=https://yourdomain.com\n'
-        );
+        console.log('ℹ️  VITE_SITE_URL not set - building in template mode (no URL replacement)');
+        siteUrl = ''; // Set to empty string so transformations don't fail
+        return;
       }
       
       // Allow localhost in development mode, require HTTPS in production
@@ -62,7 +57,11 @@ export default function envReplacePlugin() {
     },
     
     transformIndexHtml(html) {
-      return html.replace(/__SITE_URL__/g, siteUrl);
+      // Only replace if siteUrl is set
+      if (siteUrl) {
+        return html.replace(/__SITE_URL__/g, siteUrl);
+      }
+      return html;
     },
     
     // Also process public files (robots.txt, sitemap.xml)
@@ -71,7 +70,10 @@ export default function envReplacePlugin() {
         const file = bundle[fileName];
         if (file.type === 'asset' && typeof file.source === 'string') {
           if (fileName === 'robots.txt' || fileName === 'sitemap.xml') {
-            file.source = file.source.replace(/__SITE_URL__/g, siteUrl);
+            // Only replace if siteUrl is set
+            if (siteUrl) {
+              file.source = file.source.replace(/__SITE_URL__/g, siteUrl);
+            }
           }
         }
       }

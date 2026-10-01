@@ -20,6 +20,10 @@ export const CONTACT_INFO = {
   // Business hours (use \n for line breaks)
   HOURS: '',
   
+  // Production domain (e.g., "premiertechsolution.com")
+  // Used for canonical URLs, sitemap, and robots.txt
+  DOMAIN: '',
+  
   // Social media links (set to null if not available)
   FACEBOOK: null,
   INSTAGRAM: null,

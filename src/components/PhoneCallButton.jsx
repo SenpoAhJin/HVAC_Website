@@ -12,6 +12,11 @@ export default function PhoneCallButton({ className = '', children }) {
   const [showPopover, setShowPopover] = useState(false)
   const [copied, setCopied] = useState(false)
 
+  // Don't render if no phone number configured
+  if (!CONTACT_INFO.PHONE_TEL) {
+    return null
+  }
+
   const handleClick = (e) => {
     if (!isMobileDevice()) {
       e.preventDefault()
@@ -81,10 +86,12 @@ export default function PhoneCallButton({ className = '', children }) {
               </div>
 
               {/* Business hours */}
-              <div className="text-sm text-gray-600">
-                <p className="font-semibold text-gray-900 mb-1">Business Hours:</p>
-                <p className="whitespace-pre-line">{CONTACT_INFO.HOURS}</p>
-              </div>
+              {CONTACT_INFO.HOURS && (
+                <div className="text-sm text-gray-600">
+                  <p className="font-semibold text-gray-900 mb-1">Business Hours:</p>
+                  <p className="whitespace-pre-line">{CONTACT_INFO.HOURS}</p>
+                </div>
+              )}
 
               {/* Action buttons */}
               <div className="flex flex-col gap-2">
