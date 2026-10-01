@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && node scripts/postbuild-replace-urls.js",
+    "build": "npm run build:vercel",
     "prebuild": "node scripts/check-placeholders.js",
-    "build:deploy": "npm run build && node scripts/build-deploy.js",
-    "build:greengeeks": "npm run build && node scripts/build-deploy.js",
+    "build:deploy": "npm run build:greengeeks",
+    "build:greengeeks": "vite build && node scripts/postbuild-replace-urls.js && node scripts/build-deploy.js",
     "build:vercel": "cross-env VITE_DEPLOY_TARGET=vercel vite build && node scripts/inject-noindex.js",
     "build:github": "cross-env VITE_BASE=/HVAC_Website/ VITE_DEPLOY_TARGET=github vite build && node scripts/postbuild-github.js",
     "lint": "eslint .",
