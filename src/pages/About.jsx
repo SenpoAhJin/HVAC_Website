@@ -49,14 +49,14 @@ export default function About() {
       {/* Company Story */}
       <section className="py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="prose prose-lg max-w-none">
-            <h2 className="text-4xl font-bold text-gray-900 mb-6 text-center">Our Approach</h2>
+          <h2 className="text-4xl font-bold text-gray-900 mb-6 text-center">Our Approach</h2>
 
-            <p className="text-gray-600 mb-6">
+          <div className="space-y-6 text-lg">
+            <p className="text-gray-600">
               Premier Tech Solution provides professional residential HVAC services with a focus on quality and customer satisfaction. We specialize in heating systems, cooling systems, heat pumps, and indoor air quality solutions.
             </p>
 
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-600">
               Our team is dedicated to delivering reliable service for all your HVAC needs, from routine maintenance and repairs to complete system installations. We work efficiently to ensure your home's comfort systems operate at their best.
             </p>
 
