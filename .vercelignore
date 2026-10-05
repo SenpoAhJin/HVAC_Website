@@ -1,0 +1,31 @@
+# Vercel Ignore - Files not needed for Vercel deployment
+
+# PHP files (used only for GreenGeeks)
+api/*.php
+api/.htaccess
+
+# GreenGeeks deployment folder
+deploy/
+
+# Private config (PHP config not used on Vercel)
+private_config/
+../private_config/
+
+# Development files
+test-*.cjs
+test-*.js
+test-*.ps1
+test-*.png
+screenshots/
+test-results/
+test-config/
+
+# Documentation
+docs/DEPLOY-GREENGEEKS.md
+
+# Environment files
+.env.example
+.env.production.example
+.env.github
+.env.vercel
+.env.local
