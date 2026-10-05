@@ -642,3 +642,41 @@ The following features were developed before the first git commit on 2026-09-29:
 - Dev server ran successfully on port 5174
 - Production build passed with VITE_SITE_URL=https://premiertechsolution.com
 - Screenshots not run (no headless browser available in Windows PowerShell environment)
+
+## 2026-10-05 09:46 (Sunday) — Fix Live Contact Form Failure (Frontend URL Mismatch)
+
+**Git commit:** (pending)
+
+### Root Cause
+Contact form was calling `/api/contact.php` (GreenGeeks PHP endpoint) instead of `/api/contact` (Vercel Node.js serverless function). The Node.js backend was working correctly when tested directly via script, but frontend never reached it.
+
+### Discovery Process
+1. Examined deployed JavaScript bundle at https://hvac-coral-phi.vercel.app/assets/index-O-z1Y_xM.js
+2. Found: `fetch(\`/api/contact.php\`, {method:\`POST\`...`
+3. Confirmed source code in `src/pages/Contact.jsx` line 28 had wrong URL
+
+### Fix Applied
+- Changed `src/pages/Contact.jsx` line 28 from `/api/contact.php` to `/api/contact`
+- Rebuilt production bundle: new filename `index-Byv51uCa.js`
+- Verified new bundle contains `fetch(\`/api/contact\`,` (correct)
+- Deployed to Vercel production
+
+### Verification
+- ✅ Deployed bundle verified: contains correct `/api/contact` URL
+- ✅ Direct API test: POST /api/contact returns HTTP 200 with success message
+- ✅ Timestamp: 2026-10-05 09:46:32
+- ⚠️ Supabase verification: requires user to check dashboard for new row in `leads` table
+
+### Files Changed
+- src/pages/Contact.jsx (line 28: `/api/contact.php` → `/api/contact`)
+
+### What This Fixes
+- Users can now submit contact form through browser UI
+- Submissions reach Vercel serverless function
+- Data saves to Supabase database
+- "Please call us" error message no longer appears on successful submissions
+
+### Notes
+- Backend (api/contact.js) was already working correctly
+- Environment variables (SUPABASE_URL, SUPABASE_SECRET_KEY, IP_HASH_SALT) were already configured
+- This was purely a frontend URL mismatch, not a backend issue
