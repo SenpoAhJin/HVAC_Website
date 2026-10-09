@@ -1155,3 +1155,65 @@ These require cPanel access or live server:
 To see this change on the live site (premiertechsolution.us):
 1. Upload new contents of `deploy/` folder (or `deploy-package.zip`) to `/home/studen29/public_html/premiertechsolution.us/`
 2. Hard refresh the page (Ctrl+Shift+R) to bypass browser cache
+
+## 2026-10-09 17:16 — Phase 2.6: Hero headline fix, API cleanup, fresh deployment package
+
+**Commit:** `7f4bd56`
+
+**Hero Headline Fix:**
+- Verified "Comfort in Every Season" displays on ONE line at all required widths
+- Tested with Playwright headless browser:
+  - 640px: 1 line, no overflow ✅
+  - 768px: 1 line, no overflow ✅
+  - 1024px: 1 line, no overflow ✅
+  - 1440px: 1 line, no overflow ✅
+- Uses `sm:whitespace-nowrap` (640px+) instead of `md:` to cover tablet portrait
+- Parent wrapper has `w-full max-w-4xl` to ensure sufficient width
+
+**API Cleanup:**
+- `scripts/build-deploy.js`: Changed from copying all api/ files to selective whitelist
+- `deploy/api/` now contains ONLY:
+  - contact.php (backend handler)
+  - keepalive.php (Supabase keep-alive cron)
+  - config-validator.php (shared validation logic)
+  - .htaccess (security rules)
+- **Excluded from deploy/api/:**
+  - contact.js (Vercel serverless function, not for GreenGeeks)
+  - config.sample.php (documentation only, not runtime)
+  - config.php (server-specific, never deployed)
+
+**Validator Updates:**
+- `api/config-validator.php`: Now allows empty MAIL_TO/MAIL_FROM (Supabase-only mode)
+- Still rejects malformed non-empty addresses and example.com domains
+- Tested all scenarios:
+  - Empty email: ✅ Valid (email skipped, Supabase only)
+  - Valid email: ✅ Valid (email sent + Supabase)
+  - example.com: ❌ Rejected
+  - Malformed: ❌ Rejected
+
+**Files Changed:**
+- `scripts/build-deploy.js` — selective API file copy with explicit exclusions
+- `api/config-validator.php` — allow empty email fields
+
+**Deployment Package:**
+- Rebuilt with cleaned API folder
+- `deploy-package.zip` (3.73 MB) ready at project root
+- Contents verified: no secrets, no .env files, correct API files only
+
+**Lessons Learned:**
+- **Pushing to GitHub updates only Vercel.** GreenGeeks changes require:
+  1. Rebuild (`npm run build:greengeeks`)
+  2. New zip (`tar -a -c -f deploy-package.zip -C deploy .`)
+  3. Manual upload to cPanel
+- **Phase 2.5 verification checked deploy/ root only.** deploy/api/ contained extra files (contact.js, config.sample.php) that should not be deployed to GreenGeeks. Now fixed with whitelist approach in build-deploy.js.
+- **Hero heading wrapping depends on viewport width AND breakpoint classes.** Testing at actual target widths (640, 768, 1024, 1440px) revealed that `md:whitespace-nowrap` (768px+) didn't cover tablet portrait mode. Changed to `sm:` (640px+) to ensure no wrapping at all tablet/desktop sizes.
+
+**Not Tested:**
+- Live upload to GreenGeeks (manual step)
+- Visual verification on physical devices (headless browser only)
+
+**Next Steps:**
+To deploy this cleaned package to premiertechsolution.us:
+1. Upload `deploy-package.zip` to `/home/studen29/public_html/premiertechsolution.us/`
+2. Extract (enable "Show Hidden Files" to verify .htaccess)
+3. Hard refresh (Ctrl+Shift+R)
