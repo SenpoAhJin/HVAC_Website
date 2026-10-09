@@ -227,45 +227,48 @@ if ($insertResult !== false || (isset($http_response_header) && strpos($http_res
 // 6. Email the lead
 $emailSent = false;
 
-// Fixed subject with no visitor input
-$emailSubject = 'New Contact Form Submission';
+// Only attempt email if MAIL_TO is configured
+if (!empty($config['email']['MAIL_TO']) && filter_var($config['email']['MAIL_TO'], FILTER_VALIDATE_EMAIL)) {
+  // Fixed subject with no visitor input
+  $emailSubject = 'New Contact Form Submission';
 
-// Plain text body
-$emailBody = "New contact form submission:\n\n";
-$emailBody .= "Name: {$name}\n";
-$emailBody .= "Email: {$email}\n";
-if ($phone) {
-  $emailBody .= "Phone: {$phone}\n";
-}
-$emailBody .= "\nMessage:\n{$message}\n";
+  // Plain text body
+  $emailBody = "New contact form submission:\n\n";
+  $emailBody .= "Name: {$name}\n";
+  $emailBody .= "Email: {$email}\n";
+  if ($phone) {
+    $emailBody .= "Phone: {$phone}\n";
+  }
+  $emailBody .= "\nMessage:\n{$message}\n";
 
-// Strip CR/LF from all header values
-$mailFrom = str_replace(["\r", "\n"], '', $config['email']['MAIL_FROM']);
-$replyToEmail = str_replace(["\r", "\n"], '', $email);
+  // Strip CR/LF from all header values
+  $mailFrom = str_replace(["\r", "\n"], '', $config['email']['MAIL_FROM']);
+  $replyToEmail = str_replace(["\r", "\n"], '', $email);
 
-// Build headers
-$headers = [
-  'MIME-Version: 1.0',
-  'Content-Type: text/plain; charset=UTF-8',
-  'From: ' . $mailFrom,
-  'X-Mailer: PHP/' . phpversion()
-];
+  // Build headers
+  $headers = [
+    'MIME-Version: 1.0',
+    'Content-Type: text/plain; charset=UTF-8',
+    'From: ' . $mailFrom,
+    'X-Mailer: PHP/' . phpversion()
+  ];
 
-// Add Reply-To only if email is valid
-if (filter_var($replyToEmail, FILTER_VALIDATE_EMAIL)) {
-  $headers[] = 'Reply-To: ' . $replyToEmail;
-}
+  // Add Reply-To only if email is valid
+  if (filter_var($replyToEmail, FILTER_VALIDATE_EMAIL)) {
+    $headers[] = 'Reply-To: ' . $replyToEmail;
+  }
 
-// Use -f parameter only if MAIL_FROM is valid
-$additionalParams = '';
-if (filter_var($config['email']['MAIL_FROM'], FILTER_VALIDATE_EMAIL)) {
-  $additionalParams = '-f' . $config['email']['MAIL_FROM'];
-}
+  // Use -f parameter only if MAIL_FROM is valid
+  $additionalParams = '';
+  if (filter_var($config['email']['MAIL_FROM'], FILTER_VALIDATE_EMAIL)) {
+    $additionalParams = '-f' . $config['email']['MAIL_FROM'];
+  }
 
-if (@mail($config['email']['MAIL_TO'], $emailSubject, $emailBody, implode("\r\n", $headers), $additionalParams)) {
-  $emailSent = true;
-} else {
-  error_log('[contact.php] Failed to send email notification');
+  if (@mail($config['email']['MAIL_TO'], $emailSubject, $emailBody, implode("\r\n", $headers), $additionalParams)) {
+    $emailSent = true;
+  } else {
+    error_log('[contact.php] Failed to send email notification');
+  }
 }
 
 // 7. Outcomes

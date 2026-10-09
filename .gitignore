@@ -42,6 +42,7 @@ private_config/
 
 # Deployment folder
 deploy/
+deploy-package.zip
 
 # Test configuration (never commit!)
 test-config/

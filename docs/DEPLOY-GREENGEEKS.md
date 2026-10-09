@@ -194,6 +194,23 @@ Using cPanel **File Manager** or FTP:
 
 4. **Do NOT upload the deploy/ folder itself** - upload its contents
 
+**Alternative Method: Upload via Zip (Recommended)**
+
+1. On your local machine, create the deployment package:
+   ```bash
+   tar -a -c -f deploy-package.zip -C deploy .
+   ```
+   This creates `deploy-package.zip` with all files including hidden `.htaccess`
+
+2. In cPanel File Manager:
+   - Navigate to `/home/studen29/public_html/premiertechsolution.us/`
+   - Click **Upload** and select `deploy-package.zip`
+   - Wait for upload to complete
+   - Right-click `deploy-package.zip` → **Extract**
+   - Delete the zip file after extraction
+
+3. **Important:** Enable "Show Hidden Files" (Settings icon) to verify `.htaccess` was extracted
+
 **Alternative using FTP:**
 - Use FileZilla or any FTP client
 - Connect using credentials from cPanel
@@ -222,7 +239,7 @@ premiertechsolution.us/
 ### 4.4 Set API Permissions
 
 In File Manager:
-1. Navigate to `public_html/api/`
+1. Navigate to `/home/studen29/public_html/premiertechsolution.us/api/`
 2. Right-click `contact.php` → **Permissions**
 3. Set to **755** (rwxr-xr-x)
 4. Do the same for `keepalive.php`
@@ -240,12 +257,61 @@ Supabase Free tier pauses your database after 7 days of inactivity. To prevent t
    - Or set manually: `0 0 * * 0,4` (runs Sunday and Thursday at midnight)
 3. **Command**: 
    ```
-   /usr/bin/php /home/username/public_html/api/keepalive.php >> /home/username/logs/keepalive.log 2>&1
+   /usr/bin/php /home/studen29/public_html/premiertechsolution.us/api/keepalive.php >> /home/studen29/logs/keepalive.log 2>&1
    ```
-   Replace `username` with your actual cPanel username
-4. Click **Add New Cron Job**
+4. **Create logs folder first** (if it doesn't exist):
+   - In File Manager, navigate to `/home/studen29/`
+   - Create folder: `logs`
+5. Click **Add New Cron Job**
 
 This runs every 2-3 days to keep your Supabase project active.
+
+## Launch with Email Left Empty (Optional)
+
+You can launch the site immediately even if email configuration is not ready yet.
+
+**How it works:**
+- Leave `MAIL_TO` and `MAIL_FROM` empty (or `''`) in `premier_tech_config.php`
+- Contact form will still:
+  ✅ Validate input
+  ✅ Apply rate limiting
+  ✅ Save submissions to Supabase
+  ❌ Skip sending email notifications (no errors)
+- You can view all submissions in Supabase → Table Editor → leads
+
+**To enable email later:**
+1. Create email account in cPanel (Phase 2.1)
+2. Edit `/home/studen29/private_config/premier_tech_config.php` in File Manager
+3. Fill in `MAIL_TO` and `MAIL_FROM` values
+4. Save the file
+5. **No rebuild or re-upload needed** - works immediately
+
+## Later: Filling Business Details
+
+The site launches with **empty business contact details** (no phone, email, address shown). UI elements automatically hide when values are empty.
+
+**To add your business information:**
+
+1. **On your local machine:**
+   - Edit `src/config/contact.js`
+   - Fill in: `PHONE_DISPLAY`, `PHONE_TEL`, `EMAIL`, `ADDRESS`, `HOURS`, `DOMAIN`
+   
+2. **Rebuild:**
+   ```bash
+   $env:VITE_SITE_URL="https://premiertechsolution.us"
+   npm run build:greengeeks
+   ```
+
+3. **Re-upload:**
+   - Delete old files in `/home/studen29/public_html/premiertechsolution.us/`
+   - Upload new deploy/ contents
+   - **Do NOT touch** the `api/` folder or config file
+
+**What changes:**
+- Phone button appears in header
+- Footer shows contact information
+- Hero section displays phone number
+- No code changes needed in PHP or config
 
 ## Phase 6: Testing
 
@@ -286,9 +352,10 @@ This runs every 2-3 days to keep your Supabase project active.
 
 1. Check the inbox for `MAIL_TO` address (from your config)
 2. Should receive an email notification with:
-   - Subject: "New Contact Form Submission from [Name]"
+   - Subject: "New Contact Form Submission" (fixed text)
    - Body contains form data
    - Reply-To is the visitor's email
+3. If no email received, check spam folder or see Troubleshooting below
 
 ### 6.6 Delete Test Row
 
@@ -406,7 +473,7 @@ If your domain isn't pointing to GreenGeeks yet:
 
 1. Get your GreenGeeks nameservers from cPanel
 2. Update DNS at your domain registrar:
-   - Usually `ns1.greengeeks.com` and `ns2.greengeeks.com`
+   - Usually `ns1.greengeeks.net` and `ns2.greengeeks.net`
 3. DNS propagation can take 24-48 hours
 4. Use [whatsmydns.net](https://www.whatsmydns.net/) to check propagation
 

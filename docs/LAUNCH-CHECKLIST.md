@@ -87,7 +87,8 @@ This comprehensive checklist ensures your Premier Tech Solution website is fully
 - [ ] **Add cron job for Supabase keep-alive** (if using Free tier)
   - In cPanel: Cron Jobs
   - Schedule: Twice per week (0 0 * * 0,4)
-  - Command: `/usr/bin/php /home/username/public_html/api/keepalive.php`
+  - Command: `/usr/bin/php /home/studen29/public_html/premiertechsolution.us/api/keepalive.php >> /home/studen29/logs/keepalive.log 2>&1`
+  - Create `/home/studen29/logs/` folder first if it doesn't exist
   - Prevents Free tier from pausing
 
 - [ ] **Test contact form**
