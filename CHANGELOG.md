@@ -623,7 +623,154 @@ The following features were developed before the first git commit on 2026-09-29:
 
 ## 2026-10-01 14:05 — About Page: Merge Gallery into Our Approach Section
 
-**Git commit:** (pending)
+**Git commit:** d751381
+
+### Changes
+- Merged "Our Team in Action" gallery into "Our Approach" section
+- Deleted separate gallery section, heading, and intro paragraph
+- Removed three photo captions and unverified claim sentence
+- Layout: two-column grid on desktop (text left, photo collage right), single column on mobile
+- Photo collage: 2×2 grid with ladder technician photo spanning two rows (left), rooftop photo (top-right), service van (bottom-right)
+- Applied object-top to ladder photo to keep person's upper body in view
+- Container: max-w-6xl with proper spacing
+- All images have explicit width/height attributes, descriptive alt text, and loading="lazy"
+
+### Files Modified
+- src/pages/About.jsx
+
+### Testing
+- Dev server ran successfully on port 5174
+- Production build passed with VITE_SITE_URL=https://premiertechsolution.com
+- Screenshots not run (no headless browser available in Windows PowerShell environment)
+
+---
+
+## 2026-10-01 — Multi-Target Build System for Three Hosting Platforms
+
+**Git commit:** 66abb4c
+
+### Changes
+- Implemented multi-target build system supporting GreenGeeks, Vercel, and GitHub Pages
+- Added VITE_BASE environment variable support for different base paths
+- Created three build scripts:
+  - `build:greengeeks` - Outputs to `deploy/` with base `/`
+  - `build:vercel` - Outputs to `dist/` with base `/`
+  - `build:github` - Outputs to `dist/` with base `/HVAC_Website/`
+- Updated router to use dynamic basename from environment
+- Created `scripts/inject-noindex.js` to add noindex meta tag for test deployments
+- Added vercel.json with rewrite rules for SPA routing
+- Added GitHub Actions workflow for automated GitHub Pages deployment
+- Made `npm run build` alias to `npm run build:vercel` (safe default)
+
+### Files Created/Modified
+- package.json - Added build scripts
+- vite.config.js - Added VITE_BASE support
+- src/App.jsx - Dynamic basename for router
+- scripts/inject-noindex.js - Automated noindex injection
+- vercel.json - Vercel deployment config
+- .github/workflows/deploy-pages.yml - GitHub Pages auto-deploy
+
+### Testing
+- All three builds work from clean checkout with no environment variables required
+- Verified empty business details hide UI elements correctly
+- GitHub Pages deployment returns HTTP 200
+
+---
+
+## 2026-10-01 — Empty Business Details and Clean Build System
+
+**Git commit:** 9d013f6, 92be73b
+
+### Changes
+- Centralized all business information in `src/config/contact.js` with empty defaults
+- UI components conditionally render based on config values:
+  - PhoneCallButton returns null when PHONE_TEL is empty
+  - Footer hides phone/email/address sections when empty
+  - No placeholder text visible
+- Updated vite-plugin-env-replace.js to allow empty VITE_SITE_URL (template mode)
+- Removed canonical URLs from index.html (will be generated when DOMAIN is set)
+- Cleaned up placeholder references in documentation
+- Updated DEPLOY-GREENGEEKS.md for sb_secret_ keys
+- All three builds (GreenGeeks, Vercel, GitHub Pages) work from clean checkout
+
+### Files Modified
+- src/config/contact.js - Added DOMAIN field, all values empty strings
+- src/components/PhoneCallButton.jsx - Returns null when no phone
+- src/components/Footer.jsx - Conditional rendering
+- vite-plugin-env-replace.js - Template mode support
+- index.html - Removed hardcoded canonical URLs
+- docs/DEPLOY-GREENGEEKS.md - Updated for sb_secret_ keys
+- docs/LAUNCH-CHECKLIST.md - Updated security instructions
+
+### Testing
+- Clean checkout test: All three builds SUCCESS with VITE_SITE_URL unset
+- Visual test: No blank labels, no Call Now button, empty values hide correctly
+
+---
+
+## 2026-10-01 — Vercel Deployment Configuration
+
+**Git commit:** 5c6ed71
+
+### Changes
+- Updated vercel.json with proper build command and output directory
+- Made `npm run build` safe default (aliases to build:vercel)
+- Added outputDirectory: dist configuration
+- Confirmed GitHub Pages JS returns HTTP 200
+
+### Files Modified
+- vercel.json - Added buildCommand, outputDirectory
+- package.json - Made build alias to build:vercel
+
+---
+
+## 2026-10-05 — Vercel Serverless Contact Form API
+
+**Git commit:** c715d15, e471b81
+
+### Changes
+- Created Node.js serverless function for Vercel: `api/contact.js`
+- Implements same functionality as PHP version:
+  - Supabase database integration
+  - Rate limiting (5 submissions per IP per hour)
+  - IP hashing for privacy
+  - Honeypot spam protection
+  - Input validation and sanitization
+- Configured environment variables in Vercel dashboard:
+  - SUPABASE_URL
+  - SUPABASE_SECRET_KEY
+  - IP_HASH_SALT
+- Created `.vercelignore` to exclude PHP files from deployment
+- Created comprehensive documentation:
+  - docs/VERCEL-SETUP.md - Complete setup guide
+  - CONTACT-FORM-FIX.md - Technical implementation details
+  - test-contact-vercel.ps1 - Automated testing script
+  - set-vercel-env.ps1 - Environment setup helper
+
+### Files Created
+- api/contact.js - Vercel serverless function
+- .vercelignore - Deployment exclusions
+- docs/VERCEL-SETUP.md
+- CONTACT-FORM-FIX.md
+- test-contact-vercel.ps1
+- set-vercel-env.ps1
+
+### Testing
+- API endpoint test: HTTP 200 success
+- Rate limiting: Working
+- Supabase integration: Working
+- Form submissions save to database
+
+### Notes
+- Email notifications not implemented on Vercel (requires third-party service)
+- All submissions visible in Supabase dashboard
+- Same security features as GreenGeeks version
+
+---
+
+## 2026-10-05 09:46 (Sunday) — Fix Live Contact Form Failure (Frontend URL Mismatch)
+
+**Git commit:** 83e829e
 
 ### Changes
 - Merged "Our Team in Action" gallery into "Our Approach" section
@@ -645,7 +792,7 @@ The following features were developed before the first git commit on 2026-09-29:
 
 ## 2026-10-05 09:46 (Sunday) — Fix Live Contact Form Failure (Frontend URL Mismatch)
 
-**Git commit:** (pending)
+**Git commit:** 83e829e
 
 ### Root Cause
 Contact form was calling `/api/contact.php` (GreenGeeks PHP endpoint) instead of `/api/contact` (Vercel Node.js serverless function). The Node.js backend was working correctly when tested directly via script, but frontend never reached it.
