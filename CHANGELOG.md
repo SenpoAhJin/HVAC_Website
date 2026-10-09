@@ -1119,3 +1119,39 @@ These require cPanel access or live server:
 ### Files Created
 - scripts/verify-live.ps1 - Live site verification script
 - deploy-package.zip - Deployment package (not committed, in .gitignore)
+
+## 2026-10-09 16:00 — Fix: Hero heading displays on one line at tablet/desktop (md+)
+
+**Commit:** `b6825d2`
+
+**Problem:** On the live GreenGeeks site (premiertechsolution.us), the hero heading "Comfort in Every Season" was wrapping "Season" to a second line on tablet and desktop screens, even though there was empty space to the right. Root cause: parent wrapper had `max-w-2xl` (672px), which was too narrow for the heading at `text-6xl` on md+ screens.
+
+**Changes:**
+- `src/pages/Home.jsx` (hero section, lines ~57-64):
+  - Removed `max-w-2xl` from hero content wrapper
+  - Added `md:whitespace-nowrap` to h1 (prevents wrapping at 768px and up)
+  - Moved `max-w-2xl` to subtitle paragraph to maintain its intended width
+  - Reverted `Every&nbsp;Season` back to plain `Comfort in Every Season`
+
+**Tested:**
+- ✅ Playwright headless browser verification at widths 1920/1440/1280/1024/768/390px
+  - 1920px: 1 line, no horizontal overflow
+  - 1440px: 1 line, no horizontal overflow
+  - 1280px: 1 line, no horizontal overflow
+  - 1024px: 1 line, no horizontal overflow
+  - 768px: 1 line, no horizontal overflow ✅ (md breakpoint)
+  - 390px: 2 lines (natural wrap), no horizontal overflow ✅ (mobile)
+- ✅ GreenGeeks production build (`npm run build:greengeeks`) completed successfully
+- ✅ Verified `deploy/` contains no secrets (.env files)
+- ✅ Verified built JS (`deploy/assets/index-BBEQMpzu.js`) uses `/api/contact.php` endpoint
+- ✅ Vercel build (`npm run build:vercel`) still passes (not deployed)
+- ✅ Recreated `deploy-package.zip` (3.74 MB) with forward slashes and hidden files
+
+**Not Tested:**
+- Live upload to GreenGeeks cPanel (manual step required by user)
+- Visual verification on actual devices (only headless browser testing performed)
+
+**Deployment:**
+To see this change on the live site (premiertechsolution.us):
+1. Upload new contents of `deploy/` folder (or `deploy-package.zip`) to `/home/studen29/public_html/premiertechsolution.us/`
+2. Hard refresh the page (Ctrl+Shift+R) to bypass browser cache
