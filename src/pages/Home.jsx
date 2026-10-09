@@ -56,7 +56,7 @@ export default function Home() {
 
         {/* Hero Content */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
-          <div className="text-white">
+          <div className="text-white w-full max-w-4xl">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-tight md:whitespace-nowrap">
               Comfort in Every Season
             </h1>
