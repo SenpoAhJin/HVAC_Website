@@ -70,6 +70,39 @@ npm run dev
 
 **Note:** Contact form won't work locally without backend setup.
 
+## Environment Variables
+
+The build system uses environment variables to configure different deployment targets:
+
+### VITE_CONTACT_ENDPOINT
+**Purpose:** Sets the contact form API endpoint  
+**Values:**
+- `/api/contact.php` - GreenGeeks (PHP backend)
+- `/api/contact` - Vercel (Node.js serverless)
+
+**Set automatically by build scripts:**
+- `npm run build:greengeeks` → `/api/contact.php`
+- `npm run build:vercel` → `/api/contact`
+- `npm run build:github` → `/api/contact`
+
+**Default:** `/api/contact` (if not set)
+
+### VITE_SITE_URL
+**Purpose:** Production domain for SEO (canonical URLs, sitemap)  
+**Required for production builds**  
+**Example:** `https://premiertechsolution.us`
+
+**Usage:**
+```bash
+# Windows PowerShell
+$env:VITE_SITE_URL="https://premiertechsolution.us"
+npm run build:greengeeks
+
+# Mac/Linux
+export VITE_SITE_URL=https://premiertechsolution.us
+npm run build:greengeeks
+```
+
 ## Database
 
 This site uses Supabase (PostgreSQL) to store contact form submissions and track rate limiting.

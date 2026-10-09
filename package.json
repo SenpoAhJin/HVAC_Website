@@ -8,9 +8,9 @@
     "build": "npm run build:vercel",
     "prebuild": "node scripts/check-placeholders.js",
     "build:deploy": "npm run build:greengeeks",
-    "build:greengeeks": "vite build && node scripts/postbuild-replace-urls.js && node scripts/build-deploy.js",
-    "build:vercel": "cross-env VITE_DEPLOY_TARGET=vercel vite build && node scripts/inject-noindex.js",
-    "build:github": "cross-env VITE_BASE=/HVAC_Website/ VITE_DEPLOY_TARGET=github vite build && node scripts/postbuild-github.js",
+    "build:greengeeks": "cross-env VITE_CONTACT_ENDPOINT=/api/contact.php vite build && node scripts/postbuild-replace-urls.js && node scripts/build-deploy.js",
+    "build:vercel": "cross-env VITE_DEPLOY_TARGET=vercel VITE_CONTACT_ENDPOINT=/api/contact vite build && node scripts/inject-noindex.js",
+    "build:github": "cross-env VITE_BASE=/HVAC_Website/ VITE_DEPLOY_TARGET=github VITE_CONTACT_ENDPOINT=/api/contact vite build && node scripts/postbuild-github.js",
     "lint": "eslint .",
     "preview": "vite preview",
     "check:placeholders": "node scripts/check-placeholders.js"
@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.63.0",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
     "@vitejs/plugin-react": "^6.1.1",

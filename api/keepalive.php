@@ -14,7 +14,11 @@ if (PHP_SAPI !== 'cli') {
 require __DIR__ . '/config-validator.php';
 
 // Load configuration
-$privateConfigPath = dirname(__DIR__) . '/../private_config/premier_tech_config.php';
+// Path resolution from /home/username/public_html/premiertechsolution.us/api/keepalive.php:
+// __DIR__ = /home/username/public_html/premiertechsolution.us/api
+// dirname(__DIR__, 3) = /home/username
+// Target: /home/username/private_config/premier_tech_config.php
+$privateConfigPath = dirname(__DIR__, 3) . '/private_config/premier_tech_config.php';
 if (!file_exists($privateConfigPath)) {
   echo "FAILED: bad config\n";
   exit(1);

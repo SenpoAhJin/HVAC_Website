@@ -1,9 +1,9 @@
-# Deny direct access to configuration and sensitive files
-<FilesMatch "^(config\.php|config\.sample\.php|.*\.sql|.*\.log)$">
+# Deny access to config files
+<FilesMatch "config\.sample\.php$">
     Require all denied
 </FilesMatch>
 
-# Allow access to contact.php (the API endpoint)
-<Files "contact.php">
-    Require all granted
+# Deny access to keepalive.php from web (CLI/cron only)
+<Files "keepalive.php">
+    Require all denied
 </Files>

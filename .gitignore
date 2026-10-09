@@ -50,3 +50,6 @@ test-contact.ps1
 test-utf8.php
 take-screenshots.cjs
 screenshots/
+
+.vercel
+.env*

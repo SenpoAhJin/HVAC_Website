@@ -25,7 +25,10 @@ export default function Contact() {
     setStatus({ type: '', message: '' })
 
     try {
-      const response = await fetch('/api/contact', {
+      // Contact endpoint varies by deployment target:
+      // GreenGeeks: /api/contact.php, Vercel/GitHub: /api/contact
+      const endpoint = import.meta.env.VITE_CONTACT_ENDPOINT || '/api/contact'
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)

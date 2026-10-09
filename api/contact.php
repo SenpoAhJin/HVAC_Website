@@ -13,7 +13,11 @@ if (PHP_SAPI === 'cli') {
 require __DIR__ . '/config-validator.php';
 
 // Load configuration
-$privateConfigPath = dirname(__DIR__) . '/../private_config/premier_tech_config.php';
+// Path resolution from /home/username/public_html/premiertechsolution.us/api/contact.php:
+// __DIR__ = /home/username/public_html/premiertechsolution.us/api
+// dirname(__DIR__, 3) = /home/username
+// Target: /home/username/private_config/premier_tech_config.php
+$privateConfigPath = dirname(__DIR__, 3) . '/private_config/premier_tech_config.php';
 if (!file_exists($privateConfigPath)) {
   error_log('[contact.php] Config file not found');
   http_response_code(503);

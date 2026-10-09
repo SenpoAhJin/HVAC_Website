@@ -161,41 +161,50 @@ On your local machine, set your production URL:
 
 ```bash
 # Windows PowerShell
-$env:VITE_SITE_URL="https://yourdomain.com"
-npm run build:deploy
+$env:VITE_SITE_URL="https://premiertechsolution.us"
+npm run build:greengeeks
 
 # Mac/Linux
-export VITE_SITE_URL=https://yourdomain.com
-npm run build:deploy
+export VITE_SITE_URL=https://premiertechsolution.us
+npm run build:greengeeks
 ```
-
-Replace `yourdomain.com` with your actual domain.
 
 This creates a `deploy/` folder with all necessary files.
 
-### 4.2 Upload to Server
+### 4.2 Upload to Server (ADDON DOMAIN)
+
+**CRITICAL:** This site is deployed as an ADDON domain. The upload path is:
+
+```
+/home/studen29/public_html/premiertechsolution.us/
+```
+
+**NOT** `/public_html/` (which belongs to the main domain studentaidsupport.us).
 
 Using cPanel **File Manager** or FTP:
 
-1. Navigate to `public_html/`
-2. **Delete any default files** (index.html, cgi-bin, etc.)
-3. Upload ALL contents from the `deploy/` folder:
-   - All files in deploy/ root (index.html, assets/, etc.)
-   - api/ folder
-   - .htaccess file
+1. Navigate to `/home/studen29/public_html/premiertechsolution.us/`
+   - If this folder doesn't exist, you need to add the addon domain first in cPanel → Domains
+2. **Delete any existing files in this folder** (old index.html, etc.)
+3. Upload the **CONTENTS** of the `deploy/` folder:
+   - All files from deploy/ root (index.html, assets/, images/, etc.)
+   - api/ folder with all PHP files
+   - .htaccess file (hidden file - enable "Show Hidden Files" in File Manager)
+   - favicon.svg, icons.svg, robots.txt, sitemap.xml
 
-4. Preserve the folder structure
+4. **Do NOT upload the deploy/ folder itself** - upload its contents
 
 **Alternative using FTP:**
 - Use FileZilla or any FTP client
 - Connect using credentials from cPanel
-- Upload to `/public_html/`
+- Navigate to `/home/studen29/public_html/premiertechsolution.us/`
+- Upload all contents from local `deploy/` folder
 
 ### 4.3 Verify File Structure
 
-Your `public_html/` should look like:
+Your `/home/studen29/public_html/premiertechsolution.us/` should look like:
 ```
-public_html/
+premiertechsolution.us/
 ├── index.html
 ├── .htaccess
 ├── assets/

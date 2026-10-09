@@ -827,3 +827,136 @@ Contact form was calling `/api/contact.php` (GreenGeeks PHP endpoint) instead of
 - Backend (api/contact.js) was already working correctly
 - Environment variables (SUPABASE_URL, SUPABASE_SECRET_KEY, IP_HASH_SALT) were already configured
 - This was purely a frontend URL mismatch, not a backend issue
+
+---
+
+## 2026-10-05 (Sunday) — Phase 2.4: GreenGeeks Production Build for premiertechsolution.us
+
+**Git commit:** (will be added after commit)
+
+### Context
+Prepared production build for GreenGeeks ADDON domain deployment at premiertechsolution.us. Main domain (studentaidsupport.us) is a separate live site - this project must not reference or write outside the Premier Tech folder.
+
+### Changes
+
+#### 1. Contact Form Endpoint Per Build Target
+- **Problem:** Contact form was hardcoded to single endpoint
+- **Solution:** Made endpoint configurable via `VITE_CONTACT_ENDPOINT`
+- Updated `src/pages/Contact.jsx` to read endpoint from environment variable
+- Added build-time configuration:
+  - `build:greengeeks` → `/api/contact.php` (PHP backend)
+  - `build:vercel` → `/api/contact` (Node.js serverless)
+  - `build:github` → `/api/contact` (Node.js serverless)
+- Defaults to `/api/contact` if variable not set
+- Added inline comment explaining the dual-endpoint architecture
+
+#### 2. Fixed Config Path Resolution
+- **Problem:** Old path used `dirname(__DIR__) . '/../private_config'` which resolved to `/home/username/public_html/private_config` (WRONG)
+- **Solution:** Changed to `dirname(__DIR__, 3) . '/private_config'`
+- **Deployed location:** `/home/studen29/public_html/premiertechsolution.us/api/contact.php`
+- **Resolved config path:** `/home/studen29/private_config/premier_tech_config.php` ✅
+- Applied fix to both `api/contact.php` and `api/keepalive.php`
+- Added path resolution comments explaining the logic
+- Created `test-config-path.php` to verify resolution
+- Missing config returns HTTP 503 with generic error, no path leaked
+
+#### 3. Enhanced .htaccess for deploy/
+- Created comprehensive `.htaccess` in `public/` (copied to `deploy/` during build)
+- **Features implemented:**
+  a. SPA fallback: Routes unknown URLs to index.html (except /api/ and real files)
+  b. Force HTTPS: Redirects http → https for premiertechsolution.us domain only
+  c. Block keepalive.php: Web requests return 403 (CLI/cron only)
+  d. Deny directory listing
+  e. Security headers (X-Content-Type-Options, X-XSS-Protection, X-Frame-Options)
+  f. Cache control for static assets
+  g. Gzip compression
+- Created `api/.htaccess` to block config.sample.php and keepalive.php from web access
+- Does not affect main domain or other sites on same account
+
+#### 4. Production Build Verification
+- **Command:** `VITE_SITE_URL=https://premiertechsolution.us npm run build:greengeeks`
+- **Verified deploy/ contains:**
+  ✅ index.html, assets/, images/, favicon.svg, icons.svg
+  ✅ sitemap.xml (updated with premiertechsolution.us)
+  ✅ robots.txt (updated with premiertechsolution.us)
+  ✅ .htaccess (root and api/)
+  ✅ api/contact.php, api/keepalive.php, api/config-validator.php, api/config.sample.php
+  ✅ api/contact.js (for reference)
+- **Verified NOT in deploy/:**
+  ✅ No .env files
+  ✅ No node_modules
+  ✅ No config.php with secrets
+  ✅ No premier_tech_config.php
+- **Verified build output:**
+  ✅ No noindex tag (production build)
+  ✅ Built JS contains `/api/contact.php` endpoint
+  ✅ No Vercel endpoint `/api/contact` present
+
+#### 5. Documentation Updates
+- **docs/DEPLOY-GREENGEEKS.md:**
+  - Updated Phase 4.2 with ADDON domain upload instructions
+  - Specified exact path: `/home/studen29/public_html/premiertechsolution.us/`
+  - Clarified: Upload CONTENTS of deploy/, not the folder itself
+  - Added warning: Do NOT upload to `/public_html/` (main domain)
+  - Emphasized "Show Hidden Files" for .htaccess visibility
+- **README.md:**
+  - Added "Environment Variables" section
+  - Documented VITE_CONTACT_ENDPOINT purpose and values
+  - Documented VITE_SITE_URL usage for production builds
+  - Included PowerShell and Bash examples
+
+### Files Changed
+- src/pages/Contact.jsx - Dynamic endpoint from env var
+- package.json - Added VITE_CONTACT_ENDPOINT to build scripts
+- api/contact.php - Fixed config path resolution (line 18-22)
+- api/keepalive.php - Fixed config path resolution (line 17-21)
+- api/.htaccess - Created (block config.sample.php, keepalive.php)
+- public/.htaccess - Created comprehensive rules
+- docs/DEPLOY-GREENGEEKS.md - Updated for addon domain deployment
+- README.md - Added environment variables documentation
+- test-config-path.php - Created verification script
+
+### Files Created
+- test-config-path.php - Config path resolution test
+
+### Testing Results
+- ✅ Config path resolves correctly to `/home/studen29/private_config/premier_tech_config.php`
+- ✅ GreenGeeks build completes successfully
+- ✅ deploy/ folder contains all required files
+- ✅ No unwanted files in deploy/
+- ✅ No noindex tag in production build
+- ✅ Correct endpoint `/api/contact.php` in built JS
+- ✅ sitemap.xml and robots.txt updated with production domain
+- ✅ .htaccess files present in deploy/ and deploy/api/
+
+### Not Tested
+- Actual upload to GreenGeeks server (requires cPanel access)
+- Live site functionality (requires deployment)
+- Keepalive.php cron execution (requires server setup)
+- HTTPS redirect (requires SSL certificate installed)
+- Email notifications (requires server mail() configuration)
+
+### Path Resolution Details
+
+**Deployed File Location:**
+```
+/home/studen29/public_html/premiertechsolution.us/api/contact.php
+```
+
+**dirname() Levels:**
+- `__DIR__` = `/home/studen29/public_html/premiertechsolution.us/api`
+- `dirname(__DIR__)` = `/home/studen29/public_html/premiertechsolution.us`
+- `dirname(__DIR__, 2)` = `/home/studen29/public_html`
+- `dirname(__DIR__, 3)` = `/home/studen29` ✅
+
+**Target Config Path:**
+```
+/home/studen29/private_config/premier_tech_config.php
+```
+
+**Resolution:**
+```php
+dirname(__DIR__, 3) . '/private_config/premier_tech_config.php'
+```
+
+This correctly navigates from the addon domain subfolder up to the account root, then into the private_config sibling directory.

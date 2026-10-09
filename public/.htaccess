@@ -1,14 +1,25 @@
 # Apache configuration for Premier Tech Solution
-# Enables SPA (Single Page Application) routing and optimization
+# Enables SPA routing, HTTPS enforcement, and security
 
 # Disable directory listing
 Options -Indexes
 
-# Enable rewrite engine
+# Force HTTPS for premiertechsolution.us only
 <IfModule mod_rewrite.c>
     RewriteEngine On
+    
+    # Force HTTPS (redirect http to https for this site only)
+    RewriteCond %{HTTPS} off
+    RewriteCond %{HTTP_HOST} ^(www\.)?premiertechsolution\.us$ [NC]
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+    
+    # Block direct web access to keepalive.php (CLI/cron only)
+    RewriteCond %{REQUEST_URI} ^/api/keepalive\.php$ [NC]
+    RewriteRule ^ - [F,L]
+    
+    # SPA fallback routing
     RewriteBase /
-
+    
     # Don't rewrite files or directories that exist
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
@@ -44,16 +55,9 @@ Options -Indexes
     # Enable XSS protection
     Header set X-XSS-Protection "1; mode=block"
     
-    # Prevent clickjacking (can be overridden if needed)
+    # Prevent clickjacking
     Header set X-Frame-Options "SAMEORIGIN"
     
     # Referrer policy
     Header set Referrer-Policy "strict-origin-when-cross-origin"
 </IfModule>
-
-# Force HTTPS (uncomment when SSL is configured)
-# <IfModule mod_rewrite.c>
-#     RewriteEngine On
-#     RewriteCond %{HTTPS} off
-#     RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
-# </IfModule>
