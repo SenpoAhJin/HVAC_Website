@@ -960,3 +960,162 @@ dirname(__DIR__, 3) . '/private_config/premier_tech_config.php'
 ```
 
 This correctly navigates from the addon domain subfolder up to the account root, then into the private_config sibling directory.
+
+---
+
+## 2026-10-05 (Sunday) — Phase 2.5: GreenGeeks Deployment Package + Verification
+
+**Git commit:** 1d4cdef
+
+### Changes Made
+
+#### 1. Empty-Email Behavior Fix
+- **Problem:** contact.php would call `mail()` with empty recipient if MAIL_TO was not configured
+- **Solution:** Wrapped entire email block in `if (!empty($config['email']['MAIL_TO']) && filter_var(...))` check
+- Email sending now completely skipped (no errors, no warnings) when MAIL_TO is empty
+- Form still validates, rate limits, and saves to Supabase successfully
+- Returns success if database save worked, regardless of email status
+
+#### 2. Production Build
+- Built with `VITE_SITE_URL=https://premiertechsolution.us`
+- Created deploy/ folder with all required files
+- Build time: 688ms
+
+#### 3. Deployment Package
+- Created `deploy-package.zip` using `tar -a -c -f deploy-package.zip -C deploy .`
+- Size: 3.74 MB
+- File count: 200+ files
+- Includes hidden .htaccess files
+- Uses forward slashes (Linux-compatible)
+- Files at zip root (no deploy/ prefix)
+- Added deploy-package.zip to .gitignore
+
+#### 4. Live Verification Script
+- Created `scripts/verify-live.ps1` with -Domain parameter
+- READ-ONLY checks (does NOT submit real data):
+  - Main pages return 200
+  - HTTPS works and HTTP redirects
+  - API security (405 for GET, 400 for invalid JSON)
+  - keepalive.php blocked from web
+  - SEO files present (sitemap.xml, robots.txt)
+  - Security blocks (/private_config/, /api/config.sample.php, /.env)
+- Not run against live site (domain not responding yet)
+
+#### 5. Documentation Updates
+
+**docs/DEPLOY-GREENGEEKS.md:**
+- Fixed cron command path: `/home/studen29/public_html/premiertechsolution.us/api/keepalive.php`
+- Fixed log path: `/home/studen29/logs/keepalive.log`
+- Added instruction to create logs/ folder first
+- Fixed Phase 4.4 permissions path: `/home/studen29/public_html/premiertechsolution.us/api/`
+- Fixed nameservers: ns1.greengeeks.net / ns2.greengeeks.net (not .com)
+- Fixed email subject: "New Contact Form Submission" (fixed text, not dynamic)
+- Added "Launch with Email Left Empty" section explaining email-optional launch
+- Added "Later: Filling Business Details" section with rebuild instructions
+- Added zip-based upload method with hidden files warning
+- Emphasized: never upload to /public_html/ (that's studentaidsupport.us)
+
+**docs/LAUNCH-CHECKLIST.md:**
+- Updated cron command with full addon domain path
+- Added logs folder creation instruction
+
+### What Was Tested ✅
+
+1. **Pre-flight:**
+   - Git status: Clean
+   - Node v24.19.0, NPM 11.17.0
+   - PHP 8.3.33 available
+   - src/config/contact.js: All empty strings ✅
+
+2. **PHP Syntax:**
+   - config-validator.php: ✅ Pass
+   - config.sample.php: ✅ Pass
+   - contact.php: ✅ Pass
+   - keepalive.php: ✅ Pass
+
+3. **Build Verification:**
+   - deploy/ contains: index.html, .htaccess, assets/, images/, api/, favicon, sitemap, robots ✅
+   - deploy/api/ contains: .htaccess, contact.php, keepalive.php, config-validator.php ✅
+   - NO unwanted files: .env, node_modules, secrets ✅
+   - NO secret patterns in JS: sb_secret_, service_role, eyJ, passwords ✅
+   - Built JS endpoint: /api/contact.php ✅
+   - No Vercel endpoint ✅
+   - No noindex tag ✅
+   - sitemap.xml uses premiertechsolution.us ✅
+   - robots.txt uses premiertechsolution.us ✅
+   - Empty business details: conditional rendering works (undefined only in code, not output) ✅
+
+4. **Zip Package:**
+   - Created successfully: 3.74 MB ✅
+   - .htaccess present at root ✅
+   - api/.htaccess present ✅
+   - api/contact.php present ✅
+   - api/keepalive.php present ✅
+   - No deploy/ prefix ✅
+   - Forward slashes only ✅
+   - Files at zip root ✅
+
+5. **Live Verification Script:**
+   - Created successfully ✅
+   - NOT run (domain not responding yet) ⚠️
+
+### What FAILED
+
+*None - all attempted tasks completed successfully*
+
+### What Was NOT Done (Needs Human)
+
+These require cPanel access or live server:
+
+1. ⚠️ Create `/home/studen29/private_config/premier_tech_config.php` and set permissions 600
+2. ⚠️ Upload/extract deploy-package.zip in cPanel File Manager to `/home/studen29/public_html/premiertechsolution.us/`
+3. ⚠️ Set file permissions 755 on api/contact.php and api/keepalive.php
+4. ⚠️ Create `/home/studen29/logs/` folder
+5. ⚠️ Add cron job for keepalive.php
+6. ⚠️ Create email accounts (optional - can launch without)
+7. ⚠️ Check SPF/DKIM for email deliverability (optional)
+8. ⚠️ Run scripts/verify-live.ps1 against live domain after upload
+9. ⚠️ Submit real test form and verify Supabase row appears
+10. ⚠️ Verify studentaidsupport.us (main domain) remains unchanged
+
+### Lessons & Notes
+
+#### Zip Creation Pitfalls
+- **Windows PowerShell 5.1 `Compress-Archive`**: 
+  - Can skip hidden files with wildcards
+  - Writes backslash paths that break extraction on Linux
+  - DO NOT USE for deployment packages
+- **Solution**: Use `tar -a -c -f` which:
+  - Includes hidden files
+  - Uses forward slashes
+  - Creates Linux-compatible archives
+
+#### Empty Email Behavior
+- PHP `mail()` with empty recipient fails silently or generates warnings
+- **Fix**: Check `!empty($config['email']['MAIL_TO'])` before entire email block
+- Form can launch successfully with NO email configuration
+- Submissions still save to Supabase
+- Email can be added later without rebuild or re-upload
+
+#### Path Gotchas
+- Addon domain: `/home/USERNAME/public_html/DOMAIN.TLD/`
+- Main domain: `/home/USERNAME/public_html/` (different site!)
+- Private config: `/home/USERNAME/private_config/` (above public_html)
+- Logs: `/home/USERNAME/logs/` (must be created manually)
+
+#### Empty Business Details
+- React conditional rendering prevents empty tel:/mailto: links
+- "undefined" appears only in minified code, not DOM output
+- UI elements hide automatically when contact.js values are empty strings
+- Can launch site with blank contact info, fill in later with rebuild
+
+### Files Changed
+- .gitignore - Added deploy-package.zip
+- api/contact.php - Wrapped email block in empty check
+- docs/DEPLOY-GREENGEEKS.md - Fixed paths, added sections for email-optional launch and business details
+- docs/LAUNCH-CHECKLIST.md - Updated cron command path
+- scripts/verify-live.ps1 - Created (new file)
+
+### Files Created
+- scripts/verify-live.ps1 - Live site verification script
+- deploy-package.zip - Deployment package (not committed, in .gitignore)
