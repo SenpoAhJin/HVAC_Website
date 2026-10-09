@@ -56,11 +56,11 @@ export default function Home() {
 
         {/* Hero Content */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
-          <div className="max-w-2xl text-white">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-tight">
-              Comfort in Every&nbsp;Season
+          <div className="text-white">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-tight md:whitespace-nowrap">
+              Comfort in Every Season
             </h1>
-            <p className="text-xl md:text-2xl mb-8 text-white/95">
+            <p className="text-xl md:text-2xl mb-8 text-white/95 max-w-2xl">
               Expert heating and cooling solutions for your home
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
