@@ -28,17 +28,23 @@ function validate_config($config) {
     $errors[] = 'IP_HASH_SALT invalid';
   }
   
-  // MAIL_TO: valid email, not example.com
+  // MAIL_TO: if not empty, must be valid email and not example.com
   $mailTo = $config['email']['MAIL_TO'] ?? '';
-  if (!filter_var($mailTo, FILTER_VALIDATE_EMAIL) || str_ends_with($mailTo, 'example.com')) {
-    $errors[] = 'MAIL_TO invalid';
+  if (!empty($mailTo)) {
+    if (!filter_var($mailTo, FILTER_VALIDATE_EMAIL) || str_ends_with($mailTo, 'example.com')) {
+      $errors[] = 'MAIL_TO invalid (must be valid email, not example.com)';
+    }
   }
+  // Empty MAIL_TO is allowed (email will be skipped, Supabase only)
   
-  // MAIL_FROM: valid email, not example.com
+  // MAIL_FROM: if not empty, must be valid email and not example.com
   $mailFrom = $config['email']['MAIL_FROM'] ?? '';
-  if (!filter_var($mailFrom, FILTER_VALIDATE_EMAIL) || str_ends_with($mailFrom, 'example.com')) {
-    $errors[] = 'MAIL_FROM invalid';
+  if (!empty($mailFrom)) {
+    if (!filter_var($mailFrom, FILTER_VALIDATE_EMAIL) || str_ends_with($mailFrom, 'example.com')) {
+      $errors[] = 'MAIL_FROM invalid (must be valid email, not example.com)';
+    }
   }
+  // Empty MAIL_FROM is allowed (email will be skipped, Supabase only)
   
   return [
     'valid' => empty($errors),

@@ -37,30 +37,35 @@ if (!fs.existsSync(distDir)) {
 
 copyRecursive(distDir, deployDir);
 
-// Copy API folder
+// Copy API folder - only GreenGeeks files
 console.log('📡 Copying api/ folder...');
 const deployApiDir = path.join(deployDir, 'api');
 fs.mkdirSync(deployApiDir, { recursive: true });
 
-// Copy all API files except config.php
-const apiFiles = fs.readdirSync(apiDir);
-apiFiles.forEach(file => {
-  if (file === 'config.php') {
-    console.log(`   ⏭️  Skipping ${file} (not for deployment)`);
-    return;
-  }
-  
+// Only copy files needed for GreenGeeks deployment
+const greengeeksApiFiles = [
+  'contact.php',
+  'keepalive.php',
+  'config-validator.php',
+  '.htaccess'
+];
+
+greengeeksApiFiles.forEach(file => {
   const source = path.join(apiDir, file);
   const dest = path.join(deployApiDir, file);
   
-  if (fs.statSync(source).isDirectory()) {
-    copyRecursive(source, dest);
-    console.log(`   ✅ Copied ${file}/`);
-  } else {
+  if (fs.existsSync(source)) {
     fs.copyFileSync(source, dest);
     console.log(`   ✅ Copied ${file}`);
+  } else {
+    console.log(`   ⚠️  Warning: ${file} not found (skipping)`);
   }
 });
+
+// Explicitly log what's excluded
+console.log(`   ⏭️  Excluded contact.js (Vercel only)`);
+console.log(`   ⏭️  Excluded config.php (server-specific, not for deployment)`);
+console.log(`   ⏭️  Excluded config.sample.php (documentation only)`);
 
 // Copy .htaccess if it exists
 if (fs.existsSync(htaccessSource)) {
