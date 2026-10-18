@@ -15,7 +15,7 @@ export const CONTACT_INFO = {
   PHONE_TEL_2: '+19513192014',
   
   // Business email address
-  EMAIL: '',
+  EMAIL: 'inquiry@premiertechsolution.com',
   
   // Business address or service area description
   ADDRESS: '',
