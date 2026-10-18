@@ -1,0 +1,25 @@
+{
+  "url": "https://hvac-coral-phi.vercel.app",
+  "timestamp": "2026-10-18T01:25:11.639Z",
+  "passed": [
+    "Footer contains (951) 319-3022",
+    "Footer contains (951) 319-2014",
+    "Footer \"Contact Us\" column exists",
+    "Contact page contains (951) 319-3022",
+    "Contact page contains (951) 319-2014",
+    "FAQ widget opened successfully",
+    "FAQ widget contains (951) 319-3022",
+    "FAQ widget contains (951) 319-2014",
+    "FAQ has \"How can I contact you?\" question",
+    "FAQ has schedule service question",
+    "Inquiry email NOT exposed in frontend",
+    "Phone numbers present in deployed JS bundle",
+    "No console errors"
+  ],
+  "failed": [
+    "Navbar missing (951) 319-3022",
+    "Navbar missing (951) 319-2014",
+    "Hero section missing phone numbers"
+  ],
+  "consoleErrors": []
+}
