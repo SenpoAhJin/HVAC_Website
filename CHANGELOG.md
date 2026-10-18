@@ -1332,7 +1332,7 @@ When ready to deploy these changes to GreenGeeks:
 - Contact page shows both phone numbers (previously showed one)
 
 **Vercel Test Site:**
-The changes are live on https://premier-tech-solution.vercel.app for preview and testing. Phone numbers are visible and clickable. Email delivery cannot be tested on Vercel (no PHP email).
+The changes are live on https://hvac-coral-phi.vercel.app for preview and testing. Phone numbers are visible and clickable. Email delivery cannot be tested on Vercel (no PHP email).
 
 **Next Steps:**
 Business owner should review the Vercel test site, verify phone numbers appear correctly, approve the changes, then deploy to GreenGeeks following manual steps above.
