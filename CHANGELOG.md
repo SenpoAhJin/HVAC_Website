@@ -1520,3 +1520,194 @@ Test site (https://hvac-coral-phi.vercel.app) was stale, showing code from Octob
 
 **Document maintained by:** Kiro AI Development Agent  
 **Last Updated:** 2026-10-18
+
+
+---
+
+## 2026-10-18 03:00 (Friday) — Phase 3.0: GreenGeeks Upload Package Created
+
+**Git commit:** 2ab774b  
+**Package created:** 2026-10-18 03:00 UTC
+
+### Context
+Created clean, production-ready upload package for GreenGeeks hosting at premiertechsolution.us. Package contains ONLY files needed for live site with no source code, development files, or secrets. Ready for cPanel upload.
+
+### Package Contents
+
+**Structure:**
+```
+GREENGEEKS_PACKAGE/
+├── 1_UPLOAD_TO_public_html_premiertechsolution.us/  (Live site files)
+├── 2_PRIVATE_CONFIG_TEMPLATE/                        (Config template)
+├── 3_READ_ME_FIRST.txt                               (Deployment guide)
+└── premiertechsolution-upload.zip                    (1.03 MB)
+```
+
+**Files in Upload Folder (21 files total):**
+
+Root Files:
+- index.html (1.6 KB) - Main site entry point
+- .htaccess (1.8 KB) - Server rules, HTTPS redirect, routing
+- favicon.svg (1.1 KB) - Browser tab icon
+- icons.svg (4.9 KB) - Site icons
+- robots.txt (119 B) - Search engine instructions
+- sitemap.xml (786 B) - Site structure for Google
+
+Assets Folder:
+- assets/index-DfjMkdBm.css (23.6 KB) - Compiled styles
+- assets/index-DnGJr6Pg.js (291.4 KB) - Compiled JavaScript
+
+Images Folder (8 referenced images, 1.26 MB total):
+- images/about/service-van.jpg (272.3 KB)
+- images/about/technician-1.jpg (56.4 KB)
+- images/about/technician-2.jpg (64.1 KB)
+- images/hero/team-at-work.jpg (44.8 KB)
+- images/services/air-quality-service.jpg (139.6 KB)
+- images/services/cooling-service.jpg (248.5 KB)
+- images/services/heating-service.jpg (71.9 KB)
+- images/services/heat-pump-service.jpg (59.8 KB)
+
+API Folder:
+- api/contact.php (9.0 KB) - Contact form handler
+- api/keepalive.php (1.8 KB) - Database keepalive script
+- api/config-validator.php (2.3 KB) - Config validation helper
+- api/.htaccess (216 B) - API folder protection
+
+### Image Optimization
+
+**Referenced Images (8):** Only images actually used by the site were included
+**Unreferenced Images (23):** Excluded from package to reduce size
+- All Image_Assets/ subfolders (ductless mini split, furnace replacement, HVAC ductwork, HVAC installation team, HVAC service van tools, HVAC technician servicing, rooftop HVAC unit repair)
+- These were original source photos not used in final site design
+
+### Configuration Template
+
+**File:** 2_PRIVATE_CONFIG_TEMPLATE/premier_tech_config.TEMPLATE.php
+
+Contains template with:
+- Obviously fake placeholder values (no real credentials)
+- Detailed comments explaining each value
+- Instructions on where file belongs: `/home/studen29/private_config/premier_tech_config.php`
+- File permissions instructions (chmod 600)
+- Links to where values are found (Supabase dashboard, cPanel)
+
+### Deployment Guide
+
+**File:** 3_READ_ME_FIRST.txt (15.8 KB)
+
+Plain-English guide with:
+- Numbered steps using cPanel's exact button/tool names
+- Pre-flight backup instructions
+- Upload instructions (both ZIP and individual files)
+- Private config creation walkthrough
+- Complete testing checklist
+- Troubleshooting section
+- Rollback instructions
+- File purpose explanations
+- Security reminders
+
+### Verification Results
+
+**✅ All Checks Passed:**
+
+1. **Package Structure:** 
+   - Zip contains index.html and .htaccess at root ✅
+   - api/.htaccess present ✅
+   - No extra files or folders ✅
+
+2. **Security Scan:**
+   - NO real secrets found ✅
+   - NO Supabase keys ✅
+   - NO passwords ✅
+   - Only validation patterns in config-validator.php (expected) ✅
+
+3. **Code Quality:**
+   - All PHP files pass syntax check ✅
+   - contact.php ✅
+   - keepalive.php ✅
+   - config-validator.php ✅
+   - premier_tech_config.TEMPLATE.php ✅
+
+4. **Configuration:**
+   - No vercel.app references ✅
+   - No noindex tag in index.html ✅
+   - Localhost only in React Router internal code (expected) ✅
+   - JS posts to /api/contact.php (correct for GreenGeeks) ✅
+   - Phone numbers present in JS: (951) 319-3022, (951) 319-2014 ✅
+   - Email present in JS: inquiry@premiertechsolution.com ✅
+   - sitemap.xml uses https://premiertechsolution.us ✅
+   - robots.txt uses https://premiertechsolution.us ✅
+   - contact.php reads MAIL_TO from $config['email']['MAIL_TO'] ✅
+
+5. **Local PHP Server Test:**
+   - Homepage loads: HTTP 200 ✅
+   - GET to /api/contact.php: HTTP 503 (expected - no config) ✅
+   - POST with bad JSON: HTTP 503 (expected - no config) ✅
+   - Note: .htaccess rules cannot be tested with PHP built-in server
+
+### Build Configuration
+
+**Command:** `VITE_SITE_URL=https://premiertechsolution.us npm run build:greengeeks`
+
+**Results:**
+- Contact endpoint: `/api/contact.php` (PHP backend)
+- Sitemap: https://premiertechsolution.us
+- Robots.txt: https://premiertechsolution.us
+- No noindex tag (production build)
+- Build size: 315 KB JS + CSS (uncompressed)
+
+### Files Modified
+
+- .gitignore - Added GREENGEEKS_PACKAGE/ exclusion
+- Created: GREENGEEKS_PACKAGE/ folder structure
+- Created: 3_READ_ME_FIRST.txt deployment guide
+- Created: premier_tech_config.TEMPLATE.php with placeholders
+- Created: premiertechsolution-upload.zip (tar format, preserves hidden files)
+
+### What Was NOT Done (By Design)
+
+- ❌ NO actual upload to GreenGeeks
+- ❌ NO cPanel connection
+- ❌ NO real credentials created or stored
+- ❌ NO changes to studentaidsupport.us
+- ❌ NO Vercel redeployment
+- ❌ NO site content changes
+
+### Deployment Path
+
+**Target Location:** `/home/studen29/public_html/premiertechsolution.us/`  
+**Private Config:** `/home/studen29/private_config/premier_tech_config.php`  
+**Main Domain:** studentaidsupport.us (DO NOT TOUCH)  
+**Addon Domain:** premiertechsolution.us (this deployment)
+
+### Next Steps (Owner Action Required)
+
+1. Review package contents in GREENGEEKS_PACKAGE/
+2. Read 3_READ_ME_FIRST.txt thoroughly
+3. Backup current live site in cPanel
+4. Upload premiertechsolution-upload.zip via cPanel File Manager
+5. Extract zip to public_html/premiertechsolution.us/
+6. Create private config with real credentials
+7. Test site following checklist in README
+8. Monitor inbox and Supabase for submissions
+
+### Package Statistics
+
+- **Total Files:** 21 files
+- **Total Size:** ~1.64 MB (uncompressed)
+- **Zip Size:** 1.03 MB (compressed)
+- **Build:** GreenGeeks production (commit 2ab774b)
+- **Created:** 2026-10-18 03:00 UTC (Friday)
+
+### Notes
+
+- Package is self-contained and ready for upload
+- All documentation uses plain English for non-technical owner
+- No technical knowledge required beyond following numbered steps
+- Rollback instructions included in case of issues
+- Test site (Vercel) remains unchanged and available for preview
+
+---
+
+**Document maintained by:** Kiro AI Development Agent  
+**Last Updated:** 2026-10-18

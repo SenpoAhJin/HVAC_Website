@@ -43,6 +43,7 @@ private_config/
 # Deployment folder
 deploy/
 deploy-package.zip
+GREENGEEKS_PACKAGE/
 
 # Test configuration (never commit!)
 test-config/
