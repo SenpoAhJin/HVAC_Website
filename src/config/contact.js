@@ -6,10 +6,13 @@
  */
 
 export const CONTACT_INFO = {
-  // Business phone number (formatted for display, e.g., "(415) 555-0198")
-  PHONE_DISPLAY: '',
-  // Phone number for tel: links (digits only with country code, e.g., "+14155550198")
-  PHONE_TEL: '',
+  // Primary business phone number
+  PHONE_DISPLAY: '(951) 319-3022',
+  PHONE_TEL: '+19513193022',
+  
+  // Secondary business phone number
+  PHONE_DISPLAY_2: '(951) 319-2014',
+  PHONE_TEL_2: '+19513192014',
   
   // Business email address
   EMAIL: '',

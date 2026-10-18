@@ -232,8 +232,10 @@ if (!empty($config['email']['MAIL_TO']) && filter_var($config['email']['MAIL_TO'
   // Fixed subject with no visitor input
   $emailSubject = 'New Contact Form Submission';
 
-  // Plain text body
+  // Plain text body with timestamp
+  $timestamp = date('Y-m-d H:i:s T');
   $emailBody = "New contact form submission:\n\n";
+  $emailBody .= "Received: {$timestamp}\n\n";
   $emailBody .= "Name: {$name}\n";
   $emailBody .= "Email: {$email}\n";
   if ($phone) {

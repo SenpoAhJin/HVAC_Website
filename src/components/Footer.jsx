@@ -63,8 +63,23 @@ export default function Footer() {
             <ul className="space-y-3 text-sm">
               {CONTACT_INFO.PHONE_TEL && (
                 <li>
-                  <a href={`tel:${CONTACT_INFO.PHONE_TEL}`} className="hover:text-warm-400 transition-colors focus-visible-ring rounded">
-                    Phone: {CONTACT_INFO.PHONE_DISPLAY}
+                  <a 
+                    href={`tel:${CONTACT_INFO.PHONE_TEL}`} 
+                    className="hover:text-warm-400 transition-colors focus-visible-ring rounded"
+                    aria-label={`Call Premier Tech Solution at ${CONTACT_INFO.PHONE_DISPLAY}`}
+                  >
+                    {CONTACT_INFO.PHONE_DISPLAY}
+                  </a>
+                </li>
+              )}
+              {CONTACT_INFO.PHONE_TEL_2 && (
+                <li>
+                  <a 
+                    href={`tel:${CONTACT_INFO.PHONE_TEL_2}`} 
+                    className="hover:text-warm-400 transition-colors focus-visible-ring rounded"
+                    aria-label={`Call Premier Tech Solution at ${CONTACT_INFO.PHONE_DISPLAY_2}`}
+                  >
+                    {CONTACT_INFO.PHONE_DISPLAY_2}
                   </a>
                 </li>
               )}

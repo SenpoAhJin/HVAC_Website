@@ -82,6 +82,10 @@ This comprehensive checklist ensures your Premier Tech Solution website is fully
 - [ ] **Set up private config file**
   - Create `/home/username/private_config/premier_tech_config.php`
   - Fill in: Supabase URL, secret key, email addresses, IP hash salt
+  - **Email settings:**
+    - `MAIL_TO`: Your business email address where contact form submissions are sent
+    - `MAIL_FROM`: Sender address on your domain (e.g., `noreply@premiertechsolution.us`)
+  - Leave `MAIL_TO` empty (`''`) to skip email notifications (leads still saved to Supabase)
   - Set permissions to 600
 
 - [ ] **Add cron job for Supabase keep-alive** (if using Free tier)

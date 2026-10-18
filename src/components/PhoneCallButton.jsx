@@ -46,6 +46,7 @@ export default function PhoneCallButton({ className = '', children }) {
         href={`tel:${CONTACT_INFO.PHONE_TEL}`}
         onClick={handleClick}
         className={className}
+        aria-label={`Call Premier Tech Solution at ${CONTACT_INFO.PHONE_DISPLAY}`}
       >
         {children || 'Call Now'}
       </a>

@@ -121,12 +121,19 @@ Using cPanel **File Manager**:
 return [
   'supabase' => [
     'SUPABASE_URL' => 'https://xxxxxxxxxxxxx.supabase.co',
-    'SUPABASE_SECRET_KEY' => 'PASTE_YOUR_SECRET_KEY_HERE',
+    'SUPABASE_SECRET_KEY' => 'sb_secret_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
   ],
   
   'email' => [
-    'MAIL_TO' => 'info@yourdomain.com',
+    // Business owner's inquiry address (where contact form submissions are sent)
+    // Use your real business email address here
+    'MAIL_TO' => 'your-business-email@yourdomain.com',
+    
+    // Sender address (must be on your domain, e.g., noreply@yourdomain.com)
     'MAIL_FROM' => 'noreply@yourdomain.com',
+    
+    // TIP: Leave MAIL_TO empty ('') to skip email notifications
+    // Leads are still saved to Supabase when email is disabled
   ],
   
   'security' => [
@@ -139,9 +146,9 @@ return [
 **Where to find each value:**
 
 - **SUPABASE_URL**: In Supabase → Settings → API → Project URL
-- **SUPABASE_SECRET_KEY**: The secret key you created in step 1.4
-- **MAIL_TO**: Your business email where you want to receive contact form notifications
-- **MAIL_FROM**: The email account you created in step 2.1
+- **SUPABASE_SECRET_KEY**: The secret key you copied in step 1.4 (starts with `sb_secret_`)
+- **MAIL_TO**: Your business email address where contact form submissions should be sent
+- **MAIL_FROM**: The noreply email account you created in step 2.1 (e.g., `noreply@premiertechsolution.us`)
 - **IP_HASH_SALT**: Generate a random string (at least 32 characters). You can use: [random.org/strings](https://www.random.org/strings/)
 
 4. **Save the file**

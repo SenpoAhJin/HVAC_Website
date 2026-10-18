@@ -84,11 +84,19 @@ export default function Contact() {
   }
 
   const contactInfo = [
-    CONTACT_INFO.PHONE_DISPLAY && {
+    CONTACT_INFO.PHONE_TEL && {
       icon: '📞',
-      label: 'Phone',
+      label: 'Primary Phone',
       value: CONTACT_INFO.PHONE_DISPLAY,
-      link: `tel:${CONTACT_INFO.PHONE_TEL}`
+      link: `tel:${CONTACT_INFO.PHONE_TEL}`,
+      ariaLabel: `Call Premier Tech Solution at ${CONTACT_INFO.PHONE_DISPLAY}`
+    },
+    CONTACT_INFO.PHONE_TEL_2 && {
+      icon: '📞',
+      label: 'Secondary Phone',
+      value: CONTACT_INFO.PHONE_DISPLAY_2,
+      link: `tel:${CONTACT_INFO.PHONE_TEL_2}`,
+      ariaLabel: `Call Premier Tech Solution at ${CONTACT_INFO.PHONE_DISPLAY_2}`
     },
     CONTACT_INFO.EMAIL && {
       icon: '✉️',
@@ -146,12 +154,13 @@ export default function Contact() {
                       {info.link ? (
                         <a
                           href={info.link}
-                          className="text-lg text-gray-900 hover:text-warm-600 transition-colors focus-visible-ring rounded"
+                          className="text-lg text-gray-900 hover:text-warm-600 transition-colors focus-visible-ring rounded inline-block min-h-[44px] flex items-center"
+                          aria-label={info.ariaLabel}
                         >
                           {info.value}
                         </a>
                       ) : (
-                        <p className="text-lg text-gray-900">{info.value}</p>
+                        <p className="text-lg text-gray-900 whitespace-pre-line">{info.value}</p>
                       )}
                     </div>
                   </div>

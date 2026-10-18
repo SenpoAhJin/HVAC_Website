@@ -15,8 +15,12 @@ return [
   ],
   
   'email' => [
-    'MAIL_TO' => 'info@example.com',
-    'MAIL_FROM' => 'noreply@example.com',
+    // Business owner's inquiry address (where contact form submissions are sent)
+    // Leave empty to skip email (leads still saved to Supabase)
+    'MAIL_TO' => 'your-business-email@example.com',
+    
+    // Sender address (must be on your domain, e.g., noreply@yourdomain.com)
+    'MAIL_FROM' => 'noreply@yourdomain.com',
   ],
   
   'security' => [
