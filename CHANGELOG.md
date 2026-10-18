@@ -1217,3 +1217,122 @@ To deploy this cleaned package to premiertechsolution.us:
 1. Upload `deploy-package.zip` to `/home/studen29/public_html/premiertechsolution.us/`
 2. Extract (enable "Show Hidden Files" to verify .htaccess)
 3. Hard refresh (Ctrl+Shift+R)
+
+## 2026-10-18 (Sunday) 08:40 — Phase 2.7: Phone numbers and inquiry email routing (TEST ONLY)
+
+**Commit:** `d941f14`
+
+**IMPORTANT:** This phase is TEST ONLY. Changes are committed and pushed to GitHub (updating Vercel test site), but NO deployment package or GreenGeeks upload was created. The business owner will review and approve before deployment.
+
+**Phone Numbers Added:**
+- Primary: (951) 319-3022 (tel:+19513193022)
+- Secondary: (951) 319-2014 (tel:+19513192014)
+
+**Where Phone Numbers Appear:**
+- ✅ Navbar: Primary number as "Call Now" button (desktop & mobile)
+- ✅ Home hero: Primary number as "Contact Us Today" CTA button
+- ✅ Contact page: Both numbers as separate tap-to-call links
+- ✅ Footer: Both numbers listed
+- ✅ All numbers are tel: links with aria-labels for accessibility
+- ✅ PhoneCallButton: Minimum 44px tap target for mobile usability
+
+**Email Routing:**
+- `api/contact.php`: Inquiry emails now include timestamp in body
+- Format: "Received: YYYY-MM-DD HH:MM:SS TZ"
+- Routed to `MAIL_TO` address from private config (not hardcoded)
+- Reply-To automatically set to visitor's validated email
+- Email includes: timestamp, name, email, phone (if provided), message
+- Email is plain text (no HTML)
+
+**Configuration Updates:**
+- `api/config.sample.php`: Clear placeholders for MAIL_TO/MAIL_FROM with comments
+- `docs/DEPLOY-GREENGEEKS.md`: Detailed instructions for setting MAIL_TO (business inquiry address) and MAIL_FROM (noreply@domain) in private config
+- `docs/LAUNCH-CHECKLIST.md`: Added note that MAIL_TO can be left empty to skip email (leads still saved to Supabase)
+
+**Files Changed:**
+- `src/config/contact.js` — Added PHONE_DISPLAY_2 and PHONE_TEL_2
+- `src/components/Footer.jsx` — Show both phone numbers with aria-labels
+- `src/components/PhoneCallButton.jsx` — Added aria-label for primary phone
+- `src/pages/Contact.jsx` — Show both numbers, minimum 44px tap target, aria-labels
+- `api/contact.php` — Added timestamp to email body
+- `api/config.sample.php` — Clear MAIL_TO/MAIL_FROM placeholders with guidance
+- `docs/DEPLOY-GREENGEEKS.md` — Updated email config section
+- `docs/LAUNCH-CHECKLIST.md` — Added MAIL_TO/MAIL_FROM details
+
+**Security Verification:**
+- ✅ Inquiry email address (inquiry@premiertechsolution.com) does NOT appear anywhere in:
+  - Repository files
+  - Built JavaScript
+  - Built CSS
+  - Built HTML
+  - Documentation
+- ✅ No .env files in deploy/
+- ✅ No config.php in deploy/
+- ✅ Phone numbers DO appear in built JS (as expected)
+
+**Tests Performed:**
+- ✅ Vercel build: `npm run build:vercel` — PASS (0 errors)
+- ✅ GreenGeeks build: `npm run build:greengeeks` — PASS (0 errors)
+- ✅ PHP syntax check: `php -l api/contact.php` — PASS (no syntax errors)
+- ✅ Email branch logic: Empty MAIL_TO skips email, valid MAIL_TO enters send path
+- ✅ Config validator: Accepts empty email, rejects malformed/example.com addresses
+- ✅ Screenshots captured at 390px and 1440px:
+  - Home (mobile): No horizontal overflow ✅
+  - Home (desktop): No horizontal overflow ✅
+  - Contact (mobile): No horizontal overflow ✅, phone numbers easy to tap
+  - Contact (desktop): No horizontal overflow ✅, phone numbers clearly visible
+- ✅ Verified tel: links present in built output for both phone numbers
+
+**NOT Tested (Cannot test without GreenGeeks deployment):**
+- ❌ Email delivery to actual inquiry address
+- ❌ Reply-To functionality
+- ❌ Timestamp rendering in received email
+- ❌ Phone call links on actual mobile devices (headless browser only)
+
+**Out of Scope (Deliberately NOT Done):**
+- ❌ Did NOT create deploy-package.zip
+- ❌ Did NOT prepare GreenGeeks upload
+- ❌ Did NOT touch cPanel, DNS, email authentication
+- ❌ Did NOT create email mailboxes
+- ❌ Did NOT commit or store real inquiry email address
+
+**Manual Steps Required (Business Owner / Later Deployment):**
+
+When ready to deploy these changes to GreenGeeks:
+
+1. **Edit private config** (`/home/studen29/private_config/premier_tech_config.php`):
+   ```php
+   'MAIL_TO' => 'inquiry@premiertechsolution.com',  // Real inquiry address here
+   'MAIL_FROM' => 'noreply@premiertechsolution.us',
+   ```
+
+2. **Rebuild and upload:**
+   ```bash
+   $env:VITE_SITE_URL="https://premiertechsolution.us"
+   npm run build:greengeeks
+   # Create zip and upload to cPanel
+   ```
+
+3. **Test contact form on live site:**
+   - Submit test inquiry
+   - Verify email received at inquiry address
+   - Check Reply-To works correctly
+   - Verify timestamp appears in email
+   - Delete test lead from Supabase
+
+4. **Test phone links on real mobile device:**
+   - Tap both phone numbers
+   - Verify dialer opens with correct number
+
+**What Changed vs. Phase 2.6:**
+- Phone numbers added (no phone numbers before)
+- Email now includes timestamp (previously no timestamp)
+- Email routing explicitly documented with clear placeholders
+- Footer shows both phone numbers (previously showed one if configured)
+- Contact page shows both phone numbers (previously showed one)
+
+**Vercel Test Site:**
+The changes are live on https://premier-tech-solution.vercel.app for preview and testing. Phone numbers are visible and clickable. Email delivery cannot be tested on Vercel (no PHP email).
+
+**Next Steps:**
+Business owner should review the Vercel test site, verify phone numbers appear correctly, approve the changes, then deploy to GreenGeeks following manual steps above.
