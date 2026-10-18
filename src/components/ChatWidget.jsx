@@ -11,21 +11,26 @@ const faqs = [
   },
   {
     id: 2,
+    question: "How can I contact you?",
+    answer: "contact-info" // Special marker for rendering phone numbers
+  },
+  {
+    id: 3,
     question: "What is your service area?",
     answer: "Please use our contact form with your address, and we'll confirm whether we service your specific location."
   },
   {
-    id: 3,
+    id: 4,
     question: "What are your business hours?",
     answer: "For our current business hours, please send us a message through the contact form and we'll respond with our schedule."
   },
   {
-    id: 4,
+    id: 5,
     question: "How can I schedule service?",
-    answer: "You can schedule service by filling out the contact form on our website. We'll get back to you promptly to confirm your appointment."
+    answer: "schedule-service" // Special marker for rendering phone numbers with scheduling context
   },
   {
-    id: 5,
+    id: 6,
     question: "What payment methods do you accept?",
     answer: "Please contact us for information about payment methods and available options."
   }
@@ -44,6 +49,82 @@ export default function ChatWidget() {
 
   const toggleFaq = (id) => {
     setExpandedId(expandedId === id ? null : id)
+  }
+
+  // Render FAQ answer with support for phone number links
+  const renderFaqAnswer = (faq) => {
+    // Special handling for contact info
+    if (faq.answer === 'contact-info') {
+      return (
+        <div className="space-y-3">
+          <p>You can reach us by phone or through our contact form:</p>
+          {CONTACT_INFO.PHONE_TEL && (
+            <a
+              href={`tel:${CONTACT_INFO.PHONE_TEL}`}
+              className="block px-3 py-2 bg-warm-50 text-warm-700 rounded border border-warm-200 hover:bg-warm-100 transition-colors"
+              aria-label={`Call Premier Tech Solution at ${CONTACT_INFO.PHONE_DISPLAY}`}
+            >
+              📞 {CONTACT_INFO.PHONE_DISPLAY}
+            </a>
+          )}
+          {CONTACT_INFO.PHONE_TEL_2 && (
+            <a
+              href={`tel:${CONTACT_INFO.PHONE_TEL_2}`}
+              className="block px-3 py-2 bg-warm-50 text-warm-700 rounded border border-warm-200 hover:bg-warm-100 transition-colors"
+              aria-label={`Call Premier Tech Solution at ${CONTACT_INFO.PHONE_DISPLAY_2}`}
+            >
+              📞 {CONTACT_INFO.PHONE_DISPLAY_2}
+            </a>
+          )}
+          <Link
+            to="/contact"
+            className="block px-3 py-2 bg-cool-50 text-cool-700 rounded border border-cool-200 hover:bg-cool-100 transition-colors text-center"
+          >
+            Use Contact Form
+          </Link>
+        </div>
+      )
+    }
+
+    // Special handling for scheduling service
+    if (faq.answer === 'schedule-service') {
+      const hasPhone = CONTACT_INFO.PHONE_TEL || CONTACT_INFO.PHONE_TEL_2
+      return (
+        <div className="space-y-3">
+          <p>
+            You can schedule service {hasPhone ? 'by calling us or ' : ''}by filling out the contact form on our website. 
+            We'll get back to you promptly to confirm your appointment.
+          </p>
+          {CONTACT_INFO.PHONE_TEL && (
+            <a
+              href={`tel:${CONTACT_INFO.PHONE_TEL}`}
+              className="block px-3 py-2 bg-warm-50 text-warm-700 rounded border border-warm-200 hover:bg-warm-100 transition-colors"
+              aria-label={`Call Premier Tech Solution at ${CONTACT_INFO.PHONE_DISPLAY}`}
+            >
+              📞 {CONTACT_INFO.PHONE_DISPLAY}
+            </a>
+          )}
+          {CONTACT_INFO.PHONE_TEL_2 && (
+            <a
+              href={`tel:${CONTACT_INFO.PHONE_TEL_2}`}
+              className="block px-3 py-2 bg-warm-50 text-warm-700 rounded border border-warm-200 hover:bg-warm-100 transition-colors"
+              aria-label={`Call Premier Tech Solution at ${CONTACT_INFO.PHONE_DISPLAY_2}`}
+            >
+              📞 {CONTACT_INFO.PHONE_DISPLAY_2}
+            </a>
+          )}
+          <Link
+            to="/contact"
+            className="block px-3 py-2 bg-cool-50 text-cool-700 rounded border border-cool-200 hover:bg-cool-100 transition-colors text-center"
+          >
+            Use Contact Form
+          </Link>
+        </div>
+      )
+    }
+
+    // Default text answer
+    return <p>{faq.answer}</p>
   }
 
   return (
@@ -123,7 +204,7 @@ export default function ChatWidget() {
                     </button>
                     {expandedId === faq.id && (
                       <div className="px-4 py-3 bg-white text-gray-700 text-sm accordion-content">
-                        {faq.answer}
+                        {renderFaqAnswer(faq)}
                       </div>
                     )}
                   </div>
@@ -166,9 +247,21 @@ export default function ChatWidget() {
           <div className="p-4 border-t bg-gray-50 rounded-b-lg">
             <p className="text-xs text-gray-600 text-center">
               Can't find what you're looking for?{' '}
-              <a href="/contact" className="text-cool-600 hover:text-cool-700 font-medium">
-                Contact us
-              </a>
+              {CONTACT_INFO.PHONE_TEL && (
+                <>
+                  <a 
+                    href={`tel:${CONTACT_INFO.PHONE_TEL}`} 
+                    className="text-cool-600 hover:text-cool-700 font-medium"
+                    aria-label={`Call Premier Tech Solution at ${CONTACT_INFO.PHONE_DISPLAY}`}
+                  >
+                    Call us
+                  </a>
+                  {' or '}
+                </>
+              )}
+              <Link to="/contact" className="text-cool-600 hover:text-cool-700 font-medium">
+                contact us
+              </Link>
             </p>
           </div>
         </div>
